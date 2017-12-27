@@ -1,0 +1,26 @@
+.gdbar img {
+  width: 150px !important;
+  height: 103px !important;
+  margin: 8px 8px;
+}
+
+aside.gdbar {
+  -webkit-transition: all 0s;
+  -moz-transition: all 0s;
+  -o-transition: all 0s;
+  transition: all 0s;
+  background-color: #FFFFFF;
+  background-image: none;
+}
+
+.gdbar {
+  width: 200px !important;
+  height: 120px !important;
+}
+
+
+slides > slide:not(.nobackground):before {
+  width: 100px;
+  height: 69px;
+  background-size: 100px 69px;
+}
