@@ -1,0 +1,47 @@
+---
+title: "Control estadístico de procesos"
+subtitle: "Introducción a R"
+author: "Jordi Cuadros, Lucinio González"
+date: "Diciembre de 2017"
+output: ioslides_presentation
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## R
+
+R es un entorno y un lenguaje de programación estadística.
+
+Es una de las herramientas más usadas en el análisis de datos. Es de código libre, su uso es gratuito y dispone de una comunidad muy activa que contribuye al desarrollo de herramientas y funciones adicionales (más de 10.000 paquetes) y a la resolución de preguntas a través de la red.
+
+https://www.r-project.org/about.html
+
+
+## Instalación de R y RStudio
+
+- **R**
+
+    Se puede instalar desde https://cran.r-project.org/.
+
+
+- **RStudio**
+  
+    Es una interfaz gráfica (o IDE) para la realización de cálculos y la programación en R.
+  
+    Se instala desde https://www.rstudio.com/, versión RStudio Desktop (Open Source License).
+
+
+## Slide with R Output
+
+```{r cars, echo = TRUE}
+summary(cars)
+```
+
+## Slide with Plot
+
+```{r pressure}
+plot(pressure)
+```
+
