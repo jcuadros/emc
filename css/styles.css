@@ -1,3 +1,10 @@
+body, slides, slides > slide, .auto-fadein {
+  -webkit-transition: all 0s;
+  -moz-transition: all 0s;
+  -o-transition: all 0s;
+  transition: all 0s;
+}
+
 .gdbar img {
   width: 150px !important;
   height: 103px !important;
@@ -11,11 +18,16 @@ aside.gdbar {
   transition: all 0s;
   background-color: #FFFFFF;
   background-image: none;
+  top: 75px;
 }
 
 .gdbar {
   width: 200px !important;
   height: 120px !important;
+}
+
+h2 {
+  color: #0084D8;
 }
 
 

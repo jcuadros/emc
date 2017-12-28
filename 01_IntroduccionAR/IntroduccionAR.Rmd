@@ -3,14 +3,18 @@ title: "Control estadístico de procesos"
 subtitle: "Introducción a R"
 author: "Jordi Cuadros, Lucinio González"
 date: "Diciembre de 2017"
-logo: "../images/IQSlogo.png"
-css: "../css/styles.css"
-output: ioslides_presentation
+output:
+  ioslides_presentation:
+    transition: 0
+    logo: "../images/IQSlogo.png"
+    css: "../css/styles.css"
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
 ```
+
+# Elementos básicos de R
 
 ## R
 
@@ -21,7 +25,7 @@ Es una de las herramientas más usadas en el análisis de datos. Es de código l
 https://www.r-project.org/about.html
 https://www.rdocumentation.org/
 https://stackoverflow.com/questions/tagged/r 
-
+# Elementos básicos de R
 
 ## Instalación de R y RStudio
 
@@ -37,15 +41,92 @@ https://stackoverflow.com/questions/tagged/r
     Se instala desde https://www.rstudio.com/, versión RStudio Desktop (Open Source License).
 
 
-## Slide with R Output
+## Acceso a la ayuda
+- Buscar ayuda sobre una función
+```{r, echo = TRUE, eval = FALSE}
+? "mean"
+```
+- Buscar un texto en la ayuda
+```{r, echo = TRUE, eval = FALSE}
+?? "anova"
+```
+- En RStudio, se puede seleccionar y pulsar F1 para buscar en la ayuda
 
-```{r cars, echo = TRUE}
-summary(cars)
+## Datos básicos
+- *numeric*: número decimal de 15 dígitos significativos
+- *integer*
+- *logical*
+- *character*
+
+## Datos básicos -- *numeric*
+```{r, echo = TRUE}
+a <- 2
+a
+class(a)
+```
+---- 
+```{r, echo = TRUE}
+b <- 13.6788956789
+b
+class(b)
+print(b, digits = 10)
+```
+----
+```{r, echo = TRUE}
+a+b
+a-b
+a*b
+```
+----
+```{r, echo = TRUE}
+a^b
+a/b
+
+```
+## Datos básicos -- *integer*
+Permite almacenar números enteros. Es el tipo de datos usado para contadores e
+índices.
+
+```{r, echo = TRUE}
+n <- as.integer(340000)
+class(n)
+n <- 2L
+class(n)
 ```
 
-## Slide with Plot
+## Datos básicos -- *character*
+Permite almacenar cadenas de texto de longitud indeterminada.
 
-```{r pressure}
-plot(pressure)
+Los literales se indican entre comillas dobles (o simples).
+
+```{r, echo = TRUE}
+a <- "aaa"
+b <- "bbb"
+
+paste(a, b, "hola", sep = ", ") 
 ```
 
+## Datos básicos -- *logical*
+Almacena valores que son verdadero (`r T`) o falso (`r F`).
+
+Es el resultado de una comparación.
+```{r, echo = TRUE}
+3 == 2
+b <- 3 != 2 
+b
+```
+----
+Las operaciones fundamentales entre valores lógicos son
+
+```{r, echo = TRUE}
+a <- TRUE
+b <- F
+a & b # Operador AND
+a | b # Operador OR
+!b  # Operador NOT
+```
+# Gráficos en R
+
+# Estadística básica con R
+
+# Manipulación avanzada de tablas de datos
