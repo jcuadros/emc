@@ -1,5 +1,5 @@
 html, body, div, section, p {
-  font-family: "Lucida Sans","Arial","News Cycle", Impact, sans-serif;
+  font-family: "Open Sans","Arial","Helvetica",sans-serif;
   font-weight: normal;
   font-size: 90%;
   -webkit-transition: all 0s;
@@ -10,7 +10,7 @@ html, body, div, section, p {
 
 .reveal h1, .reveal h2, .reveal h3, .reveal h4, .reveal h5, .reveal h6 {
     margin: 0 0 20px 0;
-    font-family: "Lucida Sans","Arial","News Cycle", Impact, sans-serif;
+    font-family: "Open Sans","Arial","Helvetica",sans-serif;
     font-weight: normal;
     line-height: 1.2;
     letter-spacing: -1px;
