@@ -1,38 +1,60 @@
-body, slides, slides > slide, .auto-fadein {
+html, body, div, section, p {
+  font-family: "Lucida Sans","Arial","News Cycle", Impact, sans-serif;
+  font-weight: normal;
+  font-size: 90%;
   -webkit-transition: all 0s;
   -moz-transition: all 0s;
   -o-transition: all 0s;
   transition: all 0s;
 }
 
-.gdbar img {
-  width: 150px !important;
-  height: 103px !important;
-  margin: 8px 8px;
+.reveal h1, .reveal h2, .reveal h3, .reveal h4, .reveal h5, .reveal h6 {
+    margin: 0 0 20px 0;
+    font-family: "Lucida Sans","Arial","News Cycle", Impact, sans-serif;
+    font-weight: normal;
+    line-height: 1.2;
+    letter-spacing: -1px;
+    text-transform: none;
+    text-shadow: none;
+    word-wrap: break-word;
 }
 
-aside.gdbar {
-  -webkit-transition: all 0s;
-  -moz-transition: all 0s;
-  -o-transition: all 0s;
-  transition: all 0s;
-  background-color: #FFFFFF;
-  background-image: none;
-  top: 75px;
+.reveal section.level1 h1 {
+  color: #333333;
+  font-size:1.5em;
+  background-color:#fcfcfc;
+  margin-top:250px;
+  border-top: 3px solid #999999;
+  border-bottom: 3px solid #999999;
+  padding: 50px 0px 50px;
 }
 
-.gdbar {
-  width: 200px !important;
-  height: 120px !important;
-}
-
-h2 {
+.reveal section.level2 h1 {
   color: #0084D8;
+  font-size:1.2em;
 }
 
+.reveal ul, .reveal li, .reveal p {
+  text-align:left;
+  width:100%;
+}
 
-slides > slide:not(.nobackground):before {
-  width: 100px;
-  height: 69px;
-  background-size: 100px 69px;
+.reveal pre {
+    font-size: 0.7em;
+    font-family: "Inconsolata","Consolas",monospace;
+    line-height: 1em;
+    word-wrap: break-word;
+    box-shadow: none;
+}
+
+.reveal pre code {
+    padding: 2px;
+}
+
+.reveal code {
+    font-family: "Inconsolata","Consolas",monospace;
+}
+
+.reveal pre.sourceCode {
+    background-color: #f9f9f9;
 }

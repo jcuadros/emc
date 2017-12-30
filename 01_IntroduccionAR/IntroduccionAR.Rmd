@@ -1,18 +1,32 @@
 ---
-title: "Control estadístico de procesos"
-subtitle: "Introducción a R"
-author: "Jordi Cuadros, Lucinio González"
-date: "Diciembre de 2017"
 output:
-  ioslides_presentation:
-    transition: 0
-    logo: "../images/IQSlogo.png"
+  revealjs::revealjs_presentation:
+    theme: simple
+    slide_level: 2
+    highlight: pygments
+    center: false
+    self_contained: true
     css: "../css/styles.css"
+    reveal_options:
+      slideNumber: true
+      previewLinks: false
+      transition: 0
+      background_transition: 0
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
 ```
+##
+
+<img src="../images/IQSlogo.png" style="border-style:none;box-shadow:none;
+position:absolute;margin:0;top:20px;left:20px;max-width:200px;height:auto;" />
+
+<div style="font-size:1.5em;font-weight:700;margin-top:200px;">Control estadístico de procesos</div>
+<div style="font-size:1.4em;font-weight:500;color:#333333;">Introducción a R</div>
+<div style="font-size:1.2em;margin-top:40px;color:#333333;">Jordi Cuadros, Lucinio González</div>
+<div style="margin-top:80px;color:#333333;">Diciembre de 2017</div>
+
 
 # Elementos básicos de R
 
@@ -25,7 +39,7 @@ Es una de las herramientas más usadas en el análisis de datos. Es de código l
 https://www.r-project.org/about.html
 https://www.rdocumentation.org/
 https://stackoverflow.com/questions/tagged/r 
-# Elementos básicos de R
+
 
 ## Instalación de R y RStudio
 
@@ -110,12 +124,15 @@ paste(a, b, "hola", sep = ", ")
 Almacena valores que son verdadero (`r T`) o falso (`r F`).
 
 Es el resultado de una comparación.
+
 ```{r, echo = TRUE}
 3 == 2
 b <- 3 != 2 
 b
 ```
+
 ----
+
 Las operaciones fundamentales entre valores lógicos son
 
 ```{r, echo = TRUE}
@@ -124,7 +141,238 @@ b <- F
 a & b # Operador AND
 a | b # Operador OR
 !b  # Operador NOT
+``` 
+
+## Conversión a datos básicos
+Las funciones de conversión de tipos en R se indican como `as.` seguido del tipo de dato de destino.
+
+```{r, echo = TRUE}
+as.character(2)
+as.numeric(TRUE)
 ```
+
+Para saber si una información o variable es de un tipo determinado puede usarse `is.` seguido del tipo de dato a comprobar.
+
+## Constantes
+R incorpora algunas constantes preestablecidas como
+```{r, echo = TRUE}
+pi
+```
+
+```{r, echo = TRUE, eval = FALSE}
+Inf
+NaN
+NA
+NULL
+```
+
+----
+
+También existen funciones para evaluar si un dato corresponde a una de estas constantes.
+
+```{r, echo = TRUE}
+is.na(3)
+is.null(NULL)
+is.infinite(-Inf)
+```
+
+## Datos compuestos
+- **Principales**
+    - Vector
+    - Factor
+    - *Data frame* (Tabla de datos)
+- Otros tipos comunes
+    - Factor ordenado
+    - Lista
+    - Matriz
+
+## Datos compuestos -- vector
+```{r, echo = TRUE}
+a <- c(2, 3, 4)
+str(a)
+a[2]
+```
+
+----
+
+Las operaciones se aplican a vectores y devuelven vectores
+```{r, echo = TRUE}
+a + a 
+a > 2.5
+```
+
+----
+
+Atención al reciclaje de datos...
+```{r, echo = TRUE}
+a <- c(2, 3, 4)
+b <- c(10, 20)
+a * b
+```
+
+----
+
+Las funciones en R suelen ser vectoriales
+
+- algunas devuelven vectores
+```{r, echo = TRUE}
+a <- c(2, 3, 4)
+abs(sin(a))
+exp(a)
+```
+
+----
+
+- otras devuelven valores agregados
+```{r, echo = TRUE}
+length(a)
+sum(a)
+mean(a)
+```
+
+También `sd`, `max`, `min`...
+
+----
+
+Puede determinarse si un valor está presente en un vector con el operador `%in%`.
+```{r, echo = TRUE}
+a <- c(2, 3, 4)
+3 %in% a
+c(2,5,3,4) %in% a
+```
+
+----
+
+Existen estructuras especificas para crear vectores secuencia.
+```{r, echo = TRUE}
+1:10
+seq(1, 10, by = 2)
+seq(1, 3, length.out = 5) 
+```
+
+----
+
+Los vectores se ordenan usando las funciones `sort` y `order`.
+```{r, echo = TRUE}
+a <- c(8, 2, 5, 3)
+sort(a)
+a[order(a)]
+a[order(a,decreasing = T)]
+```
+
+##  Datos compuestos -- factor
+Un factor es un vector de cadenas indexado. Normalmente se crea a partir del vector de cadenas de texto.
+
+```{r, echo = TRUE}
+a <- c("hola", "adeu","hola", "adeu", "adeu", "bye")
+b <- as.factor(a)
+as.character(b)
+as.numeric(b)
+str(b)
+```
+----
+
+La función `factor` permite la codificación o recodificación manual de un vector. 
+```{r, echo = TRUE}
+a <- factor(c(3, 1, 3, 1, 1, 2), labels = c("adeu", "bye", "hola"))
+a
+levels(a)
+```
+
+## Datos compuestos -- *data frame*
+
+```{r, echo = TRUE}
+dfA <- data.frame(int = 1:10,
+                  let = sample(letters, 10, replace = TRUE), 
+                  ran = rnorm(10))
+dfA
+```
+----
+
+```{r, echo = TRUE}
+dim(dfA) # Dimensión
+nrow(dfA) # Número de columnas
+ncol(dfA) # Número de filas
+```
+
+----
+
+```{r, echo = TRUE}
+str(dfA)
+head(dfA, 3) # Primeros datos, 6 por defecto
+tail(dfA, 2) # Últimos valores
+```
+
+----
+
+Para acceder a los datos almacenados en el *data frame* se usan índices. Las variables de *data frame* también pueden extraerse usando su nombre.
+
+```{r, echo = TRUE}
+dfA[2,3]
+dfA[,1]
+dfA$let
+```
+
+Veremos más formas de acceder y usar los datos de una tabla de datos más adelante.
+
+## Más datos compuestos -- lista
+```{r, echo = TRUE}
+a <- list(2, "2", FALSE)
+b <- list(3, "hola", c(2, 3, 4))
+```
+
+<div style="column-count:2;">
+```{r, echo = TRUE}
+a
+b
+```
+</div>
+
+----
+
+<div style="column-count:2;">
+```{r, echo = TRUE}
+length(a)
+a[[3]]
+b[[3]][1]
+```
+
+&nbsp;
+<p style="display:block;break-after:column;"></p>
+
+```{r, echo = TRUE}
+str(b)
+```
+
+</div>
+
+## Más datos compuestos -- factor ordenado
+```{r, echo = TRUE}
+notes <- c("Aprovat", "Insuficient", "Notable", "Insuficient",
+           "Notable", "Excel·lent", "Aprovat")
+notes <- factor(notes,
+        levels = c("Insuficient", "Aprovat",
+                   "Notable", "Excel·lent"),
+        ordered = TRUE)
+str(notes)
+levels(notes)
+```
+
+## Más datos compuestos -- matriz
+```{r, echo = TRUE}
+a <- matrix(c(2, 4, -3, 5), ncol = 2)
+a
+a[2,2]
+```
+
+----
+```{r, echo = TRUE}
+a * a # Producto posición por posición
+a %*% a # Producto matricial
+t(a) # Transposición
+```
+
+
 # Gráficos en R
 
 # Estadística básica con R
