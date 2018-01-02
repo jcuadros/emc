@@ -40,21 +40,36 @@ html, body, div, section, p {
 }
 
 .reveal pre {
-    font-size: 0.7em;
-    font-family: "Inconsolata","Consolas",monospace;
-    line-height: 1em;
-    word-wrap: break-word;
-    box-shadow: none;
+  font-size: 0.7em;
+  font-family: "Inconsolata","Consolas",monospace;
+  line-height: 1em;
+  word-wrap: break-word;
+  box-shadow: none;
 }
 
 .reveal pre code {
-    padding: 2px;
+  padding: 2px;
 }
 
 .reveal code {
-    font-family: "Inconsolata","Consolas",monospace;
+  font-family: "Inconsolata","Consolas",monospace;
 }
 
 .reveal pre.sourceCode {
-    background-color: #f9f9f9;
+  background-color: #f9f9f9;
+}
+
+.reveal section p img {
+  position:relative;
+  width:90%;
+  left:50%;
+  margin-left:-45%;
+  text-align:center;
+  border: 3px solid #999999;
+  box-shadow:none;
+}
+
+.reveal .bibref {
+  font-size:0.6em;
+  line-height: normal;
 }

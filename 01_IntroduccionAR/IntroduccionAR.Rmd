@@ -54,6 +54,20 @@ https://stackoverflow.com/questions/tagged/r
   
     Se instala desde https://www.rstudio.com/, versión RStudio Desktop (Open Source License).
 
+## R como herramienta de cálculo
+**R** puede usarse desde la consola introduciendo directamente las instrucciones correspondientes.
+
+```{r, echo = TRUE}
+2 + 3 
+8 ^ 10
+log(100) # Logaritmo neperiano
+``` 
+\# indica que lo que sigue es un comentario
+
+## Uso de *scripts*
+Un *script* en R es un conjunto de instrucciones escritas en un archivo de texto, de forma que estás puedan almacenarse y ejecutarse con posterioridad. Se suelen almacenar con la extensión `.R`.
+
+Un editor muy recomendado para la creación, ejecución y depuración de estos *scripts* es **RStudio**.
 
 ## Acceso a la ayuda
 - Buscar ayuda sobre una función
@@ -64,7 +78,8 @@ https://stackoverflow.com/questions/tagged/r
 ```{r, echo = TRUE, eval = FALSE}
 ?? "anova"
 ```
-- En RStudio, se puede seleccionar y pulsar F1 para buscar en la ayuda
+
+En RStudio, se puede seleccionar y pulsar F1 para buscar en la ayuda
 
 ## Datos básicos
 - *numeric*: número decimal de 15 dígitos significativos
@@ -372,9 +387,273 @@ a %*% a # Producto matricial
 t(a) # Transposición
 ```
 
+## Instalación y carga de paquetes en R
+R tiene muchos paquetes para resolver problemas específicos. Para usar un paquete adicional este debe instalarse y cargarse en memoria.
+
+```{r, echo = TRUE, eval = FALSE}
+installed.packages()[,1] # Lista los paquetes instalados
+(.packages()) # Lista los paquetes en memoria
+```
+
+Dos recursos importantes para buscar y identificar paquetes relevantes son
+https://www.rdocumentation.org/
+https://cran.rstudio.com/web/views/
+
+----
+
+Para instalar un paquete, por ejemplo "nycflights13"
+```{r, echo = TRUE, eval = FALSE}
+install.packages("nycflights13")
+```
+Para cargar un paquete en memoria, se usa
+```{r, echo = TRUE, eval = FALSE}
+library("nycflights13")
+```
+
+En RStudio la gestión de paquetes también puede hacerse desde la interfaz del programa
+
+----
+
+En un script y para garantizar la disponibilidad de un paquete
+
+```{r, echo = TRUE, eval = FALSE}
+if(!require("nycflights13")) {
+  install.packages("nycflights13")
+  library("nycflights13")
+}
+```
+
+----
+
+Para acceder a la documentación de un paquete
+```{r, echo = TRUE, eval = FALSE}
+help(package="nycflights13")
+```
+
+Algunos paquetes tienen información adicional a la que se puede acceder con las funciones `vignette()` y `demo()`.
+
 
 # Gráficos en R
 
+## ¿Para qué usamos los gráficos?
+La principales funciones de los gráficos en el análisis de datos son
+
+- explorar los datos y facilitar su comprensión,
+- permitir el descubrimiento de patrones no evidentes, y
+- comunicar efectivamente los resultados de los análisis.
+
+
+## Gráficos en R
+Veremos dos paradigmas distintos para la creación de gráficos en R.
+
+- Gráficos creados con el paquete `base`.
+- Gráficos creados en base a la gramática de gráficos (*GoG*), usando el paquete `ggplot2`
+
+## Gráficos en `base` R
+Los gráficos en `base` R se construyen a partir de datos en vectores y usando funciones específicas en función del gráfico a realizar.
+
+Para ejemplifiar algunas de estas funciones, usaremos el conjunto de datos `mtcars`, que forma de los paquetes básicos de R.
+
+----
+
+```{r, echo = TRUE}
+str(mtcars)
+```
+
+----
+
+```{r, echo = TRUE}
+head(mtcars, 10)
+```
+
+----
+
+Veremos como crear
+
+- gráficos de dispersión,
+- histogramas,
+- diagramas de barras, y 
+- diagramas de caja (*boxplot*)
+
+## Gráficos en `base` R -- gráfico de dispersión
+```{r, echo = TRUE, eval = FALSE}
+plot(mtcars$disp,mtcars$hp)
+```
+
+----
+
+```{r, echo = FALSE, eval = TRUE}
+plot(mtcars$disp,mtcars$hp)
+```
+
+----
+
+## Gráficos en `base` R -- histograma
+```{r, echo = TRUE, eval = FALSE}
+hist(mtcars$disp)
+```
+
+Añadiendo una curva de densidad...
+```{r, echo = TRUE, eval = FALSE}
+hist(mtcars$disp,breaks=20,freq=FALSE)
+lines(density(mtcars$disp))
+```
+
+----
+
+```{r, echo = FALSE, eval = TRUE}
+hist(mtcars$disp)
+```
+
+----
+
+```{r, echo = FALSE, eval = TRUE}
+hist(mtcars$disp,breaks=20,freq=FALSE)
+lines(density(mtcars$disp))
+```
+
+----
+
+## Gráficos en `base` R -- diagrama de barras
+```{r, echo = TRUE, eval = FALSE}
+barplot(table(as.factor(mtcars$cyl)))
+```
+
+----
+
+```{r, echo = FALSE, eval = TRUE}
+barplot(table(as.factor(mtcars$cyl)))
+```
+
+## Gráficos en `base` R -- diagrama de caja
+```{r, echo = TRUE, eval = FALSE}
+boxplot(mtcars$disp)
+points(mean(mtcars$disp))
+```
+
+----
+
+```{r, echo = FALSE, eval = TRUE}
+boxplot(mtcars$disp)
+points(mean(mtcars$disp))
+```
+
+## Gramática de gráficos (*GoG*)
+La **gramática de gráficos** es una aproximación teórica al estudio de los componentes de un gráfico. De acuerdo con este análisis, un gráfico se puede construir mediante la especificación de un conjunto de capas y componentes que definen los datos, la asociación de los mismos a aspectos del gráfico, la especificación de la relación entre los valores de las variables de los datos con las del gráfico, la estructura geométrica del gráfico...
+
+<p class="bibref">Wilkinson, L. (2006). The grammar of graphics. Springer Science & Business Media.</p>
+
+## `ggplot2`
+`ggplot2` es un paquete de R que implementa de la gramática de gráficos.
+
+<p class="bibref">Wickham, H. (2010). A layered grammar of graphics. *Journal of Computational and Graphical Statistics*, 19(1), 3-28.</p>
+
+Referencias:
+
+- http://ggplot2.tidyverse.org/reference/
+- https://github.com/rstudio/cheatsheets/raw/master/data-visualization-2.1.pdf
+- http://www.ling.upenn.edu/~joseff/avml2012/
+- http://r-statistics.co/Complete-Ggplot2-Tutorial-Part1-With-R-Code.html
+
+----
+
+`ggplot2` forma parte del paquete `tidyverse` (aunque también puede instalarse y cargarse autónomamente).
+```{r, echo = TRUE, results = 'hide', message = FALSE, warning = FALSE, error = FALSE}
+if(!require("tidyverse")) {
+  install.packages("tidyverse")
+  library("tidyverse")
+}
+```
+
+## `ggplot2` -- capas y elementos del gráfico
+En `ggplot2` cada elemento gráfico que representa un conjunto de datos constituye una capa. Una o más capas constituyen un gráfico.
+
+Cada capa queda definida mediante la especificación de sus elementos. Los principales son 
+
+- datos,
+- mapeado estético, y
+- geometrías
+
+----
+
+En `ggplot2`, los gráficos constituyen un objeto de R y se construyen de forma aditiva.
+
+Por ejemplo,
+
+```{r, echo = TRUE, eval = FALSE}
+grafico <- ggplot(data = anscombe,
+        mapping = aes(x = x1, y = y1))  # Datos y mapeado estético 
+grafico <- grafico + geom_point()       # Geometría
+
+grafico
+```
+
+----
+
+```{r, echo = FALSE}
+grafico <- ggplot(data = anscombe,
+        mapping = aes(x = x1, y = y1))  # Datos y mapeado estético 
+grafico <- grafico + geom_point()       # Geometría
+
+grafico
+```
+
+## `ggplot2` -- datos
+En `ggplot2`, el elemento `data` (datos) se introduce como primer argumento de la función `ggplot`. Debe corresponder a una tabla de datos o un tipo de datos convertible a tabla de datos.
+
+```{r, echo = TRUE, eval = FALSE}
+grafico <- ggplot(data = anscombe,
+```
+
+## `ggplot2` -- mapeado estético
+El `mapping` (mapeado estético) corresponde al establecimiento de relaciones entre variables de los datos y variables del gráfico. Es el segundo argumento de la función `ggplot`y debe crearse con al función de apoyo `aes`. 
+
+```{r, echo = TRUE, eval = FALSE}
+        mapping = aes(x = x1, y = y1))
+```
+
+----
+
+Para variables cuantitativas, los mapeados más comunes corresponden a
+
+- posiciones: `x`, `y`...
+- tamaño: `size`
+- color: `color`, `fill`
+
+----
+
+Para variable cualitativas, los mapeados más frecuentes son
+
+- posiciones: `x`, `y`...
+- color: `color`, `fill`
+- forma: `shape`
+
+
+## `ggplot2` -- geometrías
+Las geometrías (`geom_`) indican la forma que debe tener el gráfico, es decir, cómo se articulan las variables del gráfico. Se añaden al gráfico sumándose al objeto creado por `ggplot`.
+
+```{r, echo = TRUE, eval = FALSE}
+grafico <- grafico + geom_point()
+```
+
+----
+
+Son geometrías de uso común
+
+- `geom_point`
+- `geom_line`, `geom_vline`, `geom_hline`
+- `geom_bar`
+- `geom_histogram`
+- `geom_boxplot`
+
+Un resumen de las geometrías y su relación con las variables del gráfico que reconoce cada una de ellas figura en  https://github.com/rstudio/cheatsheets/raw/master/data-visualization-2.1.pdf.
+
+
+## Gráficos en `ggplot2`
+
+
 # Estadística básica con R
 
+
 # Manipulación avanzada de tablas de datos
+
