@@ -650,6 +650,256 @@ Un resumen de las geometrías y su relación con las variables del gráfico que 
 
 
 ## Gráficos en `ggplot2`
+Veremos cómo crear en `ggplot2` los gráficos más habituales, añadiendo algunas consideraciones para aquellos casos donde los gráficos realizados con `base` tienen prestaciones insuficientes.
+
+- gráficos de dispersión,
+- histogramas,
+- diagramas de barras, y 
+- diagramas de caja (*boxplot*).
+
+De forma general, los gráficos en `ggplot2` se construyen a partir de tablas de datos (*data frames*), de los cuales se seleccionan las variables a representar.
+
+----
+
+Usaremos 1000 datos del conjunto de datos `diamonds` para crear los distintos ejemplos.
+
+```{r, echo = TRUE}
+diaM <- diamonds[sample(1:nrow(diamonds),1000),]
+str(diaM)
+```
+
+## Gráficos en `ggplot2` -- gráfico de dispersión
+```{r, echo = TRUE, eval = FALSE}
+ggplot(diaM, aes(x=carat,y=price)) + geom_point()
+```
+
+----
+
+```{r, echo = FALSE, eval = TRUE}
+ggplot(diaM, aes(x=carat,y=price)) + geom_point()
+```
+
+----
+
+Añadiendo una tercera variable (`cut`) y modificando algunos aspectos de formato...
+
+```{r, echo = TRUE, eval = FALSE}
+ggplot(diaM, aes(x=carat,y=price,color=cut)) + 
+  geom_point(alpha=.8,shape=21,size=3)
+```
+
+----
+
+```{r, echo = FALSE, eval = TRUE}
+ggplot(diaM, aes(x=carat,y=price,color=cut)) + 
+  geom_point(alpha=.8,shape=21,size=3)
+```
+
+-----
+
+Añadiendo líneas de tendencia...
+
+```{r, echo = TRUE, eval = FALSE}
+ggplot(diaM, aes(x=carat,y=price,color=cut)) + 
+  geom_point(alpha=.8,shape=21,size=3) +
+  geom_smooth(method="lm",se=FALSE)
+```
+
+----
+
+```{r, echo = FALSE, eval = TRUE}
+ggplot(diaM, aes(x=carat,y=price,color=cut)) + 
+  geom_point(alpha=.8,shape=21,size=3) +
+  geom_smooth(method="lm",se=FALSE)
+```
+
+## Gráficos en `ggplot2` -- histograma
+```{r, echo = TRUE, eval = FALSE}
+ggplot(diaM, aes(x=price)) + geom_histogram(binwidth=1000)
+```
+
+----
+
+```{r, echo = FALSE, eval = TRUE}
+ggplot(diaM, aes(x=price)) + geom_histogram(binwidth=1000)
+```
+
+----
+
+Y en función del corte...
+
+```{r, echo = TRUE, eval = FALSE}
+ggplot(diaM, aes(x=price,fill=cut)) +
+  geom_histogram(position='dodge',binwidth=1000)
+```
+
+----
+
+```{r, echo = FALSE, eval = TRUE}
+ggplot(diaM, aes(x=price,fill=cut)) +
+  geom_histogram(position='dodge',binwidth=1000)
+```
+
+----
+
+En frecuencias relativas (por grupo)...
+
+```{r, echo = TRUE, eval = FALSE}
+ggplot(diaM, aes(x=price,y=..density..,fill=cut)) +
+  geom_histogram(position='dodge',binwidth=1000)
+```
+
+----
+
+```{r, echo = FALSE, eval = TRUE}
+ggplot(diaM, aes(x=price,y=..density..,fill=cut)) +
+  geom_histogram(position='dodge',binwidth=1000)
+```
+
+----
+
+Quizás funcione mejor un gráfico de densidades...
+
+```{r, echo = TRUE, eval = FALSE}
+ggplot(diaM, aes(x=price,fill=cut)) +
+  geom_density(alpha=.3)
+```
+
+----
+
+```{r, echo = FALSE, eval = TRUE}
+ggplot(diaM, aes(x=price,fill=cut)) +
+  geom_density(alpha=.3)
+```
+
+## Gráficos en `ggplot2` -- diagrama de barras
+
+```{r, echo = TRUE, eval = FALSE}
+ggplot(diaM, aes(x=clarity)) + geom_bar()
+```
+
+----
+
+```{r, echo = FALSE, eval = TRUE}
+ggplot(diaM, aes(x=clarity)) + geom_bar()
+```
+
+----
+
+En función de la claridad...
+
+```{r, echo = TRUE, eval = FALSE}
+ggplot(diaM, aes(x=clarity, fill=cut)) + geom_bar()
+```
+
+----
+
+```{r, echo = FALSE, eval = TRUE}
+ggplot(diaM, aes(x=clarity, fill=cut)) + geom_bar()
+```
+
+----
+
+Para comparar entre frecuencias absolutas, funcionan mejor las barras separadas.
+
+```{r, echo = TRUE, eval = FALSE}
+ggplot(diaM, aes(x=clarity, fill=cut)) + geom_bar(position="dodge")
+```
+
+----
+
+```{r, echo = FALSE, eval = TRUE}
+ggplot(diaM, aes(x=clarity, fill=cut)) + geom_bar(position="dodge")
+```
+
+----
+
+Para comparar entre frecuencias relativas acumuladas, son mejores las barras apiladas en frecuencia relativa (para cada clase).
+
+```{r, echo = TRUE, eval = FALSE}
+ggplot(diaM, aes(x=clarity, fill=cut)) + geom_bar(position="fill")
+```
+
+----
+
+```{r, echo = FALSE, eval = TRUE}
+ggplot(diaM, aes(x=clarity, fill=cut)) + geom_bar(position="fill")
+```
+
+----
+
+Los diagramas de barras también pueden crearse a partir de tablas de datos agrupados. En este caso, debe indicarse qué variable es la `y` e incluir `stat="identity"` en el `geom_bar`.
+
+## Gráficos en `ggplot2` -- diagrama de caja
+
+```{r, echo = TRUE, eval = FALSE}
+ggplot(diaM, aes(x=1, y=price)) + geom_boxplot()
+```
+
+*NOTA: Para el `geom_boxplot` se requieren dos variables. Si no hay variable independiente se puede incluir `x=1`.*
+
+----
+
+```{r, echo = FALSE, eval = TRUE}
+ggplot(diaM, aes(x=1, y=price)) + geom_boxplot()
+```
+
+----
+
+Y en función del corte...
+
+```{r, echo = TRUE, eval = FALSE}
+ggplot(diaM, aes(x=cut, y=price)) + geom_boxplot()
+```
+
+----
+
+```{r, echo = FALSE, eval = TRUE}
+ggplot(diaM, aes(x=cut, y=price)) + geom_boxplot()
+```
+
+----
+
+El gráfico se puede mejorar mostrando todos los puntos, con una posición aleatorizada.
+
+```{r, echo = TRUE, eval = FALSE}
+ggplot(diaM, aes(x=cut, y=price)) + geom_boxplot(outlier.shape = NA) +
+  geom_jitter(shape = 21, alpha=.5,height=0,width=.2)
+```
+
+----
+
+```{r, echo = FALSE, eval = TRUE}
+ggplot(diaM, aes(x=cut, y=price)) + geom_boxplot(outlier.shape = NA) +
+  geom_jitter(shape = 21, alpha=.5,height=0,width=.2)
+```
+
+----
+
+O incluyendo un *violin plot* y un punto para la media...
+
+```{r, echo = TRUE, eval = FALSE}
+medias <- diaM %>% group_by(cut) %>%
+  summarise(price=mean(price))
+
+ggplot(diaM, aes(x=cut, y=price)) + 
+  geom_violin() +
+  geom_boxplot(outlier.shape = NA, width = 0.1) +
+  geom_point(data=medias,shape=3)
+```
+
+----
+
+```{r, echo = FALSE, eval = TRUE}
+medias <- diaM %>% group_by(cut) %>%
+  summarise(price=mean(price))
+
+ggplot(diaM, aes(x=cut, y=price)) + 
+  geom_violin() +
+  geom_boxplot(outlier.shape = NA, width = 0.1) +
+  geom_point(data=medias,shape=3)
+```
+
 
 
 # Estadística básica con R
