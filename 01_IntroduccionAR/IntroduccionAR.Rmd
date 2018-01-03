@@ -15,7 +15,7 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(echo = FALSE, dev="svg")
 ```
 ##
 
@@ -83,9 +83,9 @@ En RStudio, se puede seleccionar y pulsar F1 para buscar en la ayuda
 
 ## Datos básicos
 - *numeric*: número decimal de 15 dígitos significativos
-- *integer*
-- *logical*
-- *character*
+- *integer*: entero de 32 bits (hasta 2·10^9^ aprox.)
+- *logical*: `TRUE` o  `FALSE`
+- *character*: cadena de caracteres de longitud indeterminada
 
 ## Datos básicos -- *numeric*
 ```{r, echo = TRUE}
@@ -93,25 +93,48 @@ a <- 2
 a
 class(a)
 ```
+
 ---- 
+
 ```{r, echo = TRUE}
 b <- 13.6788956789
 b
 class(b)
 print(b, digits = 10)
 ```
+
 ----
+
+Operadores más comunes para datos de tipo *numeric*
+
+
+-------------------      --------------------- 
+Suma                              `+`  
+Resta                             `-`
+Producto                          `*`
+División                          `/`
+Potencia                       `^` o `**`
+Módulo (residuo)                 `%%`
+División entera                  `%/%`
+Comparaciones              `== > < >= <= !=`
+--------------           ---------------------
+
+----
+
 ```{r, echo = TRUE}
 a+b
 a-b
 a*b
 ```
+
 ----
+
 ```{r, echo = TRUE}
 a^b
 a/b
 
 ```
+
 ## Datos básicos -- *integer*
 Permite almacenar números enteros. Es el tipo de datos usado para contadores e
 índices.
@@ -135,6 +158,15 @@ b <- "bbb"
 paste(a, b, "hola", sep = ", ") 
 ```
 
+----
+
+Operadores más comunes para datos de tipo *character*
+
+
+-------------------      --------------------- 
+Comparaciones              `== > < >= <= !=`
+-------------------      ---------------------
+
 ## Datos básicos -- *logical*
 Almacena valores que son verdadero (`r T`) o falso (`r F`).
 
@@ -148,7 +180,19 @@ b
 
 ----
 
-Las operaciones fundamentales entre valores lógicos son
+Operadores más comunes para datos de tipo *logical*
+
+
+-------------------      --------------------- 
+Intersección lógica               `&`
+Unión lógica                      `|`
+Negación lógica                   `!`
+Comparaciones                   `== !=`
+-------------------      ---------------------
+
+----
+
+Por ejemplo...
 
 ```{r, echo = TRUE}
 a <- TRUE
@@ -452,7 +496,7 @@ Veremos dos paradigmas distintos para la creación de gráficos en R.
 ## Gráficos en `base` R
 Los gráficos en `base` R se construyen a partir de datos en vectores y usando funciones específicas en función del gráfico a realizar.
 
-Para ejemplifiar algunas de estas funciones, usaremos el conjunto de datos `mtcars`, que forma de los paquetes básicos de R.
+Para ejemplificar algunas de estas funciones, usaremos el conjunto de datos `mtcars`, que forma de los paquetes básicos de R.
 
 ----
 
@@ -863,14 +907,16 @@ ggplot(diaM, aes(x=cut, y=price)) + geom_boxplot()
 El gráfico se puede mejorar mostrando todos los puntos, con una posición aleatorizada.
 
 ```{r, echo = TRUE, eval = FALSE}
-ggplot(diaM, aes(x=cut, y=price)) + geom_boxplot(outlier.shape = NA) +
+ggplot(diaM, aes(x=cut, y=price)) + 
+  geom_boxplot(outlier.shape = NA) +
   geom_jitter(shape = 21, alpha=.5,height=0,width=.2)
 ```
 
 ----
 
 ```{r, echo = FALSE, eval = TRUE}
-ggplot(diaM, aes(x=cut, y=price)) + geom_boxplot(outlier.shape = NA) +
+ggplot(diaM, aes(x=cut, y=price)) + 
+  geom_boxplot(outlier.shape = NA) +
   geom_jitter(shape = 21, alpha=.5,height=0,width=.2)
 ```
 
@@ -900,9 +946,232 @@ ggplot(diaM, aes(x=cut, y=price)) +
   geom_point(data=medias,shape=3)
 ```
 
+## `ggplot2` -- elementos adicionales
 
+Además de los elementos ya presentados (datos, mapeado estético y geometrías), otros elementos de `ggplot2` permiten controlar aspectos adicionales del gráfico, por ejemplo
+
+- `scale_...`: controlan los aspectos relativos a la presentación de las variables del gráfico,
+- `coord_...`: establecen el sistema de coordenadas usado en la geometría,
+- `labs`: establece los títulos del gráfico,
+- `theme`, `theme_...`: controlan la part del gráfico que no corresponde a datos (*non-data ink*), y
+- `facet_`: permite la creació de secuencia de gráficos en función de una o dos variables
+
+----
+
+Un ejemplo para terminar...
+
+```{r, echo = TRUE, eval = FALSE}
+ggplot(diaM, aes(x=carat, y = price, shape = cut, col = clarity)) +
+  geom_point(alpha=.6) +
+  scale_x_continuous(breaks=1:3) +
+  scale_y_continuous(trans="log10") +
+  scale_color_brewer(palette="Spectral")+
+  facet_grid(cut ~ clarity) + 
+  theme_bw() + 
+  theme(legend.position = "none",text = element_text(size=10))
+
+```
+
+----
+
+
+```{r, echo = FALSE}
+ggplot(diaM, aes(x=carat, y = price, shape = cut, col = clarity)) +
+  geom_point(alpha=.8) +
+  scale_x_continuous(breaks=1:3) +
+  scale_y_continuous(trans="log10") +
+  scale_color_brewer(palette="Spectral")+
+  facet_grid(cut ~ clarity) + 
+  theme_bw() + 
+  theme(legend.position = "none",text = element_text(size=10))
+
+```
 
 # Estadística básica con R
+
+## Funciones de la estadística
+La **estadística**, como parte de la matemática que se ocupa de la recolección, análisis e interpretación de datos, tiene dos funciones principales
+
+1. la descripción de conjuntos de datos (**estadística descriptiva**), y
+2. la extracción de conclusiones a partir de estos datos (**inferencia**) 
+
+En este repaso de la estadística básica, usaremos (de nuevo) el conjunto de datos `mtcars`.
+
+----
+
+```{r, echo = TRUE}
+str(mtcars)
+```
+
+----
+
+```{r, echo = TRUE}
+head(mtcars, 10)
+```
+
+## Descriptiva de una variable
+A menudo, el primer interés que tendremos es el de describir un conjunto de datos correspondientes a una sola variable. Esta es la situación con la que empezaremos.
+
+¿Cómo se describe un conjunto de datos univariante? 
+
+Normalmente se consideran los siguientes aspectos
+
+- frecuencias y cuantiles,
+- tendencia central (también llamado localización o posición),
+- dispersión, y
+- análisis de puntos extremos
+
+
+## Descriptiva de una variable -- frecuencias y cuantiles
+**Tamaño de la muestra o número de datos**
+```{r, echo = TRUE}
+length(mtcars$disp)
+n <- sum(!is.na(mtcars$disp))
+n
+```
+
+----
+
+**Frecuencias absolutas y relativas**
+
+Para una variable cuantitativa (*numeric*)...
+```{r, echo = TRUE}
+frec_abs <- table(cut(mtcars$disp,
+      breaks=c(0,100,200,300,400,500,Inf)))
+frec_abs
+
+frec_rel <- frec_abs / n
+frec_rel
+```
+
+-----
+
+**Cuantiles**
+```{r, echo = TRUE}
+quantile(mtcars$disp,.1)
+quantile(mtcars$disp,1:4*.2)
+```
+
+## Descriptiva de una variable -- tendencia central
+```{r, echo = TRUE}
+mean(mtcars$disp)
+median(mtcars$disp)
+```
+
+## Descriptiva de una variable -- dispersión
+```{r, echo = TRUE}
+var(mtcars$disp) # el denominador es n-1
+sd(mtcars$disp)
+range(mtcars$disp)
+```
+
+----
+
+```{r, echo = TRUE}
+diff(range(mtcars$disp))
+IQR(mtcars$disp)
+mad(mtcars$disp) # mean absolute deviation
+```
+
+## Descriptiva de una variable -- puntos extremos
+```{r, echo = TRUE}
+lmin <- quantile(mtcars$disp,.25) - 1.5*IQR(mtcars$disp) 
+lmax <- quantile(mtcars$disp,.75) + 1.5*IQR(mtcars$disp) 
+mtcars$disp[mtcars$disp > lmax | mtcars$disp < lmin]
+```
+
+```{r, echo = TRUE}
+lmin <- quantile(mtcars$qsec,.25) - 1.5*IQR(mtcars$qsec) 
+lmax <- quantile(mtcars$qsec,.75) + 1.5*IQR(mtcars$qsec) 
+mtcars$qsec[mtcars$qsec > lmax | mtcars$qsec < lmin]
+```
+
+## Descriptiva de una variable -- gráficos 
+Gráficamente, son útiles para describir un conjunto de datos
+
+- para variables cuantitativas: el diagrama de caja y el histograma
+
+```{r, echo = TRUE, eval = FALSE}
+boxplot(mtcars$qsec)
+hist(mtcars$qsec)
+```
+
+- para variables cualitativas: el diagrama de barras
+
+```{r, echo = TRUE, eval = FALSE}
+barplot(table(factor(mtcars$cyl)))
+```
+
+----
+
+```{r, echo = FALSE}
+boxplot(mtcars$qsec)
+```
+
+----
+
+```{r, echo = FALSE}
+hist(mtcars$qsec)
+```
+
+----
+
+```{r, echo = FALSE}
+barplot(table(factor(mtcars$cyl)))
+```
+
+## Descriptiva de dos variables
+Para el estudio y descripción de la relación entre dos variables, las técnicas más habituales incluyen
+
+- los coeficientes de correlación, y muy especialmente el producto-momento de Pearson,
+- las tablas de contingencia, y
+- los gráficos de dispersión
+
+
+## Descriptiva de dos variables -- coeficiente de correlación
+**Producto-momento de Pearson**
+```{r, echo = TRUE}
+cor(mtcars$disp,mtcars$qsec)
+```
+
+**Coeficiente de correlación de Spearman**
+```{r, echo = TRUE}
+cor(mtcars$disp,mtcars$qsec, method = "spearman")
+```
+
+## Descriptiva de dos variables -- tabla de contingencia
+```{r, echo = TRUE}
+table(factor(mtcars$am),factor(mtcars$cyl))
+```
+
+## Descriptiva de dos variables -- gráfico de dispersión
+```{r, echo = TRUE, eval = FALSE}
+plot(mtcars$disp,mtcars$qsec)
+```
+
+----
+
+```{r, echo = FALSE}
+plot(mtcars$disp,mtcars$qsec)
+```
+
+
+## Distribuciones de probabilidad
+
+## Inferencia
+
+## Inferencia -- distribución
+
+## Inferencia -- localización
+
+## Inferencia -- dispersión
+
+## Ajuste de modelos
+
+## Regresión lineal
+
+
+# Importación y exportación de datos
 
 
 # Manipulación avanzada de tablas de datos
