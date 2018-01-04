@@ -1106,6 +1106,7 @@ barplot(table(factor(mtcars$cyl)))
 
 ```{r, echo = FALSE}
 boxplot(mtcars$qsec)
+points(mean(mtcars$qsec),pch=3)
 ```
 
 ----
@@ -1123,10 +1124,25 @@ barplot(table(factor(mtcars$cyl)))
 ## Descriptiva de dos variables
 Para el estudio y descripción de la relación entre dos variables, las técnicas más habituales incluyen
 
-- los coeficientes de correlación, y muy especialmente el producto-momento de Pearson,
-- las tablas de contingencia, y
+- las tablas de contingencia, 
+- los coeficientes de correlación, y muy especialmente el producto-momento de Pearson, y
 - los gráficos de dispersión
 
+## Descriptiva de dos variables -- tabla de contingencia
+Es el concepto equivalente a las tablas de frecuencias en el caso univariante.
+
+Para variables cualitativas...
+```{r, echo = TRUE}
+table(factor(mtcars$am),factor(mtcars$cyl))
+```
+
+----
+
+Para variables cuantitativas...
+```{r, echo = TRUE}
+table(cut(mtcars$disp,breaks = seq(0,500,by=100)),
+      cut(mtcars$qsec,breaks = seq(13,25,by=3)))
+```
 
 ## Descriptiva de dos variables -- coeficiente de correlación
 **Producto-momento de Pearson**
@@ -1137,11 +1153,6 @@ cor(mtcars$disp,mtcars$qsec)
 **Coeficiente de correlación de Spearman**
 ```{r, echo = TRUE}
 cor(mtcars$disp,mtcars$qsec, method = "spearman")
-```
-
-## Descriptiva de dos variables -- tabla de contingencia
-```{r, echo = TRUE}
-table(factor(mtcars$am),factor(mtcars$cyl))
 ```
 
 ## Descriptiva de dos variables -- gráfico de dispersión
@@ -1155,20 +1166,158 @@ plot(mtcars$disp,mtcars$qsec)
 plot(mtcars$disp,mtcars$qsec)
 ```
 
-
 ## Distribuciones de probabilidad
+La distribución de probabilidad de un número aleatorio corresponde a la abstracción teórica de la densidad  de los datos de una conjunto. Representa la densidad que se obtendría cunado se generasen infinitos números aleatorios de acuerdos a un mismo procedimiento o experimento.
+
+Un gran número de distribuciones experimentales tienen modelos teóricos con los que se relacionan. Los tres más comunes son la distribución normal (para datos de variables cuantitativas continuas), la distribución uniforme (para cualquier tipo de datos) y la distribución binomial (para el número de veces que se produce un suceso de una determinada probabilidad).
+
+----
+
+En **R**, todas las distribuiciones comparten el mismo sistema de funciones
+
+- `r<dist>`: genera aleatorios deacuerdo con una distribución de probabilidad
+- `d<dist>`: devuelve la densidad de probablidad para un valor de variable
+- `q<dist>`: devuelve el valor de la variable tal que la probablidad 
+- `p<dist>`: devuelve la probablidad que un valor sea inferior o igual a x
+
+----
+
+Por ejemplo, para la distribución normal estándar...
+
+```{r, echo = TRUE}
+rnorm(10)
+dnorm(0)
+qnorm(.95)
+pnorm(1.64)
+```
+
+## Distribuciones de probabilidad - normal
+```{r, echo = TRUE, eval = FALSE}
+df <- data.frame(x = rnorm(1000, mean = 3, sd = 1))
+dfT <-data.frame(x = seq(0,6,length.out=101),
+      y = dnorm(seq(0,6,length.out=101),mean=3,sd=1))
+ggplot(df, aes(x = x, y=..density..)) +
+  geom_histogram(binwidth = .1,fill="#dddddd",col="black") +
+  geom_density() +
+  geom_line(data=dfT,aes(x=x,y=y),col="red")+
+  theme_bw()
+```
+
+----
+
+```{r, echo = FALSE}
+df <- data.frame(x = rnorm(1000, mean = 3, sd = 1))
+dfT <-data.frame(x = seq(0,6,length.out=101),
+      y = dnorm(seq(0,6,length.out=101),mean=3,sd=1))
+ggplot(df, aes(x = x, y=..density..)) +
+  geom_histogram(binwidth = .1,fill="#dddddd",col="black") +
+  geom_density() +
+  geom_line(data=dfT,aes(x=x,y=y),col="red")+
+  theme_bw()
+```
+
+----
+
+```{r, echo = TRUE}
+pnorm(5,mean = 3,sd = 1)
+qnorm(.98,mean = 3,sd = 1)
+``` 
+
+## Distribuciones de probabilidad - uniforme
+```{r, echo = TRUE, eval = FALSE}
+df <- data.frame(x = runif(1000, min = 10, max = 20))
+dfT <-data.frame(x = seq(10,20,length.out=101),
+      y = dunif(seq(10,20,length.out=101), min=10, max=20))
+ggplot(df, aes(x = x, y=..density..)) +
+  geom_histogram(binwidth = .5,fill="#dddddd",col="black") +
+  geom_density() +
+  geom_line(data=dfT,aes(x=x,y=y),col="red")+
+  theme_bw()
+```
+
+----
+
+```{r, echo = FALSE}
+df <- data.frame(x = runif(1000, min = 10, max = 20))
+dfT <-data.frame(x = seq(10,20,length.out=101),
+      y = dunif(seq(10,20,length.out=101), min=10, max=20))
+ggplot(df, aes(x = x, y=..density..)) +
+  geom_histogram(binwidth = .5,fill="#dddddd",col="black") +
+  geom_density() +
+  geom_line(data=dfT,aes(x=x,y=y),col="red")+
+  theme_bw()
+```
+
+----
+
+```{r, echo = TRUE}
+punif(12, min=10, max=20)
+qunif(.90, min=10, max=20)
+``` 
+
+## Distribuciones de probabilidad - binomial
+```{r, echo = TRUE, eval = FALSE}
+df <- data.frame(x = rbinom(100,5,prob=0.5))
+df <- df %>% group_by(x) %>%
+  summarise(y = n()/nrow(df))
+dfT <- data.frame(x = 0:5,
+    y = dbinom(0:5,size=5,prob=0.5))
+
+dfJ <- rbind(cbind(teo=FALSE,df),
+             cbind(teo=TRUE,dfT))
+
+ggplot(dfJ,aes(x=x,y=y,fill=teo)) +
+  geom_bar(position="dodge", stat="identity",
+           col="black") +
+  theme_bw()
+```
+
+----
+
+```{r, echo = FALSE}
+df <- data.frame(x = rbinom(100,5,prob=0.5))
+df <- df %>% group_by(x) %>%
+  summarise(y = n()/nrow(df))
+dfT <- data.frame(x = 0:5,
+    y = dbinom(0:5,size=5,prob=0.5))
+
+dfJ <- rbind(cbind(teo=FALSE,df),
+             cbind(teo=TRUE,dfT))
+
+ggplot(dfJ,aes(x=x,y=y,fill=teo)) +
+  geom_bar(position="dodge", stat="identity",
+           col="black") +
+  theme_bw()
+```
+
+----
+
+```{r, echo = TRUE}
+pbinom(2,5,prob=0.5)
+qbinom(.5,5,.5)
+```
+
+## Distribuciones de probabilidad -- otras
+**R** incorpora otras muchas distribuciones de probabilidad que pueden consultarse en la página correspondiente de la ayuda. 
+
+```{r, echo = TRUE, eval = FALSE}
+? "Distributions"
+```
 
 ## Inferencia
 
 ## Inferencia -- distribución
 
+## Inferencia -- dispersión
+
 ## Inferencia -- localización
 
-## Inferencia -- dispersión
 
 ## Ajuste de modelos
 
-## Regresión lineal
+## Ajuste de modelos -- regresión lineal
+
+## Ajuste de modelos -- comprobación
 
 
 # Importación y exportación de datos
