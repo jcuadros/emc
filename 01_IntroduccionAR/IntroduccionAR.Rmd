@@ -1269,7 +1269,9 @@ dfJ <- rbind(cbind(teo=FALSE,df),
 ggplot(dfJ,aes(x=x,y=y,fill=teo)) +
   geom_bar(position="dodge", stat="identity",
            col="black") +
-  theme_bw()
+  scale_fill_manual(values=c("#dddddd","red")) +
+  theme_bw() +
+  theme(legend.position = "none")
 ```
 
 ----
@@ -1287,7 +1289,9 @@ dfJ <- rbind(cbind(teo=FALSE,df),
 ggplot(dfJ,aes(x=x,y=y,fill=teo)) +
   geom_bar(position="dodge", stat="identity",
            col="black") +
-  theme_bw()
+  scale_fill_manual(values=c("#dddddd","red")) +
+  theme_bw() +
+  theme(legend.position = "none")
 ```
 
 ----
@@ -1305,10 +1309,185 @@ qbinom(.5,5,.5)
 ```
 
 ## Inferencia
+En términos estadísticos, la **inferencia** consiste en la obtención de información sobre la población --el conjunto de los valores existentes-- a partir de una muestra representativa de la misma.
+
+Si los datos que tenemos, no constituyen una muestra *representativa* cualquier información que queramos extrapolar a la población estará sesgada, es decir, desplazada de su valor real.
+
+----
+
+Los resultados de la inferencia se suelen mostrar mediante una de las dos formas siguientes:
+
+- el valor de un parámetro para la población, asociado normalmente a un error o un intervalo de confianza,
+- la probabilidad (*p*) que unos datos, o cualquiera más extremo que ellos, se produzcan siendo cierta una determinada hipótesis, denominada hipótesis nula.
+
+----
+
+Presentaremos a continuación, las técnicas más comúnmente usadas para
+
+- analizar el ajuste a una **distribución**,
+- estudiar la **dispersión** de la población, y
+- estimar o comparar valores de **tendencia central** --localización o posición--
+
 
 ## Inferencia -- distribución
+Para contrastar la hipótesis que un conjunto de datos puede representarse mediante un determinada distribución teórica, las pruebas más comunes son la **prueba de bondad de ajuste de chi cuadrado** (`chisq.test`) y la **prueba de Kolmogorov-Smirnov** (`ks.test`). En ambos casos, los argumentos son las frecuencias absolutas de cada clase para la distribución experimental y las probabilidades esperadas de acuerdo con la distribución teórica o de referencia.
+
+----
+
+**Ejemplo**
+
+Se ha tirado cien veces un dado de 10 caras, y se han obtenido cada una de las caras las veces que se muestran en la tabla siguiente.
+
+---- ---- ---- ---- ---- ---- ---- ---- ---- ----
+  1    2    3    4    5    6    7    8    9   10
+  9    6    7   15   11   11    9   13    9   10
+---- ---- ---- ---- ---- ---- ---- ---- ---- ----
+
+Si el dado fuese normal, todas las caras tendrían la misma probabilidad de aparecer.
+¿Lo es?
+
+----
+
+```{r, echo = TRUE}
+obs <- c(9, 6, 7, 15, 11, 11, 9, 13, 9, 10)  
+exp <- rep(.1, 10)
+ 
+chisq.test(x = obs, p = exp)
+```
+
+----
+
+Gráficamente, y aunque sin la misma objetividad, la comparación de distribuciones también suele hacerse mediante el gráfico de cuantiles --en R, es la función `qqplot`.
+
+Si ambos conjuntos de datos corresponden a la misma distribución, sus cuantiles deben quedar alineados junto a la diagonal del gráfico (especialemente en la región central del mismo).
+
+```{r, echo = FALSE, include = FALSE}
+exp <- rep(1:10, obs)
+teo <- rep(1:10, 10)
+qqplot(x = exp, y = teo)
+```
+
+----
+
+```{r, echo = TRUE}
+qqplot(x = exp, y = quantile(teo, (1:length(exp))/length(exp)))
+qqline(y = exp, distribution = function(x)  quantile(teo,x),
+       probs= c(1/length(exp),1))
+
+```
+
+----
+
+Para comprobar si un conjunto de datos puede proceder de una población aleatoria de distribución normal, existen pruebas estadísticas más específicas. Entre las muchas pruebas existentes, son de uso común las pruebas de Shapiro-Wilk y Anderson-Darling.
+
+----
+
+```{r, echo = TRUE}
+x1 <- rnorm(20, mean = 4, sd = 5)
+x2 <- rbeta(20, shape1 = 5, shape2 = .5, ncp = 4)
+
+shapiro.test(x1)
+shapiro.test(x2)
+
+```
+
+----
+
+```{r, include = FALSE}
+if(!require("nortest")) {
+  install.packages("nortest")
+  library("nortest")
+}
+
+```
+
+```{r, echo = TRUE, eval = FALSE}
+if(!require("nortest")) {
+  install.packages("nortest")
+  library("nortest")
+}
+
+```
+
+```{r, echo = TRUE}
+ad.test(x1)
+ad.test(x2)
+```
+
+----
+
+Gráficamente se puede usar el gráfico de cuantiles comentado anteriormente.
+
+```{r, echo = TRUE, eval = FALSE}
+qqnorm(x1)
+qqline(x1)
+
+qqnorm(x2)
+qqline(x2)
+```
+
+----
+
+```{r, echo = FALSE}
+qqnorm(x1)
+qqline(x1)
+```
+
+----
+
+```{r, echo = FALSE}
+qqnorm(x2)
+qqline(x2)
+```
 
 ## Inferencia -- dispersión
+Las inferencias más habituales respecto a la dispersión de una población constituyen los siguientes casos
+
+- determinar el intervalo de confianza de la varianza o la desviación típica de la distribución,
+- comparar la dispersión de dos conjuntos de datos,
+- comparar la dispersión de tres o más conjuntos de datos,
+- comprobar la independencia de la dispersión respecto a una variable del sistema --homocedasticidad--
+
+----
+
+Cuando los datos estan normalmente distribuidos, el **intervalo de confianza de la varianza** se calcula a partir de la distribución de chi cuadrado.
+
+```{r, echo = TRUE}
+x <- rnorm(50, mean = 0, sd = 2)
+df <- length(x) - 1
+lower <- var(x) * df / qchisq(1 - 0.05/2, df)
+upper <- var(x) * df / qchisq(0.05/2, df)
+c(lower = lower, var = var(x), upper = upper)
+```
+
+----
+
+Para obtener el **intervalo de confianza para la desviación estándar**, cuando los datos estan normalmente distribuidos, se calcula la desviación estándar a partir de las varainzas calculadas más arriba.
+
+```{r, echo = TRUE}
+c(lower = sqrt(lower), sd = sd(x), upper = sqrt(upper))
+```
+
+----
+
+Para la **comparación de la dispersión de las poblaciones para dos conjuntos de datos**, cuando los datos estan normalmente distribuidos, se lleva a cabo con la función `var.test`.
+
+```{r, echo = TRUE}
+x <- rnorm(50, mean = 0, sd = 2)
+y <- rnorm(30, mean = 1, sd = 1)
+var.test(x, y)
+```
+
+----
+
+Si los datos no estan normalmente distribuidos, la comparación de dispersiones puede hacerse mediante el test de Ansari.
+
+```{r, echo = TRUE}
+x <- rlnorm(50, meanlog = 2, sdlog = 1)
+y <- rlnorm(30, meanlog = 2, sdlog = .2)
+ansari.test(x, y)
+```
+
 
 ## Inferencia -- localización
 
