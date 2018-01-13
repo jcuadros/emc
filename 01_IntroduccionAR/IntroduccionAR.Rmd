@@ -1361,19 +1361,25 @@ Gráficamente, y aunque sin la misma objetividad, la comparación de distribucio
 
 Si ambos conjuntos de datos corresponden a la misma distribución, sus cuantiles deben quedar alineados junto a la diagonal del gráfico (especialemente en la región central del mismo).
 
-```{r, echo = FALSE, include = FALSE}
+```{r, echo = TRUE, eval = FALSE}
 exp <- rep(1:10, obs)
 teo <- rep(1:10, 10)
-qqplot(x = exp, y = teo)
+qqplot(x = exp, y = quantile(teo, (1:length(exp))/length(exp)))
+qqline(y = exp, distribution = function(x)  quantile(teo,x),
+       probs= c(1/length(exp),1))
 ```
 
 ----
 
-```{r, echo = TRUE}
+```{r, echo = FALSE}
+exp <- rep(1:10, obs)
+teo <- rep(1:10, 10)
+```
+
+```{r, echo = FALSE}
 qqplot(x = exp, y = quantile(teo, (1:length(exp))/length(exp)))
 qqline(y = exp, distribution = function(x)  quantile(teo,x),
        probs= c(1/length(exp),1))
-
 ```
 
 ----
@@ -1445,8 +1451,7 @@ Las inferencias más habituales respecto a la dispersión de una población cons
 
 - determinar el intervalo de confianza de la varianza o la desviación típica de la distribución,
 - comparar la dispersión de dos conjuntos de datos,
-- comparar la dispersión de tres o más conjuntos de datos,
-- comprobar la independencia de la dispersión respecto a una variable del sistema --homocedasticidad--
+- comparar la dispersión de tres o más conjuntos de datos --o comprobar la homocedasticidad de distintos conjuntos de datos--.
 
 ----
 
@@ -1470,7 +1475,7 @@ c(lower = sqrt(lower), sd = sd(x), upper = sqrt(upper))
 
 ----
 
-Para la **comparación de la dispersión de las poblaciones para dos conjuntos de datos**, cuando los datos estan normalmente distribuidos, se lleva a cabo con la función `var.test`.
+Para la **comparación de la dispersión de las poblaciones para dos conjuntos de datos**, cuando los datos estan normalmente distribuidos, se lleva a cabo con un prueba de F --función `var.test` en R--.
 
 ```{r, echo = TRUE}
 x <- rnorm(50, mean = 0, sd = 2)
@@ -1488,15 +1493,434 @@ y <- rlnorm(30, meanlog = 2, sdlog = .2)
 ansari.test(x, y)
 ```
 
+----
+
+Para comparar las dispersiones de más de un conjunto de datos para los cuáles se pueda asumir normalidad, se usa la prueba de Bartlett --`bartlett.test` en R--.
+
+```{r, echo = TRUE, eval = FALSE}
+x1 <- round(rnorm(20, mean = 1, sd = 2),1)
+x2 <- round(rnorm(20, mean = 3, sd = 2),1)
+x3 <- round(rnorm(20, mean = 5, sd = 2),1)
+list(x1,x2,x3)
+bartlett.test(list(x1,x2,x3))
+```
+
+----
+
+```{r, echo = FALSE}
+x1 <- round(rnorm(20, mean = 1, sd = 2),1)
+x2 <- round(rnorm(20, mean = 3, sd = 2),1)
+x3 <- round(rnorm(20, mean = 5, sd = 2),1)
+list(x1,x2,x3)
+bartlett.test(list(x1,x2,x3))
+```
+
+----
+
+Si los datos no cumplen con la hipótesis de normalidad, en lugar de la prueba de Bartlett se usa la prueba de Levene o la de Brown–Forsythe --`leveneTest` en el paquete `car` de R--. 
+
+----
+
+Gráficamente y aunque de forma menos objetiva, la comparación de dispersiones puede hacerse usando gráficos de caja, bien directamente, bien centrando los datos.
+
+```{r, echo = TRUE, eval = FALSE}
+x1 <- round(rnorm(20, mean = 1, sd = 2),1)
+x2 <- round(rnorm(20, mean = 3, sd = 2),1)
+x3 <- round(rnorm(20, mean = 5, sd = 2),1)
+
+xs <- data.frame(
+  group = factor(c(rep(1, length(x1)),rep(2, length(x2)),
+            rep(3, length(x3)))),
+  y = c(x1,x2,x3),
+  centered = c(x1 - median(x1),x2 - median(x2),x3 - median(x3)))
+
+ggplot(xs, aes(x=group,y=y)) + geom_boxplot() +
+  coord_flip() + theme_bw()
+ggplot(xs, aes(x=group,y=centered)) + geom_boxplot() +
+  coord_flip() + theme_bw()
+
+```
+
+----
+
+```{r, echo = FALSE}
+x1 <- round(rnorm(20, mean = 1, sd = 2),1)
+x2 <- round(rnorm(20, mean = 3, sd = 2),1)
+x3 <- round(rnorm(20, mean = 5, sd = 2),1)
+
+xs <- data.frame(
+  group = factor(c(rep(1, length(x1)),rep(2, length(x2)),
+            rep(3, length(x3)))),
+  y = c(x1,x2,x3),
+  centered = c(x1 - median(x1),x2 - median(x2),x3 - median(x3)))
+
+ggplot(xs, aes(x=group,y=y)) + geom_boxplot() +
+  coord_flip() + theme_bw()
+```
+
+----
+
+```{r, echo = FALSE}
+ggplot(xs, aes(x=group,y=centered)) + geom_boxplot() +
+  coord_flip() + theme_bw()
+
+```
 
 ## Inferencia -- localización
+Las principales inferencias respecto a la localización --o tendencia central-- de los datos corresponden a
 
+- establecer un intervalo de confianza para la tendencia central de la distribución,
+- comparar la tendencia central de un conjunto de datos con un valor preestablecido,
+- comparar la tendencia central de dos conjuntos de datos,
+- comparar la tendencia central de tres o más conjuntos de datos.
+
+----
+
+Para establecer el **intervalo de confianza de la media**, cuando los datos están normalmente distribuidos, se usa la distribución t. El intervalo puede calcularse a partir de la función `qt` o visualizarlo como resultado de la función `t.test`.
+
+```{r, echo = TRUE}
+x <- rnorm(10, mean = 2, sd = .5)
+x
+```
+
+----
+
+```{r, echo = TRUE}
+t.test(x)
+```
+
+----
+
+Si los datos no están normalmente distribuidos, la función `wilcox.test` ofrece entre sus resultados el **intervalo de confianza para la mediana**.
+
+
+```{r, echo = TRUE}
+x <- rnorm(10, mean = 3, sd = .5) ^ 3
+x
+```
+
+----
+
+```{r, echo = TRUE}
+wilcox.test(x, conf.int = TRUE)
+```
+
+----
+
+Las dos funciones usadas para obtener los intervalos de confianza permiten **comparar la tendencia central de un conjunto de datos con un valor preestablecido**. Como se ha indicado antes, la prueba de t require normalidad de los datos; la prueba de Wilcoxon, no.
+
+```{r, echo = TRUE}
+x <- rnorm(10, mean = 2, sd = .5)
+x
+```
+
+----
+
+```{r, echo = TRUE}
+t.test(x, mu = 1.5)
+```
+
+----
+
+```{r, echo = TRUE}
+wilcox.test(x ^ 3, mu = 8)
+```
+
+----
+
+Para **comparar la localización** de dos conjuntos de datos, deben tenerse en cuenta los siguientes aspectos
+
+- ¿los datos de ambas muestras están asociados?
+- ¿los datos estan normalmente distribuidos?
+- ¿tienen ambos conjuntos de datos la misma dispersión?
+
+----
+
+Si los datos están **asociados**, es decir que existen pares de datos en ambas muestras tales que comparten fuentes de variación, entonces
+
+- si ambas **muestras están normalmente distribuidas**, o la diferencia entre conjuntos de datos está normalmente distribuido, se usa la prueba de t sobre la diferencia de los valores entre ambos conjuntos de datos. En R, puede calcularse la diferencia y luego aplicar la función `t.test` o bien usar directamente la función `t.test` con la opción `paired = TRUE`,
+- si los datos **no están normalmente distribuidos** se usa la prueba de Wilcoxon --`wilcox.test` sobre la resta o con la opción `paired = TRUE` en R--.
+
+----
+
+```{r, echo = TRUE}
+x <- rnorm(10, mean = 3, sd = 1)
+y <- rnorm(10, mean = 3.5, sd = 1)
+list(x = x,y = y)
+```
+
+----
+
+```{r, echo = TRUE}
+t.test(x - y)
+```
+
+----
+
+```{r, echo = TRUE}
+t.test(x, y, paired = TRUE)
+```
+
+----
+
+```{r, echo = TRUE}
+x <- rlnorm(10, meanlog = 3, sdlog = 1)
+y <- rlnorm(10, meanlog = 3.5, sdlog = 1)
+list(x = x,y = y)
+```
+
+----
+
+```{r, echo = TRUE}
+wilcox.test(x - y)
+```
+
+----
+
+```{r, echo = TRUE}
+wilcox.test(x, y, paired = TRUE)
+```
+
+----
+
+Si los datos **no están asociados**, entonces
+
+- si ambas **muestras están normalmente distribuidas**, o el conjunto de datos --escalados y centrados en cada muestra-- está normalmente distribuido, se usa la prueba de t. En R, se usa la función `t.test`; la opción `var.equal` permite escoger entre la prueba calculada con la varianza de los datos, y la aproximación de Welch, que se usa cuando la varianzas no son iguales.
+- si los datos **no están normalmente distribuidos** se usa la prueba U de Mann-Whitney --`wilcox.test` en R--.
+
+----
+
+```{r, echo = TRUE}
+x <- rnorm(10, mean = 3, sd = 1)
+y <- rnorm(14, mean = 3.5, sd = 2)
+list(x = x,y = y)
+```
+
+----
+
+```{r, echo = TRUE}
+t.test(x, y, var.equal = FALSE)
+```
+
+----
+
+```{r, echo = TRUE}
+x <- rlnorm(10, meanlog = 3, sdlog = 1)
+y <- rlnorm(14, meanlog = 3.5, sdlog = 2)
+list(x = x,y = y)
+```
+
+----
+
+```{r, echo = TRUE}
+wilcox.test(x, y)
+```
+
+----
+
+Para la **comparación de tres o más grupos**, las técnicas más habituales son
+
+- si los datos de los distintos conjuntos de datos están **normalmente distribuidos** y presentan dispersiones comparables --homocedasticidad--, la técnica recomendada es el análisis de la varianza --`aov` en R--;
+- si los **datos no están normalmente distribuidos** pero las distribuciones tienen formas parecidas y se mantiene la homocedaticidad, se usa la prueba de Kruskal-Wallis --en R, `krukal.test`--.
+
+----
+
+```{r, echo = TRUE}
+x <- c(rnorm(10, mean = 3, sd = 1),
+       rnorm(8, mean = 3.2, sd = 1),
+       rnorm(10, mean = 4, sd = 1))
+g <- factor(c(rep(1,10), rep(2,8), rep(3,10)))
+test <- aov(x ~ g)
+summary(test)
+```
+
+----
+
+```{r, echo = TRUE}
+x <- c(runif(10, min = 2, max = 4),
+       runif(8, min = 1.5, max = 3.5),
+       runif(10, min = 3, max = 5))
+g <- factor(c(rep(1,10), rep(2,8), rep(3,10)))
+kruskal.test(x ~ g)
+```
+
+----
+
+Tanto el análisis de la varianza como la prueba de Kruskal-Wallis solo permiten contrastar si algún par de grupos presentan valores de localización distintos, pero no permiten identificar cuál o cuáles.
+
+Para identificar qué pares de grupos presentan diferencias estadísticamente significativos se usan pruebas *post-hoc*
+
+- En el caso del análisi de varianza, se puede usar la prueba de Tukey --`TukeyHSD` en R,
+- Para la prueba de Kruskal-Wallis, se puede usar la prueba de Dunn --`dunn.test` en el paquete `dunn.test` de R--
+
+----
+
+Gráficamente y aunque con menos objetividad, la comparación de la loclización puede hacerse usando gráficos de caja.
+
+```{r, echo = TRUE, eval = FALSE}
+x <- c(rnorm(10, mean = 3, sd = 1),
+       rnorm(8, mean = 3.2, sd = 1),
+       rnorm(10, mean = 4, sd = 1))
+g <- factor(c(rep(1,10), rep(2,8), rep(3,10)))
+
+xs <- data.frame(y = x, group = g)
+  
+ggplot(xs, aes(x=group,y=y)) + geom_boxplot() +
+  coord_flip() + theme_bw()
+
+```
+
+----
+
+```{r, echo = FALSE}
+ggplot(xs, aes(x=group,y=y)) + geom_boxplot() +
+  coord_flip() + theme_bw()
+```
 
 ## Ajuste de modelos
+El ajuste de modelos se expresa de forma habitual en R mediante un objeto `formula`.
+
+En esta notación, se indica la relación entre variables mediante una expresión de tres términos donde la variable dependiente se indica a la izquierda y las variables dependientes a la derecha.
+
+```{r, echo = TRUE}
+form1 <- y ~ x              # recta
+class(form1)
+```
+
+```{r, echo = TRUE, eval = FALSE}
+form1 <- y ~ log(x)         # logaritmo
+form1 <- y ~ poly(x,4)      # polinomio de grado 4
+form1 <- y ~ x + 0          # recta que pasa por el origen
+form1 <- y ~ I(x^.5)        # raíz cuadrada
+```
 
 ## Ajuste de modelos -- regresión lineal
+El ajuste de un modelo lineal por mínimos cuadrados ordinarios se hace en R mediante la función `lm`.
+
+```{r, echo = TRUE, eval = FALSE}
+fit1 <- lm(mpg ~ wt, data=mtcars)
+summary(fit1)
+```
+
+----
+
+```{r, echo = FALSE}
+fit1 <- lm(mpg ~ wt, data=mtcars)
+summary(fit1)
+```
+
+----
+
+Una vez ajustado el modelo, este puede usarse para predecir nuevos datos (o calcular los valores ajustados) mediante la función `predict`.
+
+```{r, echo = TRUE}
+df <- data.frame(x=mtcars$wt, y=mtcars$mpg,
+  predict(fit1, newdata=mtcars, interval="prediction"))
+head(df)
+```
+
+----
+
+El modelo se puede visualizar gráficamente a partir de estas predicciones.
+
+```{r, echo = TRUE, eval = FALSE}
+df2 <- data.frame(
+  wt = seq(min(mtcars$wt), max(mtcars$wt), length.out = 201),
+  predict(fit1, 
+  newdata = data.frame(wt = seq(min(mtcars$wt), max(mtcars$wt),
+                             length.out = 201)), 
+  interval="prediction"))
+
+ggplot(mtcars, aes(x=wt, y=mpg)) +
+  geom_ribbon(data=df2, mapping = aes(x=wt, ymin=lwr,ymax=upr),
+              inherit.aes = FALSE, fill="#dddddd", alpha=0.8)+
+  geom_point(shape=3) +
+  geom_line(data=df2, mapping = aes(x=wt, y=fit)) +
+  theme_bw()
+```
+
+----
+
+```{r, echo = FALSE}
+df2 <- data.frame(
+  wt = seq(min(mtcars$wt), max(mtcars$wt), length.out = 201),
+  predict(fit1, 
+  newdata = data.frame(wt = seq(min(mtcars$wt), max(mtcars$wt),
+                             length.out = 201)), 
+  interval="prediction"))
+
+ggplot(mtcars, aes(x=wt, y=mpg)) +
+  geom_ribbon(data=df2, mapping = aes(x=wt, ymin=lwr,ymax=upr),
+              inherit.aes = FALSE, fill="#dddddd", alpha=0.8)+
+  geom_point(shape=3) +
+  geom_line(data=df2, mapping = aes(x=wt, y=fit)) +
+  theme_bw()
+```
 
 ## Ajuste de modelos -- comprobación
+Para comprobar la adecuación del modelo y del método de ajuste usado (OLS) deben analizarse los residuales.
+
+Estos deben ser aleatorios, estar normalmente distribuidos, mostrar homocedasticidad y no mostrar evidencia de puntos especialmente influyentes.
+
+Estas comprobaciones pueden hacerse a partir de los datos de los residuales y las pruebas estadísticas oportunas.
+
+```{r, echo = TRUE, eval = FALSE}
+fit1$residuals
+```
+
+----
+
+```{r, echo = FALSE}
+fit1$residuals
+```
+
+----
+
+Gráficamente, los mismas comprobaciones pueden hacerse a partir de la representación gráfica del modelo.
+
+```{r, echo = TRUE, eval = FALSE}
+plot(fit1, which=1:6)
+```
+
+----
+
+```{r, echo = FALSE}
+plot(fit1, which=1)
+```
+
+----
+
+```{r, echo = FALSE}
+plot(fit1, which=2)
+```
+
+----
+
+```{r, echo = FALSE}
+plot(fit1, which=3)
+```
+
+----
+
+```{r, echo = FALSE}
+plot(fit1, which=4)
+```
+
+----
+
+```{r, echo = FALSE}
+plot(fit1, which=5)
+```
+
+----
+
+```{r, echo = FALSE}
+plot(fit1, which=6)
+```
+
+----
+
+Estas mismas ideas son la base de la aplicación en R de las técnicas de ajuste multilineal (`lm`), ajuste lineal generalizado (`glm`) y ajuste no lineal por mínimos cuadrados (`nls`).
 
 
 # Importación y exportación de datos
