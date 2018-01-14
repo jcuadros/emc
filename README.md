@@ -1,11 +1,11 @@
 # Enseñanza del control estadístico de procesos -- Materiales docentes
 
-Este sitio incluye presentaciones y materiales creados para la enseánza del control estadístico de proceso en R.
+Este sitio incluye presentaciones y materiales creados para la enseñanza del control estadístico de proceso en R.
 Puede ser consultado en https://jcuadros.github.com/emc
 
 Incluye los siguientes apartados:
 
-- Introducción a R: [01_IntroduccionAR.html/IntroduccionAR.html] (en construcción)
+- Introducción a R: http://htmlpreview.github.com/?https://github.com/jcuadros/emc/blob/master/01_IntroduccionAR/IntroduccionAR.html (en construcción)
 
 
 ----
