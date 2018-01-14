@@ -1,10 +1,11 @@
 # Enseñanza del control estadístico de procesos -- Materiales docentes
 
+
 Este sitio incluye presentaciones y materiales creados para la enseánza del control estadístico de proceso en R.
 
 Incluye los siguientes apartados:
 
-- Introducción a R: [01_IntroduccionAR.html/IntroduccionAR.html] (en construcción)
+- Introducción a R: 01_IntroduccionAR.html/IntroduccionAR.html (en construcción)
 
 
 ----
