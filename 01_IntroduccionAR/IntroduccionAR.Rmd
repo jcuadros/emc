@@ -1937,7 +1937,7 @@ Aunque puede importar y exportar archivos de muy distintos formatos, solo coment
 
 Para los distintos ejemplos usaremos el conjunto de datos `flights` del paquete `nycflights13`.
 
-```{r, echo = TRUE, eval =FALSE}
+```{r, echo = TRUE, eval = FALSE}
 if(!require("nycflights13")) {
   install.packages("nycflights13")
   library("nycflights13")
@@ -1984,7 +1984,7 @@ fl_ny2ws <- read.table("fl_ny2ws.csv", sep=",", dec=".",
            quote="\"", fileEncoding="UTF-8", header=TRUE)
 ```
 
-Si se desea o dispone de un archivo delimitado por tabulaciones, el carácter tabular se indica como `\t`.
+Si se desea o dispone de un archivo delimitado por tabulaciones, el carácter tabulador se indica como `\t`.
 
 
 ## Escribir y leer archivos de datos de R
@@ -2007,19 +2007,21 @@ A menudo, para poder realizar gráficos y/o aplicar distintos procedimientos est
 
 ----
 
-Entre las operacions habituales que haremos sobre una tabla de datos, hay
+Entre las operaciones habituales que haremos sobre una tabla de datos, hay
 
 - renombrar filas o columnas,
 - añadir columnas o filas,
 - segmentar,
+- cambiar el formato de un conjunto de datos,
 - eliminar filas o columnas,
-- crear tablas de datos de resumen,
-- unir tablas, y
-- cambiar el formato de la tabla (largo a ancho, y viceversa)
+- crear tablas de datos de resumen, y
+- unir tablas
+
+Terminaremos este bloque introduciendo los funciones básicas del paquete `dplyr` que facilita la realización de algunas de estas operaciones.
 
 ----
 
-Partimos de una taba de datos sintética...
+Partimos de una tabla de datos sintética...
 
 ```{r, echo = TRUE}
 df <- data.frame(1:5, letters[1:5], c(rep("a", 3), rep("b", 2)))
@@ -2034,92 +2036,234 @@ rownames(df) <- paste("subject00", 1:5, sep = "")
 df
 ```
 
-## Añadir columnas
-dfTest2 <- cbind(dfTest1, rnorm(5)) # añadir un vector al data frame
-dfTest2
-dfTest2$var5 <- 5:1 # assignando valores a una nueva variable
-dfTest2
-
-## Añadir filas
-dfTest2 <- rbind(dfTest1, list(6, "e", "b"))
-dfTest2
-
-## Segmentar (subsetting)
-## ... por índices
-dfTest2 <- dfTest1[1:3,]
-dfTest2
-
-dfTest2 <- dfTest1[,c(1,3)]
-dfTest2
-
-dfTest2 <- dfTest1[-3,-2]
-dfTest2
-
-## ... por nombres
-dfTest2 <- dfTest1[,"var2"]
-dfTest2
-dfTest1$var2
-
-dfTest2 <- dfTest1[,c("var2","var3")]
-dfTest2
-
-## ... por condiciones o valores lógicos
-dfTest2 <- dfTest1[c(T,T,F,T,F), c(T,F,T)]
-dfTest2
-
-dfTest2 <- dfTest1[dfTest1[,1] == 3 | dfTest1[,3] == "b",]
-dfTest2
-
-humedad <- read.table("humedad.txt", sep="\t", dec=",", header=T)
-colnames(humedad) <- c("muestra", "repeticion", "valor")
-
-## Creación de una tabla de resumen a partir de datos en formato largo/tidy
-humedad_muestras <- group_by(humedad, muestra) %>%
-  summarise(xbar = mean(valor), r = diff(range(valor)), s = sd(valor))
-
-## Conversión de formato largo a formato ancho
-humedad_W1 <- as.data.frame(matrix(humedad$valor, byrow= T, ncol = 5))
-colnames(humedad_W1) <- paste("rep", 1:5, sep="")
-
-## Creación de resúmenes a partir de datos en formato ancho
-humedad_W1$xbar <- apply(humedad_W1,1,mean)
-humedad_W1$r <- apply(humedad_W1[,1:5],1,function(x) diff(range(x)))
-humedad_W1$s <- apply(humedad_W1[,1:5],1,sd)
-
-## Conversión de formato ancho a formato largo
-humedad_L1 <- data.frame(muestra = rep(1:32, 5),
-        repeticion = sort(rep(1:5, 32)))
-humedad_L1$valor <- c(humedad_W1[,1],humedad_W1[,2],
-                      humedad_W1[,3],humedad_W1[,4],
-                      humedad_W1[,5])
-humedad_L1 <- humedad_L1[order(humedad_L1$muestra),]
+## Añadir columnas o filas
 
 ```{r, echo = TRUE}
-# Estas conversiones también pueden hacerse a partir de las funciones
-# spread y gather del paquete tidyr (incluido en tidyverse)
+df2 <- cbind(df, rnorm(5)) # añadir un vector al data frame
+df2$var5 <- 5:1 # assignando valores a una nueva variable
+df2
+```
+
+----
+
+```{r, echo = TRUE}
+df2 <- rbind(df, list(6, "e", "b"))
+df2
+```
+
+## Segmentar
+
+Existen tres formas básicas de seleccionar filas o columnas de una tablas de datos
+
+- mediante índices numéricos,
+- usando los nombres de filas y columnas, y
+- mediante vectores lógicos
+
+## Segmentar -- mediante índices
+
+```{r, echo = TRUE}
+df[1:3,]
+df[,c(1,3)]
+```
+
+----
+
+```{r, echo = TRUE}
+df[-3,-2]
+```
+
+## Segmentar -- usando nombres
+
+```{r, echo = TRUE}
+df[,"var2"]
+df$var3
+df[,c("var2","var3")]
+```
+
+## Segmentar -- mediante vectores lógicos
+
+```{r, echo = TRUE}
+df[c(T,T,F,T,F), c(T,F,T)]
+df[df[,1] == 3 | df[,3] == "b",]
+```
+
+## Cambiar el formato de un conjunto de datos
+
+Un mismo conjunto de datos puede representar en una tabla de datos de acuerdo con distintas oragnizaciones o formatos.
+
+Se denomina formato ordenado, *tidy*, aquella organización en la que las filas representan individuos, las columnas, variables de medidas, y las intersecciones los valores de dichas medidas.  
+
+----
+
+Cuando existen más de una variable que corresponde al mismo tipo de medida, entonces los datos pueden organizarse de dos formas
+
+- usando una columna distinta para cada variable, formato ancho y *tidy*, o
+- usando una columna para los valores y otra para indicar cuál es la variable representada en esta fila.
+
+El formato más adecuado dependerá de los análisis y visualizaciones que quieran hacerse.
+
+----
+
+Partiremos de un subconjunto de `flights`...
+
+```{r, echo = TRUE, eval = FALSE}
+if(!require("nycflights13")) {
+  install.packages("nycflights13")
+  library("nycflights13")
+}
+```
+
+```{r, echo = FALSE, results = 'hide', message = FALSE, warning = FALSE, error = FALSE}
+if(!require("nycflights13")) {
+  install.packages("nycflights13", repos = "https://cloud.r-project.org")
+  library("nycflights13")
+}
+```
+
+----
+
+```{r, echo = TRUE}
+fl_ny2ws_W <- flights[flights$dest %in% c("IAD","BWI"),
+                    c("origin","dest","carrier","arr_delay","dep_delay")]
+fl_ny2ws_W <- cbind(key = 1:nrow(fl_ny2ws_W), fl_ny2ws_W)
+head(fl_ny2ws_W)
+```
+
+## Cambiar el formato de un conjunto de datos -- ancho a largo
+```{r, echo = TRUE}
+fl_ny2ws_L <- rbind(
+  cbind(edge = rep("origin", nrow(fl_ny2ws_W)), fl_ny2ws_W[,c(1,4)],
+        airport = fl_ny2ws_W[,2], delay = fl_ny2ws_W[,6]),
+  cbind(edge = rep("dest", nrow(fl_ny2ws_W)), fl_ny2ws_W[,c(1,4)],
+        airport = fl_ny2ws_W[,3], delay = fl_ny2ws_W[,5]))
+colnames(fl_ny2ws_L) <- c("edge","key","carrier","airport","delay")
+```
+
+----
+
+```{r, echo = TRUE}
+head(fl_ny2ws_L)
+tail(fl_ny2ws_L)
+```
+
+## Cambiar el formato de un conjunto de datos -- largo a ancho
+```{r, echo = TRUE}
+fl_ny2ws_W2p1 <- fl_ny2ws_L[fl_ny2ws_L$edge=="origin",]
+fl_ny2ws_W2p2 <- fl_ny2ws_L[fl_ny2ws_L$edge=="dest",]
+fl_ny2ws_W2p1 <- fl_ny2ws_W2p1[order(fl_ny2ws_W2p1$key),-1]
+fl_ny2ws_W2p2 <- fl_ny2ws_W2p2[order(fl_ny2ws_W2p2$key),-c(1,2)]
+fl_ny2ws_W2 <- cbind(fl_ny2ws_W2p1,fl_ny2ws_W2p2[,-1])
+colnames(fl_ny2ws_W2) <- c("key", "carrier", "origin", "dep_delay",
+                           "dest","arr_delay")
+
+```
+
+----
+
+```{r, echo = TRUE}
+head(fl_ny2ws_W2)
+tail(fl_ny2ws_W2)
+```
+
+## Eliminar filas o columnas
+La forma más habitual de eliminar filas o columnas es segmentando la tabla de datos. Sin embargo, una columna también puede eliminarse asignando la misma a `NULL`.
+
+```{r, echo = TRUE}
+df <- data.frame(1:5, letters[1:5], c(rep("a", 3), rep("b", 2)))
+colnames(df) <- c("var1", "var2", "var3") 
+rownames(df) <- paste("subject00", 1:5, sep = "")
+df <- df[-2,]
+df$var2 <- NULL
+```
+
+----
+
+```{r, echo = TRUE}
+df
+```
+
+----
+
+Si lo que se desea es eliminar una variable del entorno de trabajo entonces se usa la función `rm`.
+
+```{r, echo = TRUE}
+rm(df)
+```
+
+## Creación de resúmenes a partir de datos en formato ancho
+```{r, echo = TRUE}
+sum_fl_ny2ws <- data.frame(edge=c("origin","dest"))
+
+sum_fl_ny2ws$mean_delay <- apply(fl_ny2ws_W[,c("dep_delay","arr_delay")],2,
+                                 mean,na.rm=TRUE)
+sum_fl_ny2ws$r_delay <- apply(fl_ny2ws_W[,c("dep_delay","arr_delay")],2,
+                      function(x) diff(range(x,na.rm=TRUE)))
+sum_fl_ny2ws$s_delay <- apply(fl_ny2ws_W[,c("dep_delay","arr_delay")],2,
+                              sd,na.rm=TRUE)
+sum_fl_ny2ws
+```
+
+## Creación de una tabla de resumen a partir de datos en formato largo
+```{r, echo = TRUE}
+sum_fl_ny2ws <- data.frame(edge=c("origin","dest"))
+sum_fl_ny2ws$mean_delay <- by(fl_ny2ws_L$delay,fl_ny2ws_L$edge,
+                              mean,na.rm=TRUE)
+sum_fl_ny2ws$r_delay <- by(fl_ny2ws_L$delay,fl_ny2ws_L$edge,
+                           function(x) diff(range(x,na.rm=TRUE)))
+sum_fl_ny2ws$s_delay <- by(fl_ny2ws_L$delay,fl_ny2ws_L$edge,sd,na.rm=TRUE)
+sum_fl_ny2ws
+```
+
+## `dplyr`
+Estas mismas operaciones que se han comentado más arriba, se pueden llevar a cabo también a partir de un sistema coherente de métodos creado como una gramática para la manipulación de datos, el paquete `dplyr` --que forma parte de `tidyverse`--.
+
+http://dplyr.tidyverse.org/
+
+
+```{r, echo = FALSE}
 if(!require("tidyverse")) {
   install.packages("tidyverse")
   library("tidyverse")
 }
 ```
 
-humedad_W2 <- humedad %>% spread(repeticion,valor)
+```{r, echo = FALSE, results = 'hide', message = FALSE, warning = FALSE, error = FALSE}
+if(!require("tidyverse")) {
+  install.packages("tidyverse", repos = "https://cloud.r-project.org")
+  library("tidyverse")
+}
+```
 
-humedad_L2 <- humedad_W2 %>% gather("repeticion","valor",-muestra)
-humedad_L2$repeticion <- as.integer(humedad_L2$repeticion)
-humedad_L2 <- humedad_L2[order(humedad_L2$muestra),]
+----
 
+En `dplyr` las operaciones básicas, se realizan mediante cuatro métodos:
 
+- `select`: segmentar columnas,
+- `filter`: segmentar filas,
+- `mutate`: crear nuevas columnas, y
+- `arrange`: ordenar.
 
+Estas se encadenan usando el operador pipe, `%>%`.
 
-## Eliminar columna
-dfTest2 <- dfTest1
-dfTest2[,2] <- NULL
-dfTest1
-dfTest2
+----
 
-## Eliminar una variable
-rm(dfTest2)
+```{r, echo = TRUE}
+df <- flights %>% select(origin, dest, arr_delay) %>% 
+  filter(origin == "LGA" & (dest == "IAD" | dest == "BWI")) %>%
+  mutate(arr_delay_h=arr_delay/60) %>% 
+  arrange(-arr_delay_h)
+df
+``` 
 
-## Eliminar todas del espacio de trabajo
-rm(list=ls())
+----
+
+Para la creación de resúmenes a partir de tablas en formato largo, es muy útil y cómoda la combinación `group_by` y `summarize`.
+
+```{r, echo = TRUE}
+df %>% group_by(dest) %>% summarise(mean_delay = mean(arr_delay, na.rm=TRUE))
+``` 
+
+----
+
+Por último, las conversiones entre formatos también pueden hacerse a partir de las funciones `spread` y `gather` del paquete `tidyr` --incluido en `tidyverse` y que se integra de forma natural en la gramática propuestas por `dplyr`--.
+
