@@ -73,3 +73,7 @@ html, body, div, section, p {
   font-size:0.6em;
   line-height: normal;
 }
+
+.reveal .smaller table {
+  font-size:0.6em;
+}
