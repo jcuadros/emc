@@ -5,7 +5,7 @@ Puede ser consultado en [https://jcuadros.github.com/emc](https://jcuadros.githu
 
 Incluye los siguientes apartados:
 
-- Introducción a R: [IntroduccionAR.html](http://htmlpreview.github.com/?https://github.com/jcuadros/emc/blob/master/01_IntroduccionAR/IntroduccionAR.html) -- [versión imprimible] (http://htmlpreview.github.com/?https://github.com/jcuadros/emc/blob/master/01_IntroduccionAR/IntroduccionAR.html?print-pdf)
+- Introducción a R: [IntroduccionAR.html](http://htmlpreview.github.com/?https://github.com/jcuadros/emc/blob/master/01_IntroduccionAR/IntroduccionAR.html) -- [versión imprimible](http://htmlpreview.github.com/?https://github.com/jcuadros/emc/blob/master/01_IntroduccionAR/IntroduccionAR.html?print-pdf)
 
 
 ----
