@@ -12,6 +12,8 @@ output:
       previewLinks: false
       transition: 0
       background_transition: 0
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r setup, include=FALSE}

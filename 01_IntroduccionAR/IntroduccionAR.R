@@ -1,0 +1,2269 @@
+#' ---
+#' output:
+#'   revealjs::revealjs_presentation:
+#'     theme: simple
+#'     slide_level: 2
+#'     highlight: pygments
+#'     center: false
+#'     self_contained: true
+#'     css: "../css/styles.css"
+#'     reveal_options:
+#'       slideNumber: true
+#'       previewLinks: false
+#'       transition: 0
+#'       background_transition: 0
+#' ---
+#' 
+## ----setup, include=FALSE------------------------------------------------
+knitr::opts_chunk$set(echo = FALSE, dev="svg")
+
+#' ##
+#' 
+#' <img src="../images/IQSlogo.png" style="border-style:none;box-shadow:none;
+#' position:absolute;margin:0;top:20px;left:20px;max-width:200px;height:auto;" />
+#' 
+#' <div style="font-size:1.5em;font-weight:700;margin-top:200px;">Control estadístico de procesos</div>
+#' <div style="font-size:1.4em;font-weight:500;color:#333333;">Introducción a R</div>
+#' <div style="font-size:1.2em;margin-top:40px;color:#333333;">Jordi Cuadros, Lucinio González</div>
+#' <div style="margin-top:80px;color:#333333;">Diciembre de 2017</div>
+#' 
+#' 
+#' # Elementos básicos de R
+#' 
+#' ## R
+#' 
+#' R es un entorno y un lenguaje de programación estadística.
+#' 
+#' Es una de las herramientas más usadas en el análisis de datos. Es de código libre, su uso es gratuito y dispone de una comunidad muy activa que contribuye al desarrollo de herramientas y funciones adicionales (más de 10.000 paquetes) y a la resolución de preguntas a través de la red.
+#' 
+#' https://www.r-project.org/about.html
+#' https://www.rdocumentation.org/
+#' https://stackoverflow.com/questions/tagged/r 
+#' 
+#' 
+#' ## Instalación de R y RStudio
+#' 
+#' - **R**
+#' 
+#'     Se puede instalar desde https://cran.r-project.org/.
+#' 
+#' 
+#' - **RStudio**
+#'   
+#'     Es una interfaz gráfica (o IDE) para la realización de cálculos y la programación en R.
+#'   
+#'     Se instala desde https://www.rstudio.com/, versión RStudio Desktop (Open Source License).
+#' 
+#' ## R como herramienta de cálculo
+#' **R** puede usarse desde la consola introduciendo directamente las instrucciones correspondientes.
+#' 
+## ---- echo = TRUE--------------------------------------------------------
+2 + 3 
+8 ^ 10
+log(100) # Logaritmo neperiano
+
+#' \# indica que lo que sigue es un comentario
+#' 
+#' ## Uso de *scripts*
+#' Un *script* en R es un conjunto de instrucciones escritas en un archivo de texto, de forma que estás puedan almacenarse y ejecutarse con posterioridad. Se suelen almacenar con la extensión `.R`.
+#' 
+#' Un editor muy recomendado para la creación, ejecución y depuración de estos *scripts* es **RStudio**.
+#' 
+#' ## Acceso a la ayuda
+#' - Buscar ayuda sobre una función
+## ---- echo = TRUE, eval = FALSE------------------------------------------
+## ? "mean"
+
+#' - Buscar un texto en la ayuda
+## ---- echo = TRUE, eval = FALSE------------------------------------------
+## ?? "anova"
+
+#' 
+#' En RStudio, se puede seleccionar y pulsar F1 para buscar en la ayuda
+#' 
+#' ## Datos básicos
+#' - *numeric*: número decimal de 15 dígitos significativos
+#' - *integer*: entero de 32 bits (hasta 2·10^9^ aprox.)
+#' - *logical*: `TRUE` o  `FALSE`
+#' - *character*: cadena de caracteres de longitud indeterminada
+#' 
+#' ## Datos básicos -- *numeric*
+## ---- echo = TRUE--------------------------------------------------------
+a <- 2
+a
+class(a)
+
+#' 
+#' ---- 
+#' 
+## ---- echo = TRUE--------------------------------------------------------
+b <- 13.6788956789
+b
+class(b)
+print(b, digits = 10)
+
+#' 
+#' ----
+#' 
+#' Operadores más comunes para datos de tipo *numeric*
+#' 
+#' 
+#' -------------------      --------------------- 
+#' Suma                              `+`  
+#' Resta                             `-`
+#' Producto                          `*`
+#' División                          `/`
+#' Potencia                       `^` o `**`
+#' Módulo (residuo)                 `%%`
+#' División entera                  `%/%`
+#' Comparaciones              `== > < >= <= !=`
+#' --------------           ---------------------
+#' 
+#' ----
+#' 
+## ---- echo = TRUE--------------------------------------------------------
+a+b
+a-b
+a*b
+
+#' 
+#' ----
+#' 
+## ---- echo = TRUE--------------------------------------------------------
+a^b
+a/b
+
+
+#' 
+#' ## Datos básicos -- *integer*
+#' Permite almacenar números enteros. Es el tipo de datos usado para contadores e
+#' índices.
+#' 
+## ---- echo = TRUE--------------------------------------------------------
+n <- as.integer(340000)
+class(n)
+n <- 2L
+class(n)
+
+#' 
+#' ## Datos básicos -- *character*
+#' Permite almacenar cadenas de texto de longitud indeterminada.
+#' 
+#' Los literales se indican entre comillas dobles (o simples).
+#' 
+## ---- echo = TRUE--------------------------------------------------------
+a <- "aaa"
+b <- "bbb"
+
+paste(a, b, "hola", sep = ", ") 
+
+#' 
+#' ----
+#' 
+#' Operadores más comunes para datos de tipo *character*
+#' 
+#' 
+#' -------------------      --------------------- 
+#' Comparaciones              `== > < >= <= !=`
+#' -------------------      ---------------------
+#' 
+#' ## Datos básicos -- *logical*
+#' Almacena valores que son verdadero (`r T`) o falso (`r F`).
+#' 
+#' Es el resultado de una comparación.
+#' 
+## ---- echo = TRUE--------------------------------------------------------
+3 == 2
+b <- 3 != 2 
+b
+
+#' 
+#' ----
+#' 
+#' Operadores más comunes para datos de tipo *logical*
+#' 
+#' 
+#' -------------------      --------------------- 
+#' Intersección lógica               `&`
+#' Unión lógica                      `|`
+#' Negación lógica                   `!`
+#' Comparaciones                   `== !=`
+#' -------------------      ---------------------
+#' 
+#' ----
+#' 
+#' Por ejemplo...
+#' 
+## ---- echo = TRUE--------------------------------------------------------
+a <- TRUE
+b <- F
+a & b # Operador AND
+a | b # Operador OR
+!b  # Operador NOT
+
+#' 
+#' ## Conversión a datos básicos
+#' Las funciones de conversión de tipos en R se indican como `as.` seguido del tipo de dato de destino.
+#' 
+## ---- echo = TRUE--------------------------------------------------------
+as.character(2)
+as.numeric(TRUE)
+
+#' 
+#' Para saber si una información o variable es de un tipo determinado puede usarse `is.` seguido del tipo de dato a comprobar.
+#' 
+#' ## Constantes
+#' R incorpora algunas constantes preestablecidas como
+## ---- echo = TRUE--------------------------------------------------------
+pi
+
+#' 
+## ---- echo = TRUE, eval = FALSE------------------------------------------
+## Inf
+## NaN
+## NA
+## NULL
+
+#' 
+#' ----
+#' 
+#' También existen funciones para evaluar si un dato corresponde a una de estas constantes.
+#' 
+## ---- echo = TRUE--------------------------------------------------------
+is.na(3)
+is.null(NULL)
+is.infinite(-Inf)
+
+#' 
+#' ## Datos compuestos
+#' - **Principales**
+#'     - Vector
+#'     - Factor
+#'     - *Data frame* (Tabla de datos)
+#' - Otros tipos comunes
+#'     - Factor ordenado
+#'     - Lista
+#'     - Matriz
+#' 
+#' ## Datos compuestos -- vector
+## ---- echo = TRUE--------------------------------------------------------
+a <- c(2, 3, 4)
+str(a)
+a[2]
+
+#' 
+#' ----
+#' 
+#' Las operaciones se aplican a vectores y devuelven vectores
+## ---- echo = TRUE--------------------------------------------------------
+a + a 
+a > 2.5
+
+#' 
+#' ----
+#' 
+#' Atención al reciclaje de datos...
+## ---- echo = TRUE--------------------------------------------------------
+a <- c(2, 3, 4)
+b <- c(10, 20)
+a * b
+
+#' 
+#' ----
+#' 
+#' Las funciones en R suelen ser vectoriales
+#' 
+#' - algunas devuelven vectores
+## ---- echo = TRUE--------------------------------------------------------
+a <- c(2, 3, 4)
+abs(sin(a))
+exp(a)
+
+#' 
+#' ----
+#' 
+#' - otras devuelven valores agregados
+## ---- echo = TRUE--------------------------------------------------------
+length(a)
+sum(a)
+mean(a)
+
+#' 
+#' También `sd`, `max`, `min`...
+#' 
+#' ----
+#' 
+#' Puede determinarse si un valor está presente en un vector con el operador `%in%`.
+## ---- echo = TRUE--------------------------------------------------------
+a <- c(2, 3, 4)
+3 %in% a
+c(2,5,3,4) %in% a
+
+#' 
+#' ----
+#' 
+#' Existen estructuras especificas para crear vectores secuencia.
+## ---- echo = TRUE--------------------------------------------------------
+1:10
+seq(1, 10, by = 2)
+seq(1, 3, length.out = 5) 
+
+#' 
+#' ----
+#' 
+#' Los vectores se ordenan usando las funciones `sort` y `order`.
+## ---- echo = TRUE--------------------------------------------------------
+a <- c(8, 2, 5, 3)
+sort(a)
+a[order(a)]
+a[order(a,decreasing = T)]
+
+#' 
+#' ##  Datos compuestos -- factor
+#' Un factor es un vector de cadenas indexado. Normalmente se crea a partir del vector de cadenas de texto.
+#' 
+## ---- echo = TRUE--------------------------------------------------------
+a <- c("hola", "adeu","hola", "adeu", "adeu", "bye")
+b <- as.factor(a)
+as.character(b)
+as.numeric(b)
+str(b)
+
+#' ----
+#' 
+#' La función `factor` permite la codificación o recodificación manual de un vector. 
+## ---- echo = TRUE--------------------------------------------------------
+a <- factor(c(3, 1, 3, 1, 1, 2), labels = c("adeu", "bye", "hola"))
+a
+levels(a)
+
+#' 
+#' ## Datos compuestos -- *data frame*
+#' 
+## ---- echo = TRUE--------------------------------------------------------
+dfA <- data.frame(int = 1:10,
+                  let = sample(letters, 10, replace = TRUE), 
+                  ran = rnorm(10))
+dfA
+
+#' ----
+#' 
+## ---- echo = TRUE--------------------------------------------------------
+dim(dfA) # Dimensión
+nrow(dfA) # Número de columnas
+ncol(dfA) # Número de filas
+
+#' 
+#' ----
+#' 
+## ---- echo = TRUE--------------------------------------------------------
+str(dfA)
+head(dfA, 3) # Primeros datos, 6 por defecto
+tail(dfA, 2) # Últimos valores
+
+#' 
+#' ----
+#' 
+#' Para acceder a los datos almacenados en el *data frame* se usan índices. Las variables de *data frame* también pueden extraerse usando su nombre.
+#' 
+## ---- echo = TRUE--------------------------------------------------------
+dfA[2,3]
+dfA[,1]
+dfA$let
+
+#' 
+#' Veremos más formas de acceder y usar los datos de una tabla de datos más adelante.
+#' 
+#' ## Más datos compuestos -- lista
+## ---- echo = TRUE--------------------------------------------------------
+a <- list(2, "2", FALSE)
+b <- list(3, "hola", c(2, 3, 4))
+
+#' 
+#' <div style="column-count:2;">
+## ---- echo = TRUE--------------------------------------------------------
+a
+b
+
+#' </div>
+#' 
+#' ----
+#' 
+#' <div style="column-count:2;">
+## ---- echo = TRUE--------------------------------------------------------
+length(a)
+a[[3]]
+b[[3]][1]
+
+#' 
+#' &nbsp;
+#' <p style="display:block;break-after:column;"></p>
+#' 
+## ---- echo = TRUE--------------------------------------------------------
+str(b)
+
+#' 
+#' </div>
+#' 
+#' ## Más datos compuestos -- factor ordenado
+## ---- echo = TRUE--------------------------------------------------------
+notes <- c("Aprovat", "Insuficient", "Notable", "Insuficient",
+           "Notable", "Excel·lent", "Aprovat")
+notes <- factor(notes,
+        levels = c("Insuficient", "Aprovat",
+                   "Notable", "Excel·lent"),
+        ordered = TRUE)
+str(notes)
+levels(notes)
+
+#' 
+#' ## Más datos compuestos -- matriz
+## ---- echo = TRUE--------------------------------------------------------
+a <- matrix(c(2, 4, -3, 5), ncol = 2)
+a
+a[2,2]
+
+#' 
+#' ----
+## ---- echo = TRUE--------------------------------------------------------
+a * a # Producto posición por posición
+a %*% a # Producto matricial
+t(a) # Transposición
+
+#' 
+#' ## Instalación y carga de paquetes en R
+#' R tiene muchos paquetes para resolver problemas específicos. Para usar un paquete adicional este debe instalarse y cargarse en memoria.
+#' 
+## ---- echo = TRUE, eval = FALSE------------------------------------------
+## installed.packages()[,1] # Lista los paquetes instalados
+## (.packages()) # Lista los paquetes en memoria
+
+#' 
+#' Dos recursos importantes para buscar y identificar paquetes relevantes son
+#' https://www.rdocumentation.org/
+#' https://cran.rstudio.com/web/views/
+#' 
+#' ----
+#' 
+#' Para instalar un paquete, por ejemplo "nycflights13"
+## ---- echo = TRUE, eval = FALSE------------------------------------------
+## install.packages("nycflights13")
+
+#' Para cargar un paquete en memoria, se usa
+## ---- echo = TRUE, eval = FALSE------------------------------------------
+## library("nycflights13")
+
+#' 
+#' En RStudio la gestión de paquetes también puede hacerse desde la interfaz del programa
+#' 
+#' ----
+#' 
+#' En un script y para garantizar la disponibilidad de un paquete
+#' 
+## ---- echo = TRUE, eval = FALSE------------------------------------------
+## if(!require("nycflights13")) {
+##   install.packages("nycflights13")
+##   library("nycflights13")
+## }
+
+#' 
+#' ----
+#' 
+#' Para acceder a la documentación de un paquete
+## ---- echo = TRUE, eval = FALSE------------------------------------------
+## help(package="nycflights13")
+
+#' 
+#' Algunos paquetes tienen información adicional a la que se puede acceder con las funciones `vignette()` y `demo()`.
+#' 
+#' 
+#' # Gráficos en R
+#' 
+#' ## ¿Para qué usamos los gráficos?
+#' La principales funciones de los gráficos en el análisis de datos son
+#' 
+#' - explorar los datos y facilitar su comprensión,
+#' - permitir el descubrimiento de patrones no evidentes, y
+#' - comunicar efectivamente los resultados de los análisis.
+#' 
+#' 
+#' ## Gráficos en R
+#' Veremos dos paradigmas distintos para la creación de gráficos en R.
+#' 
+#' - Gráficos creados con el paquete `base`.
+#' - Gráficos creados en base a la gramática de gráficos (*GoG*), usando el paquete `ggplot2`
+#' 
+#' ## Gráficos en `base` R
+#' Los gráficos en `base` R se construyen a partir de datos en vectores y usando funciones específicas en función del gráfico a realizar.
+#' 
+#' Para ejemplificar algunas de estas funciones, usaremos el conjunto de datos `mtcars`, que forma de los paquetes básicos de R.
+#' 
+#' ----
+#' 
+## ---- echo = TRUE--------------------------------------------------------
+str(mtcars)
+
+#' 
+#' ----
+#' 
+## ---- echo = TRUE--------------------------------------------------------
+head(mtcars, 10)
+
+#' 
+#' ----
+#' 
+#' Veremos como crear
+#' 
+#' - gráficos de dispersión,
+#' - histogramas,
+#' - diagramas de barras, y 
+#' - diagramas de caja (*boxplot*)
+#' 
+#' ## Gráficos en `base` R -- gráfico de dispersión
+## ---- echo = TRUE, eval = FALSE------------------------------------------
+## plot(mtcars$disp,mtcars$hp)
+
+#' 
+#' ----
+#' 
+## ---- echo = FALSE, eval = TRUE------------------------------------------
+plot(mtcars$disp,mtcars$hp)
+
+#' 
+#' ----
+#' 
+#' ## Gráficos en `base` R -- histograma
+## ---- echo = TRUE, eval = FALSE------------------------------------------
+## hist(mtcars$disp)
+
+#' 
+#' Añadiendo una curva de densidad...
+## ---- echo = TRUE, eval = FALSE------------------------------------------
+## hist(mtcars$disp,breaks=20,freq=FALSE)
+## lines(density(mtcars$disp))
+
+#' 
+#' ----
+#' 
+## ---- echo = FALSE, eval = TRUE------------------------------------------
+hist(mtcars$disp)
+
+#' 
+#' ----
+#' 
+## ---- echo = FALSE, eval = TRUE------------------------------------------
+hist(mtcars$disp,breaks=20,freq=FALSE)
+lines(density(mtcars$disp))
+
+#' 
+#' ----
+#' 
+#' ## Gráficos en `base` R -- diagrama de barras
+## ---- echo = TRUE, eval = FALSE------------------------------------------
+## barplot(table(as.factor(mtcars$cyl)))
+
+#' 
+#' ----
+#' 
+## ---- echo = FALSE, eval = TRUE------------------------------------------
+barplot(table(as.factor(mtcars$cyl)))
+
+#' 
+#' ## Gráficos en `base` R -- diagrama de caja
+## ---- echo = TRUE, eval = FALSE------------------------------------------
+## boxplot(mtcars$disp)
+## points(mean(mtcars$disp))
+
+#' 
+#' ----
+#' 
+## ---- echo = FALSE, eval = TRUE------------------------------------------
+boxplot(mtcars$disp)
+points(mean(mtcars$disp))
+
+#' 
+#' ## Gramática de gráficos (*GoG*)
+#' La **gramática de gráficos** es una aproximación teórica al estudio de los componentes de un gráfico. De acuerdo con este análisis, un gráfico se puede construir mediante la especificación de un conjunto de capas y componentes que definen los datos, la asociación de los mismos a aspectos del gráfico, la especificación de la relación entre los valores de las variables de los datos con las del gráfico, la estructura geométrica del gráfico...
+#' 
+#' <p class="bibref">Wilkinson, L. (2006). The grammar of graphics. Springer Science & Business Media.</p>
+#' 
+#' ## `ggplot2`
+#' `ggplot2` es un paquete de R que implementa de la gramática de gráficos.
+#' 
+#' <p class="bibref">Wickham, H. (2010). A layered grammar of graphics. *Journal of Computational and Graphical Statistics*, 19(1), 3-28.</p>
+#' 
+#' Referencias:
+#' 
+#' - http://ggplot2.tidyverse.org/reference/
+#' - https://github.com/rstudio/cheatsheets/raw/master/data-visualization-2.1.pdf
+#' - http://www.ling.upenn.edu/~joseff/avml2012/
+#' - http://r-statistics.co/Complete-Ggplot2-Tutorial-Part1-With-R-Code.html
+#' 
+#' ----
+#' 
+#' `ggplot2` forma parte del paquete `tidyverse` (aunque también puede instalarse y cargarse autónomamente).
+## ---- echo = TRUE, results = 'hide', message = FALSE, warning = FALSE, error = FALSE----
+if(!require("tidyverse")) {
+  install.packages("tidyverse")
+  library("tidyverse")
+}
+
+#' 
+#' ## `ggplot2` -- capas y elementos del gráfico
+#' En `ggplot2` cada elemento gráfico que representa un conjunto de datos constituye una capa. Una o más capas constituyen un gráfico.
+#' 
+#' Cada capa queda definida mediante la especificación de sus elementos. Los principales son 
+#' 
+#' - datos,
+#' - mapeado estético, y
+#' - geometrías
+#' 
+#' ----
+#' 
+#' En `ggplot2`, los gráficos constituyen un objeto de R y se construyen de forma aditiva.
+#' 
+#' Por ejemplo,
+#' 
+## ---- echo = TRUE, eval = FALSE------------------------------------------
+## grafico <- ggplot(data = anscombe,
+##         mapping = aes(x = x1, y = y1))  # Datos y mapeado estético
+## grafico <- grafico + geom_point()       # Geometría
+## 
+## grafico
+
+#' 
+#' ----
+#' 
+## ---- echo = FALSE-------------------------------------------------------
+grafico <- ggplot(data = anscombe,
+        mapping = aes(x = x1, y = y1))  # Datos y mapeado estético 
+grafico <- grafico + geom_point()       # Geometría
+
+grafico
+
+#' 
+#' ## `ggplot2` -- datos
+#' En `ggplot2`, el elemento `data` (datos) se introduce como primer argumento de la función `ggplot`. Debe corresponder a una tabla de datos o un tipo de datos convertible a tabla de datos.
+#' 
+## ---- echo = TRUE, eval = FALSE------------------------------------------
+## grafico <- ggplot(data = anscombe,
+
+#' 
+#' ## `ggplot2` -- mapeado estético
+#' El `mapping` (mapeado estético) corresponde al establecimiento de relaciones entre variables de los datos y variables del gráfico. Es el segundo argumento de la función `ggplot`y debe crearse con al función de apoyo `aes`. 
+#' 
+## ---- echo = TRUE, eval = FALSE------------------------------------------
+##         mapping = aes(x = x1, y = y1))
+
+#' 
+#' ----
+#' 
+#' Para variables cuantitativas, los mapeados más comunes corresponden a
+#' 
+#' - posiciones: `x`, `y`...
+#' - tamaño: `size`
+#' - color: `color`, `fill`
+#' 
+#' ----
+#' 
+#' Para variable cualitativas, los mapeados más frecuentes son
+#' 
+#' - posiciones: `x`, `y`...
+#' - color: `color`, `fill`
+#' - forma: `shape`
+#' 
+#' 
+#' ## `ggplot2` -- geometrías
+#' Las geometrías (`geom_`) indican la forma que debe tener el gráfico, es decir, cómo se articulan las variables del gráfico. Se añaden al gráfico sumándose al objeto creado por `ggplot`.
+#' 
+## ---- echo = TRUE, eval = FALSE------------------------------------------
+## grafico <- grafico + geom_point()
+
+#' 
+#' ----
+#' 
+#' Son geometrías de uso común
+#' 
+#' - `geom_point`
+#' - `geom_line`, `geom_vline`, `geom_hline`
+#' - `geom_bar`
+#' - `geom_histogram`
+#' - `geom_boxplot`
+#' 
+#' Un resumen de las geometrías y su relación con las variables del gráfico que reconoce cada una de ellas figura en  https://github.com/rstudio/cheatsheets/raw/master/data-visualization-2.1.pdf.
+#' 
+#' 
+#' ## Gráficos en `ggplot2`
+#' Veremos cómo crear en `ggplot2` los gráficos más habituales, añadiendo algunas consideraciones para aquellos casos donde los gráficos realizados con `base` tienen prestaciones insuficientes.
+#' 
+#' - gráficos de dispersión,
+#' - histogramas,
+#' - diagramas de barras, y 
+#' - diagramas de caja (*boxplot*).
+#' 
+#' De forma general, los gráficos en `ggplot2` se construyen a partir de tablas de datos (*data frames*), de los cuales se seleccionan las variables a representar.
+#' 
+#' ----
+#' 
+#' Usaremos 1000 datos del conjunto de datos `diamonds` para crear los distintos ejemplos.
+#' 
+## ---- echo = TRUE--------------------------------------------------------
+diaM <- diamonds[sample(1:nrow(diamonds),1000),]
+str(diaM)
+
+#' 
+#' ## Gráficos en `ggplot2` -- gráfico de dispersión
+## ---- echo = TRUE, eval = FALSE------------------------------------------
+## ggplot(diaM, aes(x=carat,y=price)) + geom_point()
+
+#' 
+#' ----
+#' 
+## ---- echo = FALSE, eval = TRUE------------------------------------------
+ggplot(diaM, aes(x=carat,y=price)) + geom_point()
+
+#' 
+#' ----
+#' 
+#' Añadiendo una tercera variable (`cut`) y modificando algunos aspectos de formato...
+#' 
+## ---- echo = TRUE, eval = FALSE------------------------------------------
+## ggplot(diaM, aes(x=carat,y=price,color=cut)) +
+##   geom_point(alpha=.8,shape=21,size=3)
+
+#' 
+#' ----
+#' 
+## ---- echo = FALSE, eval = TRUE------------------------------------------
+ggplot(diaM, aes(x=carat,y=price,color=cut)) + 
+  geom_point(alpha=.8,shape=21,size=3)
+
+#' 
+#' -----
+#' 
+#' Añadiendo líneas de tendencia...
+#' 
+## ---- echo = TRUE, eval = FALSE------------------------------------------
+## ggplot(diaM, aes(x=carat,y=price,color=cut)) +
+##   geom_point(alpha=.8,shape=21,size=3) +
+##   geom_smooth(method="lm",se=FALSE)
+
+#' 
+#' ----
+#' 
+## ---- echo = FALSE, eval = TRUE------------------------------------------
+ggplot(diaM, aes(x=carat,y=price,color=cut)) + 
+  geom_point(alpha=.8,shape=21,size=3) +
+  geom_smooth(method="lm",se=FALSE)
+
+#' 
+#' ## Gráficos en `ggplot2` -- histograma
+## ---- echo = TRUE, eval = FALSE------------------------------------------
+## ggplot(diaM, aes(x=price)) + geom_histogram(binwidth=1000)
+
+#' 
+#' ----
+#' 
+## ---- echo = FALSE, eval = TRUE------------------------------------------
+ggplot(diaM, aes(x=price)) + geom_histogram(binwidth=1000)
+
+#' 
+#' ----
+#' 
+#' Y en función del corte...
+#' 
+## ---- echo = TRUE, eval = FALSE------------------------------------------
+## ggplot(diaM, aes(x=price,fill=cut)) +
+##   geom_histogram(position='dodge',binwidth=1000)
+
+#' 
+#' ----
+#' 
+## ---- echo = FALSE, eval = TRUE------------------------------------------
+ggplot(diaM, aes(x=price,fill=cut)) +
+  geom_histogram(position='dodge',binwidth=1000)
+
+#' 
+#' ----
+#' 
+#' En frecuencias relativas (por grupo)...
+#' 
+## ---- echo = TRUE, eval = FALSE------------------------------------------
+## ggplot(diaM, aes(x=price,y=..density..,fill=cut)) +
+##   geom_histogram(position='dodge',binwidth=1000)
+
+#' 
+#' ----
+#' 
+## ---- echo = FALSE, eval = TRUE------------------------------------------
+ggplot(diaM, aes(x=price,y=..density..,fill=cut)) +
+  geom_histogram(position='dodge',binwidth=1000)
+
+#' 
+#' ----
+#' 
+#' Quizás funcione mejor un gráfico de densidades...
+#' 
+## ---- echo = TRUE, eval = FALSE------------------------------------------
+## ggplot(diaM, aes(x=price,fill=cut)) +
+##   geom_density(alpha=.3)
+
+#' 
+#' ----
+#' 
+## ---- echo = FALSE, eval = TRUE------------------------------------------
+ggplot(diaM, aes(x=price,fill=cut)) +
+  geom_density(alpha=.3)
+
+#' 
+#' ## Gráficos en `ggplot2` -- diagrama de barras
+#' 
+## ---- echo = TRUE, eval = FALSE------------------------------------------
+## ggplot(diaM, aes(x=clarity)) + geom_bar()
+
+#' 
+#' ----
+#' 
+## ---- echo = FALSE, eval = TRUE------------------------------------------
+ggplot(diaM, aes(x=clarity)) + geom_bar()
+
+#' 
+#' ----
+#' 
+#' En función de la claridad...
+#' 
+## ---- echo = TRUE, eval = FALSE------------------------------------------
+## ggplot(diaM, aes(x=clarity, fill=cut)) + geom_bar()
+
+#' 
+#' ----
+#' 
+## ---- echo = FALSE, eval = TRUE------------------------------------------
+ggplot(diaM, aes(x=clarity, fill=cut)) + geom_bar()
+
+#' 
+#' ----
+#' 
+#' Para comparar entre frecuencias absolutas, funcionan mejor las barras separadas.
+#' 
+## ---- echo = TRUE, eval = FALSE------------------------------------------
+## ggplot(diaM, aes(x=clarity, fill=cut)) + geom_bar(position="dodge")
+
+#' 
+#' ----
+#' 
+## ---- echo = FALSE, eval = TRUE------------------------------------------
+ggplot(diaM, aes(x=clarity, fill=cut)) + geom_bar(position="dodge")
+
+#' 
+#' ----
+#' 
+#' Para comparar entre frecuencias relativas acumuladas, son mejores las barras apiladas en frecuencia relativa (para cada clase).
+#' 
+## ---- echo = TRUE, eval = FALSE------------------------------------------
+## ggplot(diaM, aes(x=clarity, fill=cut)) + geom_bar(position="fill")
+
+#' 
+#' ----
+#' 
+## ---- echo = FALSE, eval = TRUE------------------------------------------
+ggplot(diaM, aes(x=clarity, fill=cut)) + geom_bar(position="fill")
+
+#' 
+#' ----
+#' 
+#' Los diagramas de barras también pueden crearse a partir de tablas de datos agrupados. En este caso, debe indicarse qué variable es la `y` e incluir `stat="identity"` en el `geom_bar`.
+#' 
+#' ## Gráficos en `ggplot2` -- diagrama de caja
+#' 
+## ---- echo = TRUE, eval = FALSE------------------------------------------
+## ggplot(diaM, aes(x=1, y=price)) + geom_boxplot()
+
+#' 
+#' *NOTA: Para el `geom_boxplot` se requieren dos variables. Si no hay variable independiente se puede incluir `x=1`.*
+#' 
+#' ----
+#' 
+## ---- echo = FALSE, eval = TRUE------------------------------------------
+ggplot(diaM, aes(x=1, y=price)) + geom_boxplot()
+
+#' 
+#' ----
+#' 
+#' Y en función del corte...
+#' 
+## ---- echo = TRUE, eval = FALSE------------------------------------------
+## ggplot(diaM, aes(x=cut, y=price)) + geom_boxplot()
+
+#' 
+#' ----
+#' 
+## ---- echo = FALSE, eval = TRUE------------------------------------------
+ggplot(diaM, aes(x=cut, y=price)) + geom_boxplot()
+
+#' 
+#' ----
+#' 
+#' El gráfico se puede mejorar mostrando todos los puntos, con una posición aleatorizada.
+#' 
+## ---- echo = TRUE, eval = FALSE------------------------------------------
+## ggplot(diaM, aes(x=cut, y=price)) +
+##   geom_boxplot(outlier.shape = NA) +
+##   geom_jitter(shape = 21, alpha=.5,height=0,width=.2)
+
+#' 
+#' ----
+#' 
+## ---- echo = FALSE, eval = TRUE------------------------------------------
+ggplot(diaM, aes(x=cut, y=price)) + 
+  geom_boxplot(outlier.shape = NA) +
+  geom_jitter(shape = 21, alpha=.5,height=0,width=.2)
+
+#' 
+#' ----
+#' 
+#' O incluyendo un *violin plot* y un punto para la media...
+#' 
+## ---- echo = TRUE, eval = FALSE------------------------------------------
+## medias <- diaM %>% group_by(cut) %>%
+##   summarise(price=mean(price))
+## 
+## ggplot(diaM, aes(x=cut, y=price)) +
+##   geom_violin() +
+##   geom_boxplot(outlier.shape = NA, width = 0.1) +
+##   geom_point(data=medias,shape=3)
+
+#' 
+#' ----
+#' 
+## ---- echo = FALSE, eval = TRUE------------------------------------------
+medias <- diaM %>% group_by(cut) %>%
+  summarise(price=mean(price))
+
+ggplot(diaM, aes(x=cut, y=price)) + 
+  geom_violin() +
+  geom_boxplot(outlier.shape = NA, width = 0.1) +
+  geom_point(data=medias,shape=3)
+
+#' 
+#' ## `ggplot2` -- elementos adicionales
+#' 
+#' Además de los elementos ya presentados (datos, mapeado estético y geometrías), otros elementos de `ggplot2` permiten controlar aspectos adicionales del gráfico, por ejemplo
+#' 
+#' - `scale_...`: controlan los aspectos relativos a la presentación de las variables del gráfico,
+#' - `coord_...`: establecen el sistema de coordenadas usado en la geometría,
+#' - `labs`: establece los títulos del gráfico,
+#' - `theme`, `theme_...`: controlan la part del gráfico que no corresponde a datos (*non-data ink*), y
+#' - `facet_`: permite la creació de secuencia de gráficos en función de una o dos variables
+#' 
+#' ----
+#' 
+#' Un ejemplo para terminar...
+#' 
+## ---- echo = TRUE, eval = FALSE------------------------------------------
+## ggplot(diaM, aes(x=carat, y = price, shape = cut, col = clarity)) +
+##   geom_point(alpha=.6) +
+##   scale_x_continuous(breaks=1:3) +
+##   scale_y_continuous(trans="log10") +
+##   scale_color_brewer(palette="Spectral")+
+##   facet_grid(cut ~ clarity) +
+##   theme_bw() +
+##   theme(legend.position = "none",text = element_text(size=10))
+## 
+
+#' 
+#' ----
+#' 
+#' 
+## ---- echo = FALSE-------------------------------------------------------
+ggplot(diaM, aes(x=carat, y = price, shape = cut, col = clarity)) +
+  geom_point(alpha=.8) +
+  scale_x_continuous(breaks=1:3) +
+  scale_y_continuous(trans="log10") +
+  scale_color_brewer(palette="Spectral")+
+  facet_grid(cut ~ clarity) + 
+  theme_bw() + 
+  theme(legend.position = "none",text = element_text(size=10))
+
+
+#' 
+#' # Estadística básica con R
+#' 
+#' ## Funciones de la estadística
+#' La **estadística**, como parte de la matemática que se ocupa de la recolección, análisis e interpretación de datos, tiene dos funciones principales
+#' 
+#' 1. la descripción de conjuntos de datos (**estadística descriptiva**), y
+#' 2. la extracción de conclusiones a partir de estos datos (**inferencia**) 
+#' 
+#' En este repaso de la estadística básica, usaremos (de nuevo) el conjunto de datos `mtcars`.
+#' 
+#' ----
+#' 
+## ---- echo = TRUE--------------------------------------------------------
+str(mtcars)
+
+#' 
+#' ----
+#' 
+## ---- echo = TRUE--------------------------------------------------------
+head(mtcars, 10)
+
+#' 
+#' ## Descriptiva de una variable
+#' A menudo, el primer interés que tendremos es el de describir un conjunto de datos correspondientes a una sola variable. Esta es la situación con la que empezaremos.
+#' 
+#' ¿Cómo se describe un conjunto de datos univariante? 
+#' 
+#' Normalmente se consideran los siguientes aspectos
+#' 
+#' - frecuencias y cuantiles,
+#' - tendencia central (también llamado localización o posición),
+#' - dispersión, y
+#' - análisis de puntos extremos
+#' 
+#' 
+#' ## Descriptiva de una variable -- frecuencias y cuantiles
+#' **Tamaño de la muestra o número de datos**
+## ---- echo = TRUE--------------------------------------------------------
+length(mtcars$disp)
+n <- sum(!is.na(mtcars$disp))
+n
+
+#' 
+#' ----
+#' 
+#' **Frecuencias absolutas y relativas**
+#' 
+#' Para una variable cuantitativa (*numeric*)...
+## ---- echo = TRUE--------------------------------------------------------
+frec_abs <- table(cut(mtcars$disp,
+      breaks=c(0,100,200,300,400,500,Inf)))
+frec_abs
+
+frec_rel <- frec_abs / n
+frec_rel
+
+#' 
+#' -----
+#' 
+#' **Cuantiles**
+## ---- echo = TRUE--------------------------------------------------------
+quantile(mtcars$disp,.1)
+quantile(mtcars$disp,1:4*.2)
+
+#' 
+#' ## Descriptiva de una variable -- tendencia central
+## ---- echo = TRUE--------------------------------------------------------
+mean(mtcars$disp)
+median(mtcars$disp)
+
+#' 
+#' ## Descriptiva de una variable -- dispersión
+## ---- echo = TRUE--------------------------------------------------------
+var(mtcars$disp) # el denominador es n-1
+sd(mtcars$disp)
+range(mtcars$disp)
+
+#' 
+#' ----
+#' 
+## ---- echo = TRUE--------------------------------------------------------
+diff(range(mtcars$disp))
+IQR(mtcars$disp)
+mad(mtcars$disp) # mean absolute deviation
+
+#' 
+#' ## Descriptiva de una variable -- puntos extremos
+## ---- echo = TRUE--------------------------------------------------------
+lmin <- quantile(mtcars$disp,.25) - 1.5*IQR(mtcars$disp) 
+lmax <- quantile(mtcars$disp,.75) + 1.5*IQR(mtcars$disp) 
+mtcars$disp[mtcars$disp > lmax | mtcars$disp < lmin]
+
+#' 
+## ---- echo = TRUE--------------------------------------------------------
+lmin <- quantile(mtcars$qsec,.25) - 1.5*IQR(mtcars$qsec) 
+lmax <- quantile(mtcars$qsec,.75) + 1.5*IQR(mtcars$qsec) 
+mtcars$qsec[mtcars$qsec > lmax | mtcars$qsec < lmin]
+
+#' 
+#' ## Descriptiva de una variable -- gráficos 
+#' Gráficamente, son útiles para describir un conjunto de datos
+#' 
+#' - para variables cuantitativas: el diagrama de caja y el histograma
+#' 
+## ---- echo = TRUE, eval = FALSE------------------------------------------
+## boxplot(mtcars$qsec)
+## hist(mtcars$qsec)
+
+#' 
+#' - para variables cualitativas: el diagrama de barras
+#' 
+## ---- echo = TRUE, eval = FALSE------------------------------------------
+## barplot(table(factor(mtcars$cyl)))
+
+#' 
+#' ----
+#' 
+## ---- echo = FALSE-------------------------------------------------------
+boxplot(mtcars$qsec)
+points(mean(mtcars$qsec),pch=3)
+
+#' 
+#' ----
+#' 
+## ---- echo = FALSE-------------------------------------------------------
+hist(mtcars$qsec)
+
+#' 
+#' ----
+#' 
+## ---- echo = FALSE-------------------------------------------------------
+barplot(table(factor(mtcars$cyl)))
+
+#' 
+#' ## Descriptiva de dos variables
+#' Para el estudio y descripción de la relación entre dos variables, las técnicas más habituales incluyen
+#' 
+#' - las tablas de contingencia, 
+#' - los coeficientes de correlación, y muy especialmente el producto-momento de Pearson, y
+#' - los gráficos de dispersión
+#' 
+#' ## Descriptiva de dos variables -- tabla de contingencia
+#' Es el concepto equivalente a las tablas de frecuencias en el caso univariante.
+#' 
+#' Para variables cualitativas...
+## ---- echo = TRUE--------------------------------------------------------
+table(factor(mtcars$am),factor(mtcars$cyl))
+
+#' 
+#' ----
+#' 
+#' Para variables cuantitativas...
+## ---- echo = TRUE--------------------------------------------------------
+table(cut(mtcars$disp,breaks = seq(0,500,by=100)),
+      cut(mtcars$qsec,breaks = seq(13,25,by=3)))
+
+#' 
+#' ## Descriptiva de dos variables -- coeficiente de correlación
+#' **Producto-momento de Pearson**
+## ---- echo = TRUE--------------------------------------------------------
+cor(mtcars$disp,mtcars$qsec)
+
+#' 
+#' **Coeficiente de correlación de Spearman**
+## ---- echo = TRUE--------------------------------------------------------
+cor(mtcars$disp,mtcars$qsec, method = "spearman")
+
+#' 
+#' ## Descriptiva de dos variables -- gráfico de dispersión
+## ---- echo = TRUE, eval = FALSE------------------------------------------
+## plot(mtcars$disp,mtcars$qsec)
+
+#' 
+#' ----
+#' 
+## ---- echo = FALSE-------------------------------------------------------
+plot(mtcars$disp,mtcars$qsec)
+
+#' 
+#' ## Distribuciones de probabilidad
+#' La distribución de probabilidad de un número aleatorio corresponde a la abstracción teórica de la densidad  de los datos de una conjunto. Representa la densidad que se obtendría cunado se generasen infinitos números aleatorios de acuerdos a un mismo procedimiento o experimento.
+#' 
+#' Un gran número de distribuciones experimentales tienen modelos teóricos con los que se relacionan. Los tres más comunes son la distribución normal (para datos de variables cuantitativas continuas), la distribución uniforme (para cualquier tipo de datos) y la distribución binomial (para el número de veces que se produce un suceso de una determinada probabilidad).
+#' 
+#' ----
+#' 
+#' En **R**, todas las distribuiciones comparten el mismo sistema de funciones
+#' 
+#' - `r<dist>`: genera aleatorios deacuerdo con una distribución de probabilidad
+#' - `d<dist>`: devuelve la densidad de probablidad para un valor de variable
+#' - `q<dist>`: devuelve el valor de la variable tal que la probablidad 
+#' - `p<dist>`: devuelve la probablidad que un valor sea inferior o igual a x
+#' 
+#' ----
+#' 
+#' Por ejemplo, para la distribución normal estándar...
+#' 
+## ---- echo = TRUE--------------------------------------------------------
+rnorm(10)
+dnorm(0)
+qnorm(.95)
+pnorm(1.64)
+
+#' 
+#' ## Distribuciones de probabilidad - normal
+## ---- echo = TRUE, eval = FALSE------------------------------------------
+## df <- data.frame(x = rnorm(1000, mean = 3, sd = 1))
+## dfT <-data.frame(x = seq(0,6,length.out=101),
+##       y = dnorm(seq(0,6,length.out=101),mean=3,sd=1))
+## ggplot(df, aes(x = x, y=..density..)) +
+##   geom_histogram(binwidth = .1,fill="#dddddd",col="black") +
+##   geom_density() +
+##   geom_line(data=dfT,aes(x=x,y=y),col="red")+
+##   theme_bw()
+
+#' 
+#' ----
+#' 
+## ---- echo = FALSE-------------------------------------------------------
+df <- data.frame(x = rnorm(1000, mean = 3, sd = 1))
+dfT <-data.frame(x = seq(0,6,length.out=101),
+      y = dnorm(seq(0,6,length.out=101),mean=3,sd=1))
+ggplot(df, aes(x = x, y=..density..)) +
+  geom_histogram(binwidth = .1,fill="#dddddd",col="black") +
+  geom_density() +
+  geom_line(data=dfT,aes(x=x,y=y),col="red")+
+  theme_bw()
+
+#' 
+#' ----
+#' 
+## ---- echo = TRUE--------------------------------------------------------
+pnorm(5,mean = 3,sd = 1)
+qnorm(.98,mean = 3,sd = 1)
+
+#' 
+#' ## Distribuciones de probabilidad - uniforme
+## ---- echo = TRUE, eval = FALSE------------------------------------------
+## df <- data.frame(x = runif(1000, min = 10, max = 20))
+## dfT <-data.frame(x = seq(10,20,length.out=101),
+##       y = dunif(seq(10,20,length.out=101), min=10, max=20))
+## ggplot(df, aes(x = x, y=..density..)) +
+##   geom_histogram(binwidth = .5,fill="#dddddd",col="black") +
+##   geom_density() +
+##   geom_line(data=dfT,aes(x=x,y=y),col="red")+
+##   theme_bw()
+
+#' 
+#' ----
+#' 
+## ---- echo = FALSE-------------------------------------------------------
+df <- data.frame(x = runif(1000, min = 10, max = 20))
+dfT <-data.frame(x = seq(10,20,length.out=101),
+      y = dunif(seq(10,20,length.out=101), min=10, max=20))
+ggplot(df, aes(x = x, y=..density..)) +
+  geom_histogram(binwidth = .5,fill="#dddddd",col="black") +
+  geom_density() +
+  geom_line(data=dfT,aes(x=x,y=y),col="red")+
+  theme_bw()
+
+#' 
+#' ----
+#' 
+## ---- echo = TRUE--------------------------------------------------------
+punif(12, min=10, max=20)
+qunif(.90, min=10, max=20)
+
+#' 
+#' ## Distribuciones de probabilidad - binomial
+## ---- echo = TRUE, eval = FALSE------------------------------------------
+## df <- data.frame(x = rbinom(100,5,prob=0.5))
+## df <- df %>% group_by(x) %>%
+##   summarise(y = n()/nrow(df))
+## dfT <- data.frame(x = 0:5,
+##     y = dbinom(0:5,size=5,prob=0.5))
+## 
+## dfJ <- rbind(cbind(teo=FALSE,df),
+##              cbind(teo=TRUE,dfT))
+## 
+## ggplot(dfJ,aes(x=x,y=y,fill=teo)) +
+##   geom_bar(position="dodge", stat="identity",
+##            col="black") +
+##   scale_fill_manual(values=c("#dddddd","red")) +
+##   theme_bw() +
+##   theme(legend.position = "none")
+
+#' 
+#' ----
+#' 
+## ---- echo = FALSE-------------------------------------------------------
+df <- data.frame(x = rbinom(100,5,prob=0.5))
+df <- df %>% group_by(x) %>%
+  summarise(y = n()/nrow(df))
+dfT <- data.frame(x = 0:5,
+    y = dbinom(0:5,size=5,prob=0.5))
+
+dfJ <- rbind(cbind(teo=FALSE,df),
+             cbind(teo=TRUE,dfT))
+
+ggplot(dfJ,aes(x=x,y=y,fill=teo)) +
+  geom_bar(position="dodge", stat="identity",
+           col="black") +
+  scale_fill_manual(values=c("#dddddd","red")) +
+  theme_bw() +
+  theme(legend.position = "none")
+
+#' 
+#' ----
+#' 
+## ---- echo = TRUE--------------------------------------------------------
+pbinom(2,5,prob=0.5)
+qbinom(.5,5,.5)
+
+#' 
+#' ## Distribuciones de probabilidad -- otras
+#' **R** incorpora otras muchas distribuciones de probabilidad que pueden consultarse en la página correspondiente de la ayuda. 
+#' 
+## ---- echo = TRUE, eval = FALSE------------------------------------------
+## ? "Distributions"
+
+#' 
+#' ## Inferencia
+#' En términos estadísticos, la **inferencia** consiste en la obtención de información sobre la población --el conjunto de los valores existentes-- a partir de una muestra representativa de la misma.
+#' 
+#' Si los datos que tenemos, no constituyen una muestra *representativa* cualquier información que queramos extrapolar a la población estará sesgada, es decir, desplazada de su valor real.
+#' 
+#' ----
+#' 
+#' Los resultados de la inferencia se suelen mostrar mediante una de las dos formas siguientes:
+#' 
+#' - el valor de un parámetro para la población, asociado normalmente a un error o un intervalo de confianza,
+#' - la probabilidad (*p*) que unos datos, o cualquiera más extremo que ellos, se produzcan siendo cierta una determinada hipótesis, denominada hipótesis nula.
+#' 
+#' ----
+#' 
+#' Presentaremos a continuación, las técnicas más comúnmente usadas para
+#' 
+#' - analizar el ajuste a una **distribución**,
+#' - estudiar la **dispersión** de la población, y
+#' - estimar o comparar valores de **tendencia central** --localización o posición--
+#' 
+#' 
+#' ## Inferencia -- distribución
+#' Para contrastar la hipótesis que un conjunto de datos puede representarse mediante un determinada distribución teórica, las pruebas más comunes son la **prueba de bondad de ajuste de chi cuadrado** (`chisq.test`) y la **prueba de Kolmogorov-Smirnov** (`ks.test`). En ambos casos, los argumentos son las frecuencias absolutas de cada clase para la distribución experimental y las probabilidades esperadas de acuerdo con la distribución teórica o de referencia.
+#' 
+#' ----
+#' 
+#' **Ejemplo**
+#' 
+#' Se ha tirado cien veces un dado de 10 caras, y se han obtenido cada una de las caras las veces que se muestran en la tabla siguiente.
+#' 
+#' ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
+#'   1    2    3    4    5    6    7    8    9   10
+#'   9    6    7   15   11   11    9   13    9   10
+#' ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
+#' 
+#' Si el dado fuese normal, todas las caras tendrían la misma probabilidad de aparecer.
+#' ¿Lo es?
+#' 
+#' ----
+#' 
+## ---- echo = TRUE--------------------------------------------------------
+obs <- c(9, 6, 7, 15, 11, 11, 9, 13, 9, 10)  
+exp <- rep(.1, 10)
+ 
+chisq.test(x = obs, p = exp)
+
+#' 
+#' ----
+#' 
+#' Gráficamente, y aunque sin la misma objetividad, la comparación de distribuciones también suele hacerse mediante el gráfico de cuantiles --en R, es la función `qqplot`.
+#' 
+#' Si ambos conjuntos de datos corresponden a la misma distribución, sus cuantiles deben quedar alineados junto a la diagonal del gráfico (especialemente en la región central del mismo).
+#' 
+## ---- echo = TRUE, eval = FALSE------------------------------------------
+## exp <- rep(1:10, obs)
+## teo <- rep(1:10, 10)
+## qqplot(x = exp, y = quantile(teo, (1:length(exp))/length(exp)))
+## qqline(y = exp, distribution = function(x)  quantile(teo,x),
+##        probs= c(1/length(exp),1))
+
+#' 
+#' ----
+#' 
+## ---- echo = FALSE-------------------------------------------------------
+exp <- rep(1:10, obs)
+teo <- rep(1:10, 10)
+
+#' 
+## ---- echo = FALSE-------------------------------------------------------
+qqplot(x = exp, y = quantile(teo, (1:length(exp))/length(exp)))
+qqline(y = exp, distribution = function(x)  quantile(teo,x),
+       probs= c(1/length(exp),1))
+
+#' 
+#' ----
+#' 
+#' Para comprobar si un conjunto de datos puede proceder de una población aleatoria de distribución normal, existen pruebas estadísticas más específicas. Entre las muchas pruebas existentes, son de uso común las pruebas de Shapiro-Wilk y Anderson-Darling.
+#' 
+#' ----
+#' 
+## ---- echo = TRUE--------------------------------------------------------
+x1 <- rnorm(20, mean = 4, sd = 5)
+x2 <- rbeta(20, shape1 = 5, shape2 = .5, ncp = 4)
+
+shapiro.test(x1)
+shapiro.test(x2)
+
+
+#' 
+#' ----
+#' 
+## ---- include = FALSE----------------------------------------------------
+if(!require("nortest")) {
+  install.packages("nortest")
+  library("nortest")
+}
+
+
+#' 
+## ---- echo = TRUE, eval = FALSE------------------------------------------
+## if(!require("nortest")) {
+##   install.packages("nortest")
+##   library("nortest")
+## }
+## 
+
+#' 
+## ---- echo = TRUE--------------------------------------------------------
+ad.test(x1)
+ad.test(x2)
+
+#' 
+#' ----
+#' 
+#' Gráficamente se puede usar el gráfico de cuantiles comentado anteriormente.
+#' 
+## ---- echo = TRUE, eval = FALSE------------------------------------------
+## qqnorm(x1)
+## qqline(x1)
+## 
+## qqnorm(x2)
+## qqline(x2)
+
+#' 
+#' ----
+#' 
+## ---- echo = FALSE-------------------------------------------------------
+qqnorm(x1)
+qqline(x1)
+
+#' 
+#' ----
+#' 
+## ---- echo = FALSE-------------------------------------------------------
+qqnorm(x2)
+qqline(x2)
+
+#' 
+#' ## Inferencia -- dispersión
+#' Las inferencias más habituales respecto a la dispersión de una población constituyen los siguientes casos
+#' 
+#' - determinar el intervalo de confianza de la varianza o la desviación típica de la distribución,
+#' - comparar la dispersión de dos conjuntos de datos,
+#' - comparar la dispersión de tres o más conjuntos de datos --o comprobar la homocedasticidad de distintos conjuntos de datos--.
+#' 
+#' ----
+#' 
+#' Cuando los datos estan normalmente distribuidos, el **intervalo de confianza de la varianza** se calcula a partir de la distribución de chi cuadrado.
+#' 
+## ---- echo = TRUE--------------------------------------------------------
+x <- rnorm(50, mean = 0, sd = 2)
+df <- length(x) - 1
+lower <- var(x) * df / qchisq(1 - 0.05/2, df)
+upper <- var(x) * df / qchisq(0.05/2, df)
+c(lower = lower, var = var(x), upper = upper)
+
+#' 
+#' ----
+#' 
+#' Para obtener el **intervalo de confianza para la desviación estándar**, cuando los datos estan normalmente distribuidos, se calcula la desviación estándar a partir de las varainzas calculadas más arriba.
+#' 
+## ---- echo = TRUE--------------------------------------------------------
+c(lower = sqrt(lower), sd = sd(x), upper = sqrt(upper))
+
+#' 
+#' ----
+#' 
+#' Para la **comparación de la dispersión de las poblaciones para dos conjuntos de datos**, cuando los datos estan normalmente distribuidos, se lleva a cabo con un prueba de F --función `var.test` en R--.
+#' 
+## ---- echo = TRUE--------------------------------------------------------
+x <- rnorm(50, mean = 0, sd = 2)
+y <- rnorm(30, mean = 1, sd = 1)
+var.test(x, y)
+
+#' 
+#' ----
+#' 
+#' Si los datos no estan normalmente distribuidos, la comparación de dispersiones puede hacerse mediante el test de Ansari.
+#' 
+## ---- echo = TRUE--------------------------------------------------------
+x <- rlnorm(50, meanlog = 2, sdlog = 1)
+y <- rlnorm(30, meanlog = 2, sdlog = .2)
+ansari.test(x, y)
+
+#' 
+#' ----
+#' 
+#' Para comparar las dispersiones de más de un conjunto de datos para los cuáles se pueda asumir normalidad, se usa la prueba de Bartlett --`bartlett.test` en R--.
+#' 
+## ---- echo = TRUE, eval = FALSE------------------------------------------
+## x1 <- round(rnorm(20, mean = 1, sd = 2),1)
+## x2 <- round(rnorm(20, mean = 3, sd = 2),1)
+## x3 <- round(rnorm(20, mean = 5, sd = 2),1)
+## list(x1,x2,x3)
+## bartlett.test(list(x1,x2,x3))
+
+#' 
+#' ----
+#' 
+## ---- echo = FALSE-------------------------------------------------------
+x1 <- round(rnorm(20, mean = 1, sd = 2),1)
+x2 <- round(rnorm(20, mean = 3, sd = 2),1)
+x3 <- round(rnorm(20, mean = 5, sd = 2),1)
+list(x1,x2,x3)
+bartlett.test(list(x1,x2,x3))
+
+#' 
+#' ----
+#' 
+#' Si los datos no cumplen con la hipótesis de normalidad, en lugar de la prueba de Bartlett se usa la prueba de Levene o la de Brown–Forsythe --`leveneTest` en el paquete `car` de R--. 
+#' 
+#' ----
+#' 
+#' Gráficamente y aunque de forma menos objetiva, la comparación de dispersiones puede hacerse usando gráficos de caja, bien directamente, bien centrando los datos.
+#' 
+## ---- echo = TRUE, eval = FALSE------------------------------------------
+## x1 <- round(rnorm(20, mean = 1, sd = 2),1)
+## x2 <- round(rnorm(20, mean = 3, sd = 2),1)
+## x3 <- round(rnorm(20, mean = 5, sd = 2),1)
+## 
+## xs <- data.frame(
+##   group = factor(c(rep(1, length(x1)),rep(2, length(x2)),
+##             rep(3, length(x3)))),
+##   y = c(x1,x2,x3),
+##   centered = c(x1 - median(x1),x2 - median(x2),x3 - median(x3)))
+## 
+## ggplot(xs, aes(x=group,y=y)) + geom_boxplot() +
+##   coord_flip() + theme_bw()
+## ggplot(xs, aes(x=group,y=centered)) + geom_boxplot() +
+##   coord_flip() + theme_bw()
+## 
+
+#' 
+#' ----
+#' 
+## ---- echo = FALSE-------------------------------------------------------
+x1 <- round(rnorm(20, mean = 1, sd = 2),1)
+x2 <- round(rnorm(20, mean = 3, sd = 2),1)
+x3 <- round(rnorm(20, mean = 5, sd = 2),1)
+
+xs <- data.frame(
+  group = factor(c(rep(1, length(x1)),rep(2, length(x2)),
+            rep(3, length(x3)))),
+  y = c(x1,x2,x3),
+  centered = c(x1 - median(x1),x2 - median(x2),x3 - median(x3)))
+
+ggplot(xs, aes(x=group,y=y)) + geom_boxplot() +
+  coord_flip() + theme_bw()
+
+#' 
+#' ----
+#' 
+## ---- echo = FALSE-------------------------------------------------------
+ggplot(xs, aes(x=group,y=centered)) + geom_boxplot() +
+  coord_flip() + theme_bw()
+
+
+#' 
+#' ## Inferencia -- localización
+#' Las principales inferencias respecto a la localización --o tendencia central-- de los datos corresponden a
+#' 
+#' - establecer un intervalo de confianza para la tendencia central de la distribución,
+#' - comparar la tendencia central de un conjunto de datos con un valor preestablecido,
+#' - comparar la tendencia central de dos conjuntos de datos,
+#' - comparar la tendencia central de tres o más conjuntos de datos.
+#' 
+#' ----
+#' 
+#' Para establecer el **intervalo de confianza de la media**, cuando los datos están normalmente distribuidos, se usa la distribución t. El intervalo puede calcularse a partir de la función `qt` o visualizarlo como resultado de la función `t.test`.
+#' 
+## ---- echo = TRUE--------------------------------------------------------
+x <- rnorm(10, mean = 2, sd = .5)
+x
+
+#' 
+#' ----
+#' 
+## ---- echo = TRUE--------------------------------------------------------
+t.test(x)
+
+#' 
+#' ----
+#' 
+#' Si los datos no están normalmente distribuidos, la función `wilcox.test` ofrece entre sus resultados el **intervalo de confianza para la mediana**.
+#' 
+#' 
+## ---- echo = TRUE--------------------------------------------------------
+x <- rnorm(10, mean = 3, sd = .5) ^ 3
+x
+
+#' 
+#' ----
+#' 
+## ---- echo = TRUE--------------------------------------------------------
+wilcox.test(x, conf.int = TRUE)
+
+#' 
+#' ----
+#' 
+#' Las dos funciones usadas para obtener los intervalos de confianza permiten **comparar la tendencia central de un conjunto de datos con un valor preestablecido**. Como se ha indicado antes, la prueba de t require normalidad de los datos; la prueba de Wilcoxon, no.
+#' 
+## ---- echo = TRUE--------------------------------------------------------
+x <- rnorm(10, mean = 2, sd = .5)
+x
+
+#' 
+#' ----
+#' 
+## ---- echo = TRUE--------------------------------------------------------
+t.test(x, mu = 1.5)
+
+#' 
+#' ----
+#' 
+## ---- echo = TRUE--------------------------------------------------------
+wilcox.test(x ^ 3, mu = 8)
+
+#' 
+#' ----
+#' 
+#' Para **comparar la localización** de dos conjuntos de datos, deben tenerse en cuenta los siguientes aspectos
+#' 
+#' - ¿los datos de ambas muestras están asociados?
+#' - ¿los datos estan normalmente distribuidos?
+#' - ¿tienen ambos conjuntos de datos la misma dispersión?
+#' 
+#' ----
+#' 
+#' Si los datos están **asociados**, es decir que existen pares de datos en ambas muestras tales que comparten fuentes de variación, entonces
+#' 
+#' - si ambas **muestras están normalmente distribuidas**, o la diferencia entre conjuntos de datos está normalmente distribuido, se usa la prueba de t sobre la diferencia de los valores entre ambos conjuntos de datos. En R, puede calcularse la diferencia y luego aplicar la función `t.test` o bien usar directamente la función `t.test` con la opción `paired = TRUE`,
+#' - si los datos **no están normalmente distribuidos** se usa la prueba de Wilcoxon --`wilcox.test` sobre la resta o con la opción `paired = TRUE` en R--.
+#' 
+#' ----
+#' 
+## ---- echo = TRUE--------------------------------------------------------
+x <- rnorm(10, mean = 3, sd = 1)
+y <- rnorm(10, mean = 3.5, sd = 1)
+list(x = x,y = y)
+
+#' 
+#' ----
+#' 
+## ---- echo = TRUE--------------------------------------------------------
+t.test(x - y)
+
+#' 
+#' ----
+#' 
+## ---- echo = TRUE--------------------------------------------------------
+t.test(x, y, paired = TRUE)
+
+#' 
+#' ----
+#' 
+## ---- echo = TRUE--------------------------------------------------------
+x <- rlnorm(10, meanlog = 3, sdlog = 1)
+y <- rlnorm(10, meanlog = 3.5, sdlog = 1)
+list(x = x,y = y)
+
+#' 
+#' ----
+#' 
+## ---- echo = TRUE--------------------------------------------------------
+wilcox.test(x - y)
+
+#' 
+#' ----
+#' 
+## ---- echo = TRUE--------------------------------------------------------
+wilcox.test(x, y, paired = TRUE)
+
+#' 
+#' ----
+#' 
+#' Si los datos **no están asociados**, entonces
+#' 
+#' - si ambas **muestras están normalmente distribuidas**, o el conjunto de datos --escalados y centrados en cada muestra-- está normalmente distribuido, se usa la prueba de t. En R, se usa la función `t.test`; la opción `var.equal` permite escoger entre la prueba calculada con la varianza de los datos, y la aproximación de Welch, que se usa cuando la varianzas no son iguales.
+#' - si los datos **no están normalmente distribuidos** se usa la prueba U de Mann-Whitney --`wilcox.test` en R--.
+#' 
+#' ----
+#' 
+## ---- echo = TRUE--------------------------------------------------------
+x <- rnorm(10, mean = 3, sd = 1)
+y <- rnorm(14, mean = 3.5, sd = 2)
+list(x = x,y = y)
+
+#' 
+#' ----
+#' 
+## ---- echo = TRUE--------------------------------------------------------
+t.test(x, y, var.equal = FALSE)
+
+#' 
+#' ----
+#' 
+## ---- echo = TRUE--------------------------------------------------------
+x <- rlnorm(10, meanlog = 3, sdlog = 1)
+y <- rlnorm(14, meanlog = 3.5, sdlog = 2)
+list(x = x,y = y)
+
+#' 
+#' ----
+#' 
+## ---- echo = TRUE--------------------------------------------------------
+wilcox.test(x, y)
+
+#' 
+#' ----
+#' 
+#' Para la **comparación de tres o más grupos**, las técnicas más habituales son
+#' 
+#' - si los datos de los distintos conjuntos de datos están **normalmente distribuidos** y presentan dispersiones comparables --homocedasticidad--, la técnica recomendada es el análisis de la varianza --`aov` en R--;
+#' - si los **datos no están normalmente distribuidos** pero las distribuciones tienen formas parecidas y se mantiene la homocedaticidad, se usa la prueba de Kruskal-Wallis --en R, `krukal.test`--.
+#' 
+#' ----
+#' 
+## ---- echo = TRUE--------------------------------------------------------
+x <- c(rnorm(10, mean = 3, sd = 1),
+       rnorm(8, mean = 3.2, sd = 1),
+       rnorm(10, mean = 4, sd = 1))
+g <- factor(c(rep(1,10), rep(2,8), rep(3,10)))
+test <- aov(x ~ g)
+summary(test)
+
+#' 
+#' ----
+#' 
+## ---- echo = TRUE--------------------------------------------------------
+x <- c(runif(10, min = 2, max = 4),
+       runif(8, min = 1.5, max = 3.5),
+       runif(10, min = 3, max = 5))
+g <- factor(c(rep(1,10), rep(2,8), rep(3,10)))
+kruskal.test(x ~ g)
+
+#' 
+#' ----
+#' 
+#' Tanto el análisis de la varianza como la prueba de Kruskal-Wallis solo permiten contrastar si algún par de grupos presentan valores de localización distintos, pero no permiten identificar cuál o cuáles.
+#' 
+#' Para identificar qué pares de grupos presentan diferencias estadísticamente significativos se usan pruebas *post-hoc*
+#' 
+#' - En el caso del análisi de varianza, se puede usar la prueba de Tukey --`TukeyHSD` en R,
+#' - Para la prueba de Kruskal-Wallis, se puede usar la prueba de Dunn --`dunn.test` en el paquete `dunn.test` de R--
+#' 
+#' ----
+#' 
+#' Gráficamente y aunque con menos objetividad, la comparación de la loclización puede hacerse usando gráficos de caja.
+#' 
+## ---- echo = TRUE, eval = FALSE------------------------------------------
+## x <- c(rnorm(10, mean = 3, sd = 1),
+##        rnorm(8, mean = 3.2, sd = 1),
+##        rnorm(10, mean = 4, sd = 1))
+## g <- factor(c(rep(1,10), rep(2,8), rep(3,10)))
+## 
+## xs <- data.frame(y = x, group = g)
+## 
+## ggplot(xs, aes(x=group,y=y)) + geom_boxplot() +
+##   coord_flip() + theme_bw()
+## 
+
+#' 
+#' ----
+#' 
+## ---- echo = FALSE-------------------------------------------------------
+ggplot(xs, aes(x=group,y=y)) + geom_boxplot() +
+  coord_flip() + theme_bw()
+
+#' 
+#' ## Ajuste de modelos
+#' El ajuste de modelos se expresa de forma habitual en R mediante un objeto `formula`.
+#' 
+#' En esta notación, se indica la relación entre variables mediante una expresión de tres términos donde la variable dependiente se indica a la izquierda y las variables dependientes a la derecha.
+#' 
+## ---- echo = TRUE--------------------------------------------------------
+form1 <- y ~ x              # recta
+class(form1)
+
+#' 
+## ---- echo = TRUE, eval = FALSE------------------------------------------
+## form1 <- y ~ log(x)         # logaritmo
+## form1 <- y ~ poly(x,4)      # polinomio de grado 4
+## form1 <- y ~ x + 0          # recta que pasa por el origen
+## form1 <- y ~ I(x^.5)        # raíz cuadrada
+
+#' 
+#' ## Ajuste de modelos -- regresión lineal
+#' El ajuste de un modelo lineal por mínimos cuadrados ordinarios se hace en R mediante la función `lm`.
+#' 
+## ---- echo = TRUE, eval = FALSE------------------------------------------
+## fit1 <- lm(mpg ~ wt, data=mtcars)
+## summary(fit1)
+
+#' 
+#' ----
+#' 
+## ---- echo = FALSE-------------------------------------------------------
+fit1 <- lm(mpg ~ wt, data=mtcars)
+summary(fit1)
+
+#' 
+#' ----
+#' 
+#' Una vez ajustado el modelo, este puede usarse para predecir nuevos datos (o calcular los valores ajustados) mediante la función `predict`.
+#' 
+## ---- echo = TRUE--------------------------------------------------------
+df <- data.frame(x=mtcars$wt, y=mtcars$mpg,
+  predict(fit1, newdata=mtcars, interval="prediction"))
+head(df)
+
+#' 
+#' ----
+#' 
+#' El modelo se puede visualizar gráficamente a partir de estas predicciones.
+#' 
+## ---- echo = TRUE, eval = FALSE------------------------------------------
+## df2 <- data.frame(
+##   wt = seq(min(mtcars$wt), max(mtcars$wt), length.out = 201),
+##   predict(fit1,
+##   newdata = data.frame(wt = seq(min(mtcars$wt), max(mtcars$wt),
+##                              length.out = 201)),
+##   interval="prediction"))
+## 
+## ggplot(mtcars, aes(x=wt, y=mpg)) +
+##   geom_ribbon(data=df2, mapping = aes(x=wt, ymin=lwr,ymax=upr),
+##               inherit.aes = FALSE, fill="#dddddd", alpha=0.8)+
+##   geom_point(shape=3) +
+##   geom_line(data=df2, mapping = aes(x=wt, y=fit)) +
+##   theme_bw()
+
+#' 
+#' ----
+#' 
+## ---- echo = FALSE-------------------------------------------------------
+df2 <- data.frame(
+  wt = seq(min(mtcars$wt), max(mtcars$wt), length.out = 201),
+  predict(fit1, 
+  newdata = data.frame(wt = seq(min(mtcars$wt), max(mtcars$wt),
+                             length.out = 201)), 
+  interval="prediction"))
+
+ggplot(mtcars, aes(x=wt, y=mpg)) +
+  geom_ribbon(data=df2, mapping = aes(x=wt, ymin=lwr,ymax=upr),
+              inherit.aes = FALSE, fill="#dddddd", alpha=0.8)+
+  geom_point(shape=3) +
+  geom_line(data=df2, mapping = aes(x=wt, y=fit)) +
+  theme_bw()
+
+#' 
+#' ## Ajuste de modelos -- comprobación
+#' Para comprobar la adecuación del modelo y del método de ajuste usado (OLS) deben analizarse los residuales.
+#' 
+#' Estos deben ser aleatorios, estar normalmente distribuidos, mostrar homocedasticidad y no mostrar evidencia de puntos especialmente influyentes.
+#' 
+#' Estas comprobaciones pueden hacerse a partir de los datos de los residuales y las pruebas estadísticas oportunas.
+#' 
+## ---- echo = TRUE, eval = FALSE------------------------------------------
+## fit1$residuals
+
+#' 
+#' ----
+#' 
+## ---- echo = FALSE-------------------------------------------------------
+fit1$residuals
+
+#' 
+#' ----
+#' 
+#' Gráficamente, los mismas comprobaciones pueden hacerse a partir de la representación gráfica del modelo.
+#' 
+## ---- echo = TRUE, eval = FALSE------------------------------------------
+## plot(fit1, which=1:6)
+
+#' 
+#' ----
+#' 
+## ---- echo = FALSE-------------------------------------------------------
+plot(fit1, which=1)
+
+#' 
+#' ----
+#' 
+## ---- echo = FALSE-------------------------------------------------------
+plot(fit1, which=2)
+
+#' 
+#' ----
+#' 
+## ---- echo = FALSE-------------------------------------------------------
+plot(fit1, which=3)
+
+#' 
+#' ----
+#' 
+## ---- echo = FALSE-------------------------------------------------------
+plot(fit1, which=4)
+
+#' 
+#' ----
+#' 
+## ---- echo = FALSE-------------------------------------------------------
+plot(fit1, which=5)
+
+#' 
+#' ----
+#' 
+## ---- echo = FALSE-------------------------------------------------------
+plot(fit1, which=6)
+
+#' 
+#' ----
+#' 
+#' Estas mismas ideas son la base de la aplicación en R de las técnicas de ajuste multilineal (`lm`), ajuste lineal generalizado (`glm`) y ajuste no lineal por mínimos cuadrados (`nls`).
+#' 
+#' 
+#' # Importación y exportación de datos
+#' 
+#' ## Archivos de datos
+#' A menudo es necesario leer y guardar los datos en algún formato tal que permita la importación y exportación de los mismos y su intercambio con otros programas o entornos.
+#' 
+#' Aunque puede importar y exportar archivos de muy distintos formatos, solo comentaremos como trabajar con
+#' 
+#' - archivos de texto, y
+#' - archivos RData, el formato de almacenamiento de datos de R.
+#' 
+#' ----
+#' 
+#' Para los distintos ejemplos usaremos el conjunto de datos `flights` del paquete `nycflights13`.
+#' 
+## ---- echo = TRUE, eval = FALSE------------------------------------------
+## if(!require("nycflights13")) {
+##   install.packages("nycflights13")
+##   library("nycflights13")
+## }
+
+#' 
+## ---- echo = FALSE, results = 'hide', message = FALSE, warning = FALSE, error = FALSE----
+if(!require("nycflights13")) {
+  install.packages("nycflights13", repos = "https://cloud.r-project.org")
+  library("nycflights13")
+}
+
+#' 
+## ---- echo = TRUE, eval = FALSE------------------------------------------
+## str(flights)
+
+#' 
+#' ----
+#' 
+## ---- echo = FALSE-------------------------------------------------------
+str(flights)
+
+#' 
+#' ----
+#' 
+#' Partiremos de un subconjunto de `flights`, para ello empezamos segmentando el `data.frame`.
+#' 
+## ---- echo = TRUE--------------------------------------------------------
+fl_ny2ws <- flights[flights$dest %in% c("IAD","BWI"),
+                    c("origin","dest","carrier","arr_delay","air_time")]
+head(fl_ny2ws)
+
+#' 
+#' ## Escribir y leer archivos de texto
+#' Para escribir un archivo de texto (delimitado) desde un `data.frame` se usa la función `write.table` o cualquiera de sus derivadas. Para leer, la función es `read.table`.
+#' 
+## ---- echo = TRUE, eval = FALSE------------------------------------------
+## write.table(fl_ny2ws, file="fl_ny2ws.csv", sep=",", dec=".",
+##             quote=TRUE, fileEncoding="UTF-8", row.names=FALSE)
+
+#' 
+## ---- echo = TRUE, eval = FALSE------------------------------------------
+## fl_ny2ws <- read.table("fl_ny2ws.csv", sep=",", dec=".",
+##            quote="\"", fileEncoding="UTF-8", header=TRUE)
+
+#' 
+#' Si se desea o dispone de un archivo delimitado por tabulaciones, el carácter tabulador se indica como `\t`.
+#' 
+#' 
+#' ## Escribir y leer archivos de datos de R
+#' Para leer y guardar datos en el formato propio de R, se usan las funciones `save` y `load`. Estas permiten almacenar y recuperar cualquier conjunto de variables del entorno de trabajo. Al recuperarlas se recuperan con el mismo nombre con el que se almacenaron.  
+#' 
+## ---- echo = TRUE, eval = FALSE------------------------------------------
+## save(fl_ny2ws, file="fl_ny2ws.rda")
+
+#' 
+## ---- echo = TRUE, eval = FALSE------------------------------------------
+## print(load("fl_ny2ws.rda"))   #print muestra el nombre de los objetos
+
+#' 
+#' # Manipulación avanzada de tablas de datos
+#' 
+#' ## Tabla de datos o *data frame*
+#' Com se ha viso anteriormente, el *data frame* es el tipo de dato más usado para almacenar tablas de datos.
+#' 
+#' A menudo, para poder realizar gráficos y/o aplicar distintos procedimientos estadísticos, es necesario manipular la tabla de datos. A esto dedicaremos este apartado.
+#' 
+#' ----
+#' 
+#' Entre las operaciones habituales que haremos sobre una tabla de datos, hay
+#' 
+#' - renombrar filas o columnas,
+#' - añadir columnas o filas,
+#' - segmentar,
+#' - cambiar el formato de un conjunto de datos,
+#' - eliminar filas o columnas,
+#' - crear tablas de datos de resumen, y
+#' - unir tablas
+#' 
+#' Terminaremos este bloque introduciendo los funciones básicas del paquete `dplyr` que facilita la realización de algunas de estas operaciones.
+#' 
+#' ----
+#' 
+#' Partimos de una tabla de datos sintética...
+#' 
+## ---- echo = TRUE--------------------------------------------------------
+df <- data.frame(1:5, letters[1:5], c(rep("a", 3), rep("b", 2)))
+df
+
+#' 
+#' ## Renombrar filas o columnas
+#' 
+## ---- echo = TRUE--------------------------------------------------------
+colnames(df) <- c("var1", "var2", "var3") 
+rownames(df) <- paste("subject00", 1:5, sep = "")
+df
+
+#' 
+#' ## Añadir columnas o filas
+#' 
+## ---- echo = TRUE--------------------------------------------------------
+df2 <- cbind(df, rnorm(5)) # añadir un vector al data frame
+df2$var5 <- 5:1 # assignando valores a una nueva variable
+df2
+
+#' 
+#' ----
+#' 
+## ---- echo = TRUE--------------------------------------------------------
+df2 <- rbind(df, list(6, "e", "b"))
+df2
+
+#' 
+#' ## Segmentar
+#' 
+#' Existen tres formas básicas de seleccionar filas o columnas de una tablas de datos
+#' 
+#' - mediante índices numéricos,
+#' - usando los nombres de filas y columnas, y
+#' - mediante vectores lógicos
+#' 
+#' ## Segmentar -- mediante índices
+#' 
+## ---- echo = TRUE--------------------------------------------------------
+df[1:3,]
+df[,c(1,3)]
+
+#' 
+#' ----
+#' 
+## ---- echo = TRUE--------------------------------------------------------
+df[-3,-2]
+
+#' 
+#' ## Segmentar -- usando nombres
+#' 
+## ---- echo = TRUE--------------------------------------------------------
+df[,"var2"]
+df$var3
+df[,c("var2","var3")]
+
+#' 
+#' ## Segmentar -- mediante vectores lógicos
+#' 
+## ---- echo = TRUE--------------------------------------------------------
+df[c(T,T,F,T,F), c(T,F,T)]
+df[df[,1] == 3 | df[,3] == "b",]
+
+#' 
+#' ## Cambiar el formato de un conjunto de datos
+#' 
+#' Un mismo conjunto de datos puede representar en una tabla de datos de acuerdo con distintas oragnizaciones o formatos.
+#' 
+#' Se denomina formato ordenado, *tidy*, aquella organización en la que las filas representan individuos, las columnas, variables de medidas, y las intersecciones los valores de dichas medidas.  
+#' 
+#' ----
+#' 
+#' Cuando existen más de una variable que corresponde al mismo tipo de medida, entonces los datos pueden organizarse de dos formas
+#' 
+#' - usando una columna distinta para cada variable, formato ancho y *tidy*, o
+#' - usando una columna para los valores y otra para indicar cuál es la variable representada en esta fila.
+#' 
+#' El formato más adecuado dependerá de los análisis y visualizaciones que quieran hacerse.
+#' 
+#' ----
+#' 
+#' Partiremos de un subconjunto de `flights`...
+#' 
+## ---- echo = TRUE, eval = FALSE------------------------------------------
+## if(!require("nycflights13")) {
+##   install.packages("nycflights13")
+##   library("nycflights13")
+## }
+
+#' 
+## ---- echo = FALSE, results = 'hide', message = FALSE, warning = FALSE, error = FALSE----
+if(!require("nycflights13")) {
+  install.packages("nycflights13", repos = "https://cloud.r-project.org")
+  library("nycflights13")
+}
+
+#' 
+#' ----
+#' 
+## ---- echo = TRUE--------------------------------------------------------
+fl_ny2ws_W <- flights[flights$dest %in% c("IAD","BWI"),
+                    c("origin","dest","carrier","arr_delay","dep_delay")]
+fl_ny2ws_W <- cbind(key = 1:nrow(fl_ny2ws_W), fl_ny2ws_W)
+head(fl_ny2ws_W)
+
+#' 
+#' ## Cambiar el formato de un conjunto de datos -- ancho a largo
+## ---- echo = TRUE--------------------------------------------------------
+fl_ny2ws_L <- rbind(
+  cbind(edge = rep("origin", nrow(fl_ny2ws_W)), fl_ny2ws_W[,c(1,4)],
+        airport = fl_ny2ws_W[,2], delay = fl_ny2ws_W[,6]),
+  cbind(edge = rep("dest", nrow(fl_ny2ws_W)), fl_ny2ws_W[,c(1,4)],
+        airport = fl_ny2ws_W[,3], delay = fl_ny2ws_W[,5]))
+colnames(fl_ny2ws_L) <- c("edge","key","carrier","airport","delay")
+
+#' 
+#' ----
+#' 
+## ---- echo = TRUE--------------------------------------------------------
+head(fl_ny2ws_L)
+tail(fl_ny2ws_L)
+
+#' 
+#' ## Cambiar el formato de un conjunto de datos -- largo a ancho
+## ---- echo = TRUE--------------------------------------------------------
+fl_ny2ws_W2p1 <- fl_ny2ws_L[fl_ny2ws_L$edge=="origin",]
+fl_ny2ws_W2p2 <- fl_ny2ws_L[fl_ny2ws_L$edge=="dest",]
+fl_ny2ws_W2p1 <- fl_ny2ws_W2p1[order(fl_ny2ws_W2p1$key),-1]
+fl_ny2ws_W2p2 <- fl_ny2ws_W2p2[order(fl_ny2ws_W2p2$key),-c(1,2)]
+fl_ny2ws_W2 <- cbind(fl_ny2ws_W2p1,fl_ny2ws_W2p2[,-1])
+colnames(fl_ny2ws_W2) <- c("key", "carrier", "origin", "dep_delay",
+                           "dest","arr_delay")
+
+
+#' 
+#' ----
+#' 
+## ---- echo = TRUE--------------------------------------------------------
+head(fl_ny2ws_W2)
+tail(fl_ny2ws_W2)
+
+#' 
+#' ## Eliminar filas o columnas
+#' La forma más habitual de eliminar filas o columnas es segmentando la tabla de datos. Sin embargo, una columna también puede eliminarse asignando la misma a `NULL`.
+#' 
+## ---- echo = TRUE--------------------------------------------------------
+df <- data.frame(1:5, letters[1:5], c(rep("a", 3), rep("b", 2)))
+colnames(df) <- c("var1", "var2", "var3") 
+rownames(df) <- paste("subject00", 1:5, sep = "")
+df <- df[-2,]
+df$var2 <- NULL
+
+#' 
+#' ----
+#' 
+## ---- echo = TRUE--------------------------------------------------------
+df
+
+#' 
+#' ----
+#' 
+#' Si lo que se desea es eliminar una variable del entorno de trabajo entonces se usa la función `rm`.
+#' 
+## ---- echo = TRUE--------------------------------------------------------
+rm(df)
+
+#' 
+#' ## Creación de resúmenes a partir de datos en formato ancho
+## ---- echo = TRUE--------------------------------------------------------
+sum_fl_ny2ws <- data.frame(edge=c("origin","dest"))
+
+sum_fl_ny2ws$mean_delay <- apply(fl_ny2ws_W[,c("dep_delay","arr_delay")],2,
+                                 mean,na.rm=TRUE)
+sum_fl_ny2ws$r_delay <- apply(fl_ny2ws_W[,c("dep_delay","arr_delay")],2,
+                      function(x) diff(range(x,na.rm=TRUE)))
+sum_fl_ny2ws$s_delay <- apply(fl_ny2ws_W[,c("dep_delay","arr_delay")],2,
+                              sd,na.rm=TRUE)
+sum_fl_ny2ws
+
+#' 
+#' ## Creación de una tabla de resumen a partir de datos en formato largo
+## ---- echo = TRUE--------------------------------------------------------
+sum_fl_ny2ws <- data.frame(edge=c("origin","dest"))
+sum_fl_ny2ws$mean_delay <- by(fl_ny2ws_L$delay,fl_ny2ws_L$edge,
+                              mean,na.rm=TRUE)
+sum_fl_ny2ws$r_delay <- by(fl_ny2ws_L$delay,fl_ny2ws_L$edge,
+                           function(x) diff(range(x,na.rm=TRUE)))
+sum_fl_ny2ws$s_delay <- by(fl_ny2ws_L$delay,fl_ny2ws_L$edge,sd,na.rm=TRUE)
+sum_fl_ny2ws
+
+#' 
+#' ## `dplyr`
+#' Estas mismas operaciones que se han comentado más arriba, se pueden llevar a cabo también a partir de un sistema coherente de métodos creado como una gramática para la manipulación de datos, el paquete `dplyr` --que forma parte de `tidyverse`--.
+#' 
+#' http://dplyr.tidyverse.org/
+#' 
+#' 
+## ---- echo = FALSE-------------------------------------------------------
+if(!require("tidyverse")) {
+  install.packages("tidyverse")
+  library("tidyverse")
+}
+
+#' 
+## ---- echo = FALSE, results = 'hide', message = FALSE, warning = FALSE, error = FALSE----
+if(!require("tidyverse")) {
+  install.packages("tidyverse", repos = "https://cloud.r-project.org")
+  library("tidyverse")
+}
+
+#' 
+#' ----
+#' 
+#' En `dplyr` las operaciones básicas, se realizan mediante cuatro métodos:
+#' 
+#' - `select`: segmentar columnas,
+#' - `filter`: segmentar filas,
+#' - `mutate`: crear nuevas columnas, y
+#' - `arrange`: ordenar.
+#' 
+#' Estas se encadenan usando el operador pipe, `%>%`.
+#' 
+#' ----
+#' 
+## ---- echo = TRUE--------------------------------------------------------
+df <- flights %>% select(origin, dest, arr_delay) %>% 
+  filter(origin == "LGA" & (dest == "IAD" | dest == "BWI")) %>%
+  mutate(arr_delay_h=arr_delay/60) %>% 
+  arrange(-arr_delay_h)
+df
+
+#' 
+#' ----
+#' 
+#' Para la creación de resúmenes a partir de tablas en formato largo, es muy útil y cómoda la combinación `group_by` y `summarize`.
+#' 
+## ---- echo = TRUE--------------------------------------------------------
+df %>% group_by(dest) %>% summarise(mean_delay = mean(arr_delay, na.rm=TRUE))
+
+#' 
+#' ----
+#' 
+#' Por último, las conversiones entre formatos también pueden hacerse a partir de las funciones `spread` y `gather` del paquete `tidyr` --incluido en `tidyverse` y que se integra de forma natural en la gramática propuestas por `dplyr`--.
+#' 

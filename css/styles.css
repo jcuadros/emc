@@ -65,7 +65,7 @@ html, body, div, section, p {
   left:50%;
   margin-left:-45%;
   text-align:center;
-  border: 3px solid #999999;
+  border: 0px solid #999999;
   box-shadow:none;
 }
 
