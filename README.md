@@ -5,8 +5,8 @@ Puede ser consultado en [https://jcuadros.github.com/emc](https://jcuadros.githu
 
 Incluye los siguientes apartados:
 
-- Introducción a R: [IntroduccionAR.html](http://htmlpreview.github.com/?https://github.com/jcuadros/emc/blob/master/01_IntroduccionAR/IntroduccionAR.html) -- [versión imprimible](http://htmlpreview.github.com/?https://github.com/jcuadros/emc/blob/master/01_IntroduccionAR/IntroduccionAR.html?print-pdf)
-- Introducción a la calidad: [IntroCalidad.html](http://htmlpreview.github.com/?https://github.com/jcuadros/emc/blob/master/02_IntroCalidad/IntroCalidad.html) -- [versión imprimible](http://htmlpreview.github.com/?https://github.com/jcuadros/emc/blob/master/02_IntroCalidad/IntroCalidad.html?print-pdf)
+- Introducción a R: [IntroduccionAR.html](https://cdn.rawgit.com/jcuadros/emc/master/01_IntroduccionAR/IntroduccionAR.html) -- [versión imprimible](https://cdn.rawgit.com/jcuadros/emc/master/01_IntroduccionAR/IntroduccionAR.html?print-pdf)
+- Introducción a la calidad: [IntroCalidad.html](https://cdn.rawgit.com/jcuadros/emc/master/02_IntroCalidad/IntroCalidad.html) -- [versión imprimible](https://cdn.rawgit.com/jcuadros/emc/master/02_IntroCalidad/IntroCalidad.html?print-pdf)
 
 
 ----
