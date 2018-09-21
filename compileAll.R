@@ -15,6 +15,11 @@ if(!require("rmarkdown")) {
   library("rmarkdown")
 }
 
+if(!require("revealjs")) {
+  install.packages("revealjs")
+  library("revealjs")
+}
+
 RmdFiles <- dir(pattern="*.Rmd", recursive=TRUE)
 for(i in seq(RmdFiles)) {
   render(RmdFiles[i],encoding ="UTF-8")
