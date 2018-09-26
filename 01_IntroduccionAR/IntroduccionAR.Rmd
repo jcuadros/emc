@@ -604,7 +604,8 @@ Referencias:
 `ggplot2` forma parte del paquete `tidyverse` (aunque también puede instalarse y cargarse autónomamente).
 ```{r, echo = TRUE, results = 'hide', message = FALSE, warning = FALSE, error = FALSE}
 if(!require("tidyverse")) {
-  install.packages("tidyverse")
+  install.packages("tidyverse", repos="https://cloud.r-project.org/",
+         quiet=TRUE, type="binary")
   library("tidyverse")
 }
 ```
@@ -1401,7 +1402,8 @@ shapiro.test(x2)
 
 ```{r, include = FALSE}
 if(!require("nortest")) {
-  install.packages("nortest")
+  install.packages("nortest", repos="https://cloud.r-project.org/",
+         quiet=TRUE, type="binary")
   library("nortest")
 }
 
@@ -1946,7 +1948,8 @@ if(!require("nycflights13")) {
 
 ```{r, echo = FALSE, results = 'hide', message = FALSE, warning = FALSE, error = FALSE}
 if(!require("nycflights13")) {
-  install.packages("nycflights13", repos = "https://cloud.r-project.org")
+  install.packages("nycflights13", repos="https://cloud.r-project.org/",
+         quiet=TRUE, type="binary")
   library("nycflights13")
 }
 ```
@@ -2115,7 +2118,8 @@ if(!require("nycflights13")) {
 
 ```{r, echo = FALSE, results = 'hide', message = FALSE, warning = FALSE, error = FALSE}
 if(!require("nycflights13")) {
-  install.packages("nycflights13", repos = "https://cloud.r-project.org")
+  install.packages("nycflights13", repos="https://cloud.r-project.org/",
+         quiet=TRUE, type="binary")
   library("nycflights13")
 }
 ```
@@ -2220,16 +2224,10 @@ Estas mismas operaciones que se han comentado más arriba, se pueden llevar a ca
 http://dplyr.tidyverse.org/
 
 
-```{r, echo = FALSE}
-if(!require("tidyverse")) {
-  install.packages("tidyverse")
-  library("tidyverse")
-}
-```
-
 ```{r, echo = FALSE, results = 'hide', message = FALSE, warning = FALSE, error = FALSE}
 if(!require("tidyverse")) {
-  install.packages("tidyverse", repos = "https://cloud.r-project.org")
+  install.packages("tidyverse", repos="https://cloud.r-project.org/",
+         quiet=TRUE, type="binary")
   library("tidyverse")
 }
 ```

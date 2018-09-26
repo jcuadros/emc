@@ -47,9 +47,9 @@ if(!require("kableExtra")) {
 #' ## ¿Qué es un negocio?
 #' Un **negocio** es un proceso **repetitivo** que crea **riqueza**.
 #' 
-#' ![](im001.png)
+#' ![](im001.png){style=width:80%;left-margin:-40%;}
 #' 
-#' Kaufman, J. (2010). The personal MBA: Master the art of business. Penguin. 
+#' <p class="bibref">Kaufman, J. (2010). *The personal MBA: Master the art of business*. Penguin.</p>
 #' 
 #' ----
 #' 
@@ -259,7 +259,7 @@ gsub("<thead>.*</thead>", "", tb)
 #' Una *norma* es un documento técnico de aplicación voluntaria, fruto del consenso, basado en los resultados de la experiencia y del desarrollo tecnológico y aprobado por un organismo de normalización reconocido.
 #' 
 #' - ISO (International Organization for Standardization)
-#' - EANOR
+#' - AENOR
 #' - ASTM
 #' 
 #' 

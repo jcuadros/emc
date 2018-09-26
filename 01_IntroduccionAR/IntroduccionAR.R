@@ -604,7 +604,8 @@ points(mean(mtcars$disp))
 #' `ggplot2` forma parte del paquete `tidyverse` (aunque también puede instalarse y cargarse autónomamente).
 ## ---- echo = TRUE, results = 'hide', message = FALSE, warning = FALSE, error = FALSE----
 if(!require("tidyverse")) {
-  install.packages("tidyverse")
+  install.packages("tidyverse", repos="https://cloud.r-project.org/",
+         quiet=TRUE, type="binary")
   library("tidyverse")
 }
 
@@ -1401,7 +1402,8 @@ shapiro.test(x2)
 #' 
 ## ---- include = FALSE----------------------------------------------------
 if(!require("nortest")) {
-  install.packages("nortest")
+  install.packages("nortest", repos="https://cloud.r-project.org/",
+         quiet=TRUE, type="binary")
   library("nortest")
 }
 
@@ -1946,7 +1948,8 @@ plot(fit1, which=6)
 #' 
 ## ---- echo = FALSE, results = 'hide', message = FALSE, warning = FALSE, error = FALSE----
 if(!require("nycflights13")) {
-  install.packages("nycflights13", repos = "https://cloud.r-project.org")
+  install.packages("nycflights13", repos="https://cloud.r-project.org/",
+         quiet=TRUE, type="binary")
   library("nycflights13")
 }
 
@@ -2115,7 +2118,8 @@ df[df[,1] == 3 | df[,3] == "b",]
 #' 
 ## ---- echo = FALSE, results = 'hide', message = FALSE, warning = FALSE, error = FALSE----
 if(!require("nycflights13")) {
-  install.packages("nycflights13", repos = "https://cloud.r-project.org")
+  install.packages("nycflights13", repos="https://cloud.r-project.org/",
+         quiet=TRUE, type="binary")
   library("nycflights13")
 }
 
@@ -2220,16 +2224,10 @@ sum_fl_ny2ws
 #' http://dplyr.tidyverse.org/
 #' 
 #' 
-## ---- echo = FALSE-------------------------------------------------------
-if(!require("tidyverse")) {
-  install.packages("tidyverse")
-  library("tidyverse")
-}
-
-#' 
 ## ---- echo = FALSE, results = 'hide', message = FALSE, warning = FALSE, error = FALSE----
 if(!require("tidyverse")) {
-  install.packages("tidyverse", repos = "https://cloud.r-project.org")
+  install.packages("tidyverse", repos="https://cloud.r-project.org/",
+         quiet=TRUE, type="binary")
   library("tidyverse")
 }
 
