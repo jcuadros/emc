@@ -197,9 +197,146 @@ No se observan:
 ![](im012.png){style=width:50%;margin-left:-25%;}
 
 
-<!-- # Construcción de gráficos de control -->
+# Construcción de gráficos de control
+
+## Estructura del apartado
+
+- Gráficos de control para variables
+    - Gráfico Xbarra-R
+        - Con líneas de control preestablecidas
+        - Cálculo de las líneas de control
+    - Gráfico I-MR
+- Gráficos de control para atributos
+    - Gráfico p
 
 
+## Gráfico de control para variables
+
+Se usan para aquellas variables que se determinan cuantitativamente.
+
+La medida debe permitir la observación de la variabilidad. Si la medida tiene demasiada incertidumbre, estas técnicas no seran fiables.
+
+## Gráfico Xbarra-R
+
+Es el tipo de gráfico de control más usado.
+
+Normalmente, la práctica de los gráficos de control implica dos fases diferenciadas:
+
+- Fase I: Cálculo de las líneas de control
+- Fase II: Representación y uso del gráfico de control (análisis e interpretación)
+
+Debe tenerse en cuenta el tamaño de muestra. En todos los casos, se asume que la determinación del subgrupo racional y el muestreo son adecuados y no producen sesgo.
 
 
+## Gráfico Xbarra-R -- con líneas de control preestablecidas
+
+Conocido el tamaño de muestra, se incluyen en el gráfico de control las últimas 15-50 muestras (nunca menos de 10).
+
+1. Para cada muestra, se determina el promedio y el recorrido.
+2. Se representan los recorridos en el gráfico R, mediante puntos unidos con segmentos rectos. En el gráfico se incluen las líneas de control (LC, LCI, LCS).
+3. Se representan los recorridos en el gráfico Xbarra, mediante puntos unidos con segmentos rectos. Se añaden al gráfico las líneas de control (LC, LCI, LCS).
+
+----
+
+En una planta de fabricación de neveras, se han establecido las siguientes líneas de control (gráficos Xbarra-R) para el control del grosor de la capa de pintura. Paa cada turno, se inspecciona una muestra de 5 neveras.
+
+|          |Xbarra    |R         |
+|:--------:|:--------:|:--------:|
+|LCS       |2,960     |1,63      |
+|LC        |2,515     |0,77      |
+|LCI       |2,070     |0,00      |
+
+<p>&nbsp;</p>
+
+<p class="bibref">Adaptado de Wild, C. J., & Seber, G. A. F. (2000). Chance encounters. John Wiley & Sons</p>
+
+----
+
+```{r, echo = FALSE, results = 'asis'}
+datos <- data.frame(shift=1:20,
+      s1=c(2.7,2.6,2.3,2.8,2.6,
+           2.2,2.2,2.8,2.4,2.6,
+           3.1,2.4,2.1,2.2,2.4,
+           3.1,2.9,1.9,2.3,1.8),
+      s2=c(2.3,2.4,2.3,2.3,2.5,
+           2.3,2.6,2.6,2.8,2.3,
+           3.0,2.8,3.2,2.8,3.0,
+           2.6,2.4,1.6,2.6,2.8),
+      s3=c(2.6,2.6,2.4,2.4,2.6,
+           2.7,2.4,2.6,2.4,2.0,
+           3.5,2.2,2.5,2.1,2.5,
+           2.6,2.9,2.6,2.7,2.3),
+      s4=c(2.4,2.3,2.5,2.6,2.1,
+           2.2,2.0,2.7,2.2,2.5,
+           2.8,2.9,2.6,2.2,2.5,
+           2.8,1.3,3.3,2.8,2.0),
+      s5=c(2.7,2.8,2.4,2.7,2.8,
+           2.6,2.3,2.5,2.3,2.4,
+           3.0,2.5,2.8,2.4,2.0,
+           2.1,1.8,3.3,3.2,2.9))
+kable_styling(kable(datos), font_size=18)
+```
+
+----
+
+```{r, echo = TRUE}
+promedio <- apply(datos[,2:6],1,mean)
+rango <- apply(datos[,2:6],1,function (x) diff(range(x)))
+promedio
+rango
+
+resumen <- data.frame(shift=datos$shift,promedio,rango)
+str(resumen)
+```
+
+## Gráfico Xbarra-R -- cálculo de las líneas de control
+
+Las líneas de control deben calcularse exclusivamente con datos que correspondan al **proceso bajo control** en las **mismas condiciones** de producción.
+
+----
+
+Para conseguir estos datos se siguen una de las dos aproximaciones siguientes:
+
+- Buscar una ventana de datos donde el proceso esté bajo control,
+- Iterar excluyendo aquellos datos que estan fuera de control
+      1. Tomar los últimos datos disponibles
+      2. Realizar el gráfico de control de recorridos
+      3. Excluir las muestras que estan fuera de control
+      4. Recalcular el gráfico de recorridos y hacer el gráfico de promedios
+      5. Excluir las muestras que estan fuera de control
+      6. Recalcular los gráficos de control hasta que no haya muestras fuera de control
+      7. Tomar como referencia estas líneas de control
+
+
+## Cálculo de las líneas de control
+
+Para construir los gráficos se usan fórmulas y constantes preestablecidas
+
+Se pueden encontrar en la bibliografía
+
+<a href="http://www.world-class-quality.com/uploads/Download/2017080116220211ControlChartConstantsandFormulae.pdf">2017080116220211ControlChartConstantsandFormulae.pdf</a> 
+
+
+## Cálculo de las líneas de control en un gráfico R
+
+![](im013.svg){style=width:50%;margin-left:-25%;}
+
+
+## Cálculo de las líneas de control en un gráfico Xbarra (a partir de R)
+
+![](im014.svg){style=width:50%;margin-left:-25%;}
+
+
+## Constantes para el gráfico Xbarra-R
+
+![](im015.png){style=width:50%;margin-left:-25%;}
+
+
+## Ejemplo
+
+En el proceso de fabricación de un producto en polvo se determina su humedad tomando 5 muestras de cada lote producido.
+
+¿Cómo podemos determinar si el proceso está funcionando según lo previsto?
+
+Los datos se encuentran en el archivo <a href="humedad.txt">humedad.txt</a>
 
