@@ -252,6 +252,32 @@ En una planta de fabricación de neveras, se han establecido las siguientes lín
 
 ----
 
+```{r, echo = TRUE, eval = FALSE}
+datos <- data.frame(shift=1:20,
+      s1=c(2.7,2.6,2.3,2.8,2.6,
+           2.2,2.2,2.8,2.4,2.6,
+           3.1,2.4,2.1,2.2,2.4,
+           3.1,2.9,1.9,2.3,1.8),
+      s2=c(2.3,2.4,2.3,2.3,2.5,
+           2.3,2.6,2.6,2.8,2.3,
+           3.0,2.8,3.2,2.8,3.0,
+           2.6,2.4,1.6,2.6,2.8),
+      s3=c(2.6,2.6,2.4,2.4,2.6,
+           2.7,2.4,2.6,2.4,2.0,
+           3.5,2.2,2.5,2.1,2.5,
+           2.6,2.9,2.6,2.7,2.3),
+      s4=c(2.4,2.3,2.5,2.6,2.1,
+           2.2,2.0,2.7,2.2,2.5,
+           2.8,2.9,2.6,2.2,2.5,
+           2.8,1.3,3.3,2.8,2.0),
+      s5=c(2.7,2.8,2.4,2.7,2.8,
+           2.6,2.3,2.5,2.3,2.4,
+           3.0,2.5,2.8,2.4,2.0,
+           2.1,1.8,3.3,3.2,2.9))
+```
+
+----
+
 ```{r, echo = FALSE, results = 'asis'}
 datos <- data.frame(shift=1:20,
       s1=c(2.7,2.6,2.3,2.8,2.6,
@@ -288,6 +314,68 @@ rango
 resumen <- data.frame(shift=datos$shift,promedio,rango)
 str(resumen)
 ```
+
+----
+
+```{r, echo = TRUE, eval = FALSE}
+if(!require("tidyverse")) {
+  install.packages("tidyverse", repos="https://cloud.r-project.org/",
+                   quiet=TRUE, type="binary")
+  library("tidyverse")
+}
+```
+
+----
+
+```{r, echo = TRUE, eval = FALSE}
+ggplot(resumen,aes(x=shift,y=rango))+
+  geom_point(size=3,shape=21)+geom_line()+
+  geom_hline(yintercept = 1.63,color="red")+
+  geom_hline(yintercept = 0,color="red")+
+  geom_hline(yintercept = 0.77)+
+  theme_classic()
+```
+----
+
+```{r, echo = FALSE}
+ggplot(resumen,aes(x=shift,y=rango))+
+  geom_point(size=3,shape=21)+geom_line()+
+  geom_hline(yintercept = 1.63,color="red")+
+  geom_hline(yintercept = 0,color="red")+
+  geom_hline(yintercept = 0.77)+
+  theme_classic()
+```
+
+----
+
+```{r, echo = TRUE, eval = FALSE}
+ggplot(resumen,aes(x=shift,y=promedio))+
+  geom_point(size=3,shape=21)+geom_line()+
+  geom_hline(yintercept = 2.96,color="red")+
+  geom_hline(yintercept = 2.07,color="red")+
+  geom_hline(yintercept = 2.515 + (2.96-2.515)/3,color="green")+
+  geom_hline(yintercept = 2.515 - (2.515-2.07)/3,color="green")+
+  geom_hline(yintercept = 2.515 + (2.96-2.515)/3 * 2,color="orange")+
+  geom_hline(yintercept = 2.515 - (2.515-2.07)/3 * 2,color="orange")+
+  geom_hline(yintercept = 2.515)+
+  theme_classic()
+```
+
+----
+
+```{r, echo = FALSE}
+ggplot(resumen,aes(x=shift,y=promedio))+
+  geom_point(size=3,shape=21)+geom_line()+
+  geom_hline(yintercept = 2.96,color="red")+
+  geom_hline(yintercept = 2.07,color="red")+
+  geom_hline(yintercept = 2.515 + (2.96-2.515)/3,color="green")+
+  geom_hline(yintercept = 2.515 - (2.515-2.07)/3,color="green")+
+  geom_hline(yintercept = 2.515 + (2.96-2.515)/3 * 2,color="orange")+
+  geom_hline(yintercept = 2.515 - (2.515-2.07)/3 * 2,color="orange")+
+  geom_hline(yintercept = 2.515)+
+  theme_classic()
+```
+
 
 ## Gráfico Xbarra-R -- cálculo de las líneas de control
 
@@ -338,5 +426,62 @@ En el proceso de fabricación de un producto en polvo se determina su humedad to
 
 ¿Cómo podemos determinar si el proceso está funcionando según lo previsto?
 
-Los datos se encuentran en el archivo <a href="humedad.txt">humedad.txt</a>
+Los datos se encuentran en el archivo <a href="humedad.txt">humedad.txt</a>.
+
+
+## Gráfico I-MR (X-MR)
+
+Cuando no existe un subgrupo racional, una alternativa habitual es el gráfico de individuos y recorridos móbiles (I-MR). 
+
+En este caso, el gráfico de nivel muestra los valores individuales y el gráfico de recorridos se calcula tomando como recorrido la diferencia al valor anterior. El tamaño de muestra se asume igual a 2.
+
+----
+
+![](im016.png)
+
+
+
+## Ejemplo
+
+Los datos adjuntos corresponden a medidas de la resistividad de 25 placas de silicona fabricadas de forma consecutivas (<a href="resistividad.txt">resistividad.txt</a>).
+
+Construye un gráfico I-MR y analiza si el proceso está bajo control estadístico de acuerdo con las reglas de la Western Electric.
+
+
+## Gráficos de control para atributos
+
+### Defecto
+
+- una característica (cualitativa o cuantitativa) que no cumple con las especificaciones (valor o intervalo de valores) establecidas
+
+### Unidad defectuosa
+
+- unidad que tiene uno o varios defectos
+
+----
+
+![](im002.png)
+
+<p class="bibref">https://www.isixsigma.com/tools-templates/control-charts/a-guide-to-control-charts/</p>
+
+
+## Gráfico p
+
+- Se representa la proporción de unidades defectuosas.
+- Se asume que
+
+    - Π, la proporción de unidades defectuosas reales del proceso, se mantiene constante
+    - las unidades se producen de manera independiente
+
+El gráfico de control se hace con las proporciones muestrales de unidades de defectuosas.
+
+
+## Ejemplo
+
+En un determinado proceso de fabricación de un complemento alimenticio en forma de grageas, estas se inspeccionan de acuerdo con un muestreo aleatorio para verificar que el recubrimiento es estéticamente aceptable.
+
+Tenéis establecido que una partida de producción es un lote nuevo cuando cambia cualquier aspecto significativo de la misma, y ello da lugar a lotes de tamaños de producción muy variables.
+
+Los datos figuran en el archivo <a href="grageas.xlsx">grageas.xlsx</a>
+
 
