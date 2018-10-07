@@ -252,6 +252,32 @@ if(!require("kableExtra")) {
 #' 
 #' ----
 #' 
+## ---- echo = TRUE, eval = FALSE------------------------------------------
+## datos <- data.frame(shift=1:20,
+##       s1=c(2.7,2.6,2.3,2.8,2.6,
+##            2.2,2.2,2.8,2.4,2.6,
+##            3.1,2.4,2.1,2.2,2.4,
+##            3.1,2.9,1.9,2.3,1.8),
+##       s2=c(2.3,2.4,2.3,2.3,2.5,
+##            2.3,2.6,2.6,2.8,2.3,
+##            3.0,2.8,3.2,2.8,3.0,
+##            2.6,2.4,1.6,2.6,2.8),
+##       s3=c(2.6,2.6,2.4,2.4,2.6,
+##            2.7,2.4,2.6,2.4,2.0,
+##            3.5,2.2,2.5,2.1,2.5,
+##            2.6,2.9,2.6,2.7,2.3),
+##       s4=c(2.4,2.3,2.5,2.6,2.1,
+##            2.2,2.0,2.7,2.2,2.5,
+##            2.8,2.9,2.6,2.2,2.5,
+##            2.8,1.3,3.3,2.8,2.0),
+##       s5=c(2.7,2.8,2.4,2.7,2.8,
+##            2.6,2.3,2.5,2.3,2.4,
+##            3.0,2.5,2.8,2.4,2.0,
+##            2.1,1.8,3.3,3.2,2.9))
+
+#' 
+#' ----
+#' 
 ## ---- echo = FALSE, results = 'asis'-------------------------------------
 datos <- data.frame(shift=1:20,
       s1=c(2.7,2.6,2.3,2.8,2.6,
@@ -288,6 +314,68 @@ rango
 resumen <- data.frame(shift=datos$shift,promedio,rango)
 str(resumen)
 
+#' 
+#' ----
+#' 
+## ---- echo = TRUE, eval = FALSE------------------------------------------
+## if(!require("tidyverse")) {
+##   install.packages("tidyverse", repos="https://cloud.r-project.org/",
+##                    quiet=TRUE, type="binary")
+##   library("tidyverse")
+## }
+
+#' 
+#' ----
+#' 
+## ---- echo = TRUE, eval = FALSE------------------------------------------
+## ggplot(resumen,aes(x=shift,y=rango))+
+##   geom_point(size=3,shape=21)+geom_line()+
+##   geom_hline(yintercept = 1.63,color="red")+
+##   geom_hline(yintercept = 0,color="red")+
+##   geom_hline(yintercept = 0.77)+
+##   theme_classic()
+
+#' ----
+#' 
+## ---- echo = FALSE-------------------------------------------------------
+ggplot(resumen,aes(x=shift,y=rango))+
+  geom_point(size=3,shape=21)+geom_line()+
+  geom_hline(yintercept = 1.63,color="red")+
+  geom_hline(yintercept = 0,color="red")+
+  geom_hline(yintercept = 0.77)+
+  theme_classic()
+
+#' 
+#' ----
+#' 
+## ---- echo = TRUE, eval = FALSE------------------------------------------
+## ggplot(resumen,aes(x=shift,y=promedio))+
+##   geom_point(size=3,shape=21)+geom_line()+
+##   geom_hline(yintercept = 2.96,color="red")+
+##   geom_hline(yintercept = 2.07,color="red")+
+##   geom_hline(yintercept = 2.515 + (2.96-2.515)/3,color="green")+
+##   geom_hline(yintercept = 2.515 - (2.515-2.07)/3,color="green")+
+##   geom_hline(yintercept = 2.515 + (2.96-2.515)/3 * 2,color="orange")+
+##   geom_hline(yintercept = 2.515 - (2.515-2.07)/3 * 2,color="orange")+
+##   geom_hline(yintercept = 2.515)+
+##   theme_classic()
+
+#' 
+#' ----
+#' 
+## ---- echo = FALSE-------------------------------------------------------
+ggplot(resumen,aes(x=shift,y=promedio))+
+  geom_point(size=3,shape=21)+geom_line()+
+  geom_hline(yintercept = 2.96,color="red")+
+  geom_hline(yintercept = 2.07,color="red")+
+  geom_hline(yintercept = 2.515 + (2.96-2.515)/3,color="green")+
+  geom_hline(yintercept = 2.515 - (2.515-2.07)/3,color="green")+
+  geom_hline(yintercept = 2.515 + (2.96-2.515)/3 * 2,color="orange")+
+  geom_hline(yintercept = 2.515 - (2.515-2.07)/3 * 2,color="orange")+
+  geom_hline(yintercept = 2.515)+
+  theme_classic()
+
+#' 
 #' 
 #' ## Gráfico Xbarra-R -- cálculo de las líneas de control
 #' 
@@ -334,9 +422,407 @@ str(resumen)
 #' 
 #' ## Ejemplo
 #' 
-#' En el proceso de fabricación de un producto en polvo se determina su humedad tomando 5 muestras de cada lote producido.
+#' En el proceso de fabricación de un producto en polvo se determina su humedad tomando cinco muestras de cada lote producido.
 #' 
 #' ¿Cómo podemos determinar si el proceso está funcionando según lo previsto?
 #' 
-#' Los datos se encuentran en el archivo <a href="humedad.txt">humedad.txt</a>
+#' Los datos se encuentran en el archivo <a href="humedad.txt">humedad.txt</a>.
+#' 
+#' ----
+#' 
+## ---- echo = TRUE--------------------------------------------------------
+datos <- read.table("humedad.txt",header=TRUE,sep="\t",
+                    dec=",",quote="")
+
+resumen <- datos %>% group_by(Muestra) %>%
+  summarise(promedio=mean(X),rango=diff(range(X)))
+
+# Lineas de control
+# ... para recorridos
+R_LC <- mean(resumen$rango)
+R_LCS <- 2.114 * R_LC
+R_LCI <- 0
+
+# ... para Xbarra
+X_LC <- mean(resumen$promedio)
+X_LCS <- X_LC + .577 * R_LC
+X_LCI <- X_LC - .577 * R_LC
+
+#' 
+#' ----
+#' 
+## ---- echo = FALSE-------------------------------------------------------
+ggplot(resumen,aes(x=Muestra,y=rango))+
+  geom_point(size=3,shape=21)+geom_line()+
+  geom_hline(yintercept = R_LCS,color="red")+
+  geom_hline(yintercept = R_LCI,color="red")+
+  geom_hline(yintercept = R_LC)+
+  theme_classic()
+
+#' 
+#' ----
+#' 
+#' La muestra 6 indica que el proceso fuera de control. 
+#' 
+#' Se excluye para el cálculo de los límites de control. Recalculando sin este punto...
+#' 
+## ---- echo = TRUE--------------------------------------------------------
+R_LC <- mean(resumen$rango[-6])
+R_LCS <- 2.114 * R_LC
+R_LCI <- 0
+
+X_LC <- mean(resumen$promedio[-6])
+X_LCS <- X_LC + .577 * R_LC
+X_LCI <- X_LC - .577 * R_LC
+
+#' 
+#' ----
+#' 
+## ---- echo = FALSE-------------------------------------------------------
+ggplot(resumen,aes(x=Muestra,y=rango))+
+  geom_point(size=3,shape=21)+geom_line()+
+  geom_hline(yintercept = R_LCS,color="red")+
+  geom_hline(yintercept = R_LCI,color="red")+
+  geom_hline(yintercept = R_LC)+
+  theme_classic()
+
+#' 
+#' ----
+#' 
+## ---- echo = FALSE-------------------------------------------------------
+ggplot(resumen,aes(x=Muestra,y=promedio))+
+  geom_point(size=3,shape=21)+geom_line()+
+  geom_hline(yintercept = X_LCS,color="red")+
+  geom_hline(yintercept = X_LCI,color="red")+
+  geom_hline(yintercept = X_LC  + (X_LCS-X_LC)/3,color="green")+
+  geom_hline(yintercept = X_LC  - (X_LC-X_LCI)/3,color="green")+
+  geom_hline(yintercept = X_LC + (X_LCS-X_LC)/3 * 2,color="orange")+
+  geom_hline(yintercept = X_LC - (X_LC-X_LCI)/3 * 2,color="orange")+
+  geom_hline(yintercept = X_LC)+
+  theme_classic()
+
+#' 
+#' ----
+#' 
+#' Iterando se logra una secuencia de datos en los que no se muestran indicios de estar fuera de control excluyendo los datos 6 y los que estan entre 10 y 20 (extremos incluidos)
+#' 
+## ---- echo = FALSE-------------------------------------------------------
+exc <- c(6,10:20)
+
+R_LC <- mean(resumen$rango[-exc])
+R_LCS <- 2.114 * R_LC
+R_LCI <- 0
+
+X_LC <- mean(resumen$promedio[-exc])
+X_LCS <- X_LC + .577 * R_LC
+X_LCI <- X_LC - .577 * R_LC
+
+#' 
+#' Líneas de control para el gráfico R
+#' 
+## ---- echo = FALSE-------------------------------------------------------
+c(LC = R_LC, LCI = R_LCI, LCS = R_LCS)
+
+#' 
+#' Líneas de control para el gráfico Xbarra
+#' 
+## ---- echo = FALSE-------------------------------------------------------
+c(LC = X_LC, LCI = X_LCI, LCS = X_LCS)
+
+#' 
+#' ----
+#' 
+## ---- echo = FALSE-------------------------------------------------------
+ggplot(resumen[-exc,],aes(x=Muestra,y=rango))+
+  geom_point(size=3,shape=21)+geom_line()+
+  geom_hline(yintercept = R_LCS,color="red")+
+  geom_hline(yintercept = R_LCI,color="red")+
+  geom_hline(yintercept = R_LC)+
+  theme_classic()
+
+#' 
+#' ----
+#' 
+## ---- echo = FALSE-------------------------------------------------------
+ggplot(resumen[-exc,],aes(x=Muestra,y=promedio))+
+  geom_point(size=3,shape=21)+geom_line()+
+  geom_hline(yintercept = X_LCS,color="red")+
+  geom_hline(yintercept = X_LCI,color="red")+
+  geom_hline(yintercept = X_LC  + (X_LCS-X_LC)/3,color="green")+
+  geom_hline(yintercept = X_LC  - (X_LC-X_LCI)/3,color="green")+
+  geom_hline(yintercept = X_LC + (X_LCS-X_LC)/3 * 2,color="orange")+
+  geom_hline(yintercept = X_LC - (X_LC-X_LCI)/3 * 2,color="orange")+
+  geom_hline(yintercept = X_LC)+
+  theme_classic()
+
+#' 
+#' ----
+#' 
+#' Los gráficos de control finales, con los límites bien calculados, se muestran a continuación.
+#' 
+#' ----
+#' 
+## ---- echo = FALSE-------------------------------------------------------
+ggplot(resumen,aes(x=Muestra,y=rango))+
+  geom_point(size=3,shape=21)+geom_line()+
+  geom_hline(yintercept = R_LCS,color="red")+
+  geom_hline(yintercept = R_LCI,color="red")+
+  geom_hline(yintercept = R_LC)+
+  theme_classic()
+
+#' 
+#' ----
+#' 
+## ---- echo = FALSE-------------------------------------------------------
+ggplot(resumen,aes(x=Muestra,y=promedio))+
+  geom_point(size=3,shape=21)+geom_line()+
+  geom_hline(yintercept = X_LCS,color="red")+
+  geom_hline(yintercept = X_LCI,color="red")+
+  geom_hline(yintercept = X_LC  + (X_LCS-X_LC)/3,color="green")+
+  geom_hline(yintercept = X_LC  - (X_LC-X_LCI)/3,color="green")+
+  geom_hline(yintercept = X_LC + (X_LCS-X_LC)/3 * 2,color="orange")+
+  geom_hline(yintercept = X_LC - (X_LC-X_LCI)/3 * 2,color="orange")+
+  geom_hline(yintercept = X_LC)+
+  theme_classic()
+
+#' 
+#' 
+#' ## Gráfico I-MR (X-MR)
+#' 
+#' Cuando no existe un subgrupo racional, una alternativa habitual es el gráfico de individuos y recorridos móviles (I-MR). 
+#' 
+#' En este caso, el gráfico de nivel muestra los valores individuales y el gráfico de recorridos se calcula tomando como recorrido la diferencia al valor anterior. El tamaño de muestra se asume igual a 2.
+#' 
+#' ----
+#' 
+#' ![](im016.png)
+#' 
+#' 
+#' 
+#' ## Ejemplo
+#' 
+#' Los datos adjuntos corresponden a medidas de la resistividad de 25 placas de silicona fabricadas de forma consecutivas (<a href="resistividad.txt">resistividad.txt</a>).
+#' 
+## ---- echo = FALSE, results = 'asis'-------------------------------------
+datos <- read.table("resistividad.txt")
+colnames(datos) <- c("x")
+
+kable_styling(kable(matrix(datos[,1],ncol=5)), font_size=18)
+
+#' 
+#' Construye un gráfico I-MR y analiza si el proceso está bajo control estadístico de acuerdo con las reglas de la Western Electric.
+#' 
+#' ----
+#' 
+## ---- echo = FALSE-------------------------------------------------------
+datos$i <- 1:25
+datos <- datos[,c(2,1)]
+mr <- data.frame(i=2:25,R=abs(diff(datos$x)))
+
+R_LC <- mean(mr$R)
+R_LCS <- 3.267 * R_LC
+R_LCI <- 0
+
+X_LC <- mean(datos$x)
+X_LCS <- X_LC + 2.660 * R_LC
+X_LCI <- X_LC - 2.660 * R_LC
+
+ggplot(mr,aes(x=i,y=R))+
+  geom_point(size=3,shape=21)+geom_line()+
+  geom_hline(yintercept = R_LCS,color="red")+
+  geom_hline(yintercept = R_LCI,color="red")+
+  geom_hline(yintercept = R_LC)+
+  theme_classic()
+
+#' 
+#' ----
+#' 
+#' El proceso está fuera de control.
+#' 
+#' Para un cálculo adecuado de las líneas de control, deberán excluirse las muestra 12 y 19. La muestra 19 se determina como indicadora de que el proceso está fuera de control al repetir el cálculo excluyendo la muestra 12.
+#' 
+#' ----
+#' 
+#' Líneas de control para el gráfico mR
+#' 
+## ---- echo = FALSE-------------------------------------------------------
+mr <- data.frame(i=2:23,R=abs(diff(datos$x[-c(12,19)])))
+
+R_LC <- mean(mr$R)
+R_LCS <- 3.267 * R_LC
+R_LCI <- 0
+
+c(LC = R_LC, LCI = R_LCI, LCS = R_LCS)
+
+#' 
+#' Líneas de control para el gráfico I
+#' 
+## ---- echo = FALSE-------------------------------------------------------
+X_LC <- mean(datos$x[-c(12,19)])
+X_LCS <- X_LC + 2.660 * R_LC
+X_LCI <- X_LC - 2.660 * R_LC
+
+c(LC = X_LC, LCI = X_LCI, LCS = X_LCS)
+
+#' 
+#' ----
+#' 
+## ---- echo = FALSE-------------------------------------------------------
+mr <- data.frame(i=2:25,R=abs(diff(datos$x)))
+
+ggplot(mr,aes(x=i,y=R))+
+  geom_point(size=3,shape=21)+geom_line()+
+  geom_hline(yintercept = R_LCS,color="red")+
+  geom_hline(yintercept = R_LCI,color="red")+
+  geom_hline(yintercept = R_LC)+
+  theme_classic()
+
+#' 
+#' ----
+#' 
+## ---- echo = FALSE-------------------------------------------------------
+ggplot(datos,aes(x=i,y=x))+
+  geom_point(size=3,shape=21)+geom_line()+
+  geom_hline(yintercept = X_LCS,color="red")+
+  geom_hline(yintercept = X_LCI,color="red")+
+  geom_hline(yintercept = X_LC  + (X_LCS-X_LC)/3,color="green")+
+  geom_hline(yintercept = X_LC  - (X_LC-X_LCI)/3,color="green")+
+  geom_hline(yintercept = X_LC + (X_LCS-X_LC)/3 * 2,color="orange")+
+  geom_hline(yintercept = X_LC - (X_LC-X_LCI)/3 * 2,color="orange")+
+  geom_hline(yintercept = X_LC)+
+  theme_classic()
+
+#' 
+#' ----
+#' 
+#' El proceso está fuera de control y debe evaluarse qué ha pasado en el entorno de las muestras 12 y 19.
+#' 
+#' 
+#' ## Gráficos de control para atributos
+#' 
+#' ### Defecto
+#' 
+#' - una característica (cualitativa o cuantitativa) que no cumple con las especificaciones (valor o intervalo de valores) establecidas
+#' 
+#' ### Unidad defectuosa
+#' 
+#' - unidad que tiene uno o varios defectos
+#' 
+#' ----
+#' 
+#' ![](im002.png)
+#' 
+#' <p class="bibref">https://www.isixsigma.com/tools-templates/control-charts/a-guide-to-control-charts/</p>
+#' 
+#' 
+#' ## Gráfico p
+#' 
+#' - Se representa la proporción de unidades defectuosas.
+#' - Se asume que
+#' 
+#'     - Π, la proporción de unidades defectuosas reales del proceso, se mantiene constante
+#'     - las unidades se producen de manera independiente
+#' 
+#' El gráfico de control se hace con las proporciones muestrales de unidades de defectuosas.
+#' 
+#' 
+#' ## Ejemplo
+#' 
+#' En un determinado proceso de fabricación de un complemento alimenticio en forma de grageas, estas se inspeccionan de acuerdo con un muestreo aleatorio para verificar que el recubrimiento es estéticamente aceptable.
+#' 
+#' Tenéis establecido que una partida de producción es un lote nuevo cuando cambia cualquier aspecto significativo de la misma, y ello da lugar a lotes de tamaños de producción muy variables.
+#' 
+#' Los datos figuran en el archivo <a href="grageas.xlsx">grageas.xlsx</a>
+#' 
+#' ----
+#' 
+## ---- echo = FALSE-------------------------------------------------------
+load("grageas.rda")
+
+P_LC <- mean(datos$p)
+
+datos$lcs <- P_LC + 3 * sqrt(P_LC * (1-P_LC)) / sqrt(datos$n)
+datos$lci <- P_LC - 3 * sqrt(P_LC * (1-P_LC)) / sqrt(datos$n)
+datos$i <- 1:50
+
+#' 
+## ---- echo = TRUE, eval=FALSE--------------------------------------------
+## ggplot(datos,aes(x=i,y=p))+
+##   geom_point(size=3,shape=21)+geom_line()+
+##   geom_hline(yintercept = P_LC)+
+##   geom_line(aes(y = lcs),color="red")+
+##   geom_line(aes(y = lci),color="red")+
+##   geom_line(aes(y = P_LC - (P_LC - lci)/3),color="green")+
+##   geom_line(aes(y = P_LC + (lcs - P_LC)/3),color="green")+
+##   geom_line(aes(y = P_LC - (P_LC - lci) * 2 / 3),color="orange")+
+##   geom_line(aes(y = P_LC + (lcs - P_LC) * 2 / 3),color="orange")+
+##   theme_classic()
+
+#' 
+#' ----
+#' 
+## ---- echo = FALSE-------------------------------------------------------
+ggplot(datos,aes(x=i,y=p))+
+  geom_point(size=3,shape=21)+geom_line()+
+  geom_hline(yintercept = P_LC)+
+  geom_line(aes(y = lcs),color="red")+
+  geom_line(aes(y = lci),color="red")+
+  geom_line(aes(y = P_LC - (P_LC - lci)/3),color="green")+
+  geom_line(aes(y = P_LC + (lcs - P_LC)/3),color="green")+
+  geom_line(aes(y = P_LC - (P_LC - lci) * 2 / 3),color="orange")+
+  geom_line(aes(y = P_LC + (lcs - P_LC) * 2 / 3),color="orange")+
+  theme_classic()
+
+#' 
+#' ----
+#' 
+#' El proceso parece bajo control estadístico de acuerdo con las reglas de Nelson o de
+#' Western Electric.
+#' 
+#' <p>&nbsp;</p>
+#' <p>&nbsp;</p>
+#' <p>&nbsp;</p>
+#' 
+#' Representado con límites horizontales, se tiene...
+#' 
+#' ----
+#' 
+## ---- echo = TRUE, eval=FALSE--------------------------------------------
+## limites <- data.frame(i=c((1:50)-0.4999,(1:50)+0.4999),
+##                       lcs=c(datos$lcs,datos$lcs),
+##                       lci=c(datos$lci,datos$lci))
+## limites <- limites[order(limites$i),]
+## 
+## ggplot(datos,aes(x=i,y=p))+
+##   geom_point(size=3,shape=21)+geom_line()+
+##   geom_hline(yintercept = P_LC)+
+##   geom_line(aes(y = lcs),data=limites,color="red")+
+##   geom_line(aes(y = lci),data=limites,color="red")+
+##   geom_line(aes(y = P_LC - (P_LC - lci)/3),data=limites,color="green",linetype="dashed")+
+##   geom_line(aes(y = P_LC + (lcs - P_LC)/3),data=limites,color="green",linetype="dashed")+
+##   geom_line(aes(y = P_LC - (P_LC - lci) * 2 / 3),data=limites,color="orange",linetype="dashed")+
+##   geom_line(aes(y = P_LC + (lcs - P_LC) * 2 / 3),data=limites,color="orange",linetype="dashed")+
+##   theme_classic()
+
+#' 
+#' ----
+#' 
+## ---- echo = FALSE-------------------------------------------------------
+limites <- data.frame(i=c((1:50)-0.4999,(1:50)+0.4999),
+                      lcs=c(datos$lcs,datos$lcs),
+                      lci=c(datos$lci,datos$lci))
+limites <- limites[order(limites$i),]
+
+ggplot(datos,aes(x=i,y=p))+
+  geom_point(size=3,shape=21)+geom_line()+
+  geom_hline(yintercept = P_LC)+
+  geom_line(aes(y = lcs),data=limites,color="red")+
+  geom_line(aes(y = lci),data=limites,color="red")+
+  geom_line(aes(y = P_LC - (P_LC - lci)/3),data=limites,color="green",linetype="dashed")+
+  geom_line(aes(y = P_LC + (lcs - P_LC)/3),data=limites,color="green",linetype="dashed")+
+  geom_line(aes(y = P_LC - (P_LC - lci) * 2 / 3),data=limites,color="orange",linetype="dashed")+
+  geom_line(aes(y = P_LC + (lcs - P_LC) * 2 / 3),data=limites,color="orange",linetype="dashed")+
+  theme_classic()
+
+#' 
 #' 
