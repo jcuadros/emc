@@ -8,6 +8,8 @@ Incluye los siguientes apartados:
 - Introducción a R: [IntroduccionAR.html](https://cdn.rawgit.com/jcuadros/emc/master/01_IntroduccionAR/IntroduccionAR.html) -- [versión imprimible](https://cdn.rawgit.com/jcuadros/emc/master/01_IntroduccionAR/IntroduccionAR.html?print-pdf)
 - Introducción a la calidad: [IntroCalidad.html](https://cdn.rawgit.com/jcuadros/emc/master/02_IntroCalidad/IntroCalidad.html) -- [versión imprimible](https://cdn.rawgit.com/jcuadros/emc/master/02_IntroCalidad/IntroCalidad.html?print-pdf)
 - Gráficos de control: [GrafControl.html](https://cdn.rawgit.com/jcuadros/emc/master/03_GraficosControl/GrafControl.html) -- [versión imprimible](https://cdn.rawgit.com/jcuadros/emc/master/03_GraficosControl/GrafControl.html?print-pdf)
+- Especificaciones y capacidad: [GrafControl.html](https://cdn.rawgit.com/jcuadros/emc/master/04_Especificaciones/EspecYCapacidad.html) -- [versión imprimible](https://cdn.rawgit.com/jcuadros/emc/master/04_Especificaciones/EspecYCapacidad.html?print-pdf)
+
 
 ----
 Presentaciones creadas con RMarkdown y revealjs.

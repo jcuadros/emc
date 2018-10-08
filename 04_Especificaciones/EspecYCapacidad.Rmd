@@ -1,0 +1,208 @@
+---
+output:
+  revealjs::revealjs_presentation:
+    theme: simple
+    slide_level: 2
+    highlight: pygments
+    center: false
+    self_contained: true
+    css: "../css/styles.css"
+    reveal_options:
+      slideNumber: true
+      previewLinks: false
+      transition: 0
+      background_transition: 0
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, dev="svg")
+```
+
+```{r include=FALSE}
+if(!require("tidyverse")) {
+  install.packages("tidyverse", repos="https://cloud.r-project.org/",
+         quiet=TRUE, type="binary")
+  library("tidyverse")
+}
+if(!require("nortest")) {
+  install.packages("nortest", repos="https://cloud.r-project.org/",
+         quiet=TRUE, type="binary")
+  library("normtest")
+}
+if(!require("kableExtra")) {
+  install.packages("kableExtra", repos="https://cloud.r-project.org/",
+         quiet=TRUE, type="binary")
+  library("kableExtra")
+}
+```
+
+##
+
+<img src="../images/IQSlogo.png" style="border-style:none;box-shadow:none;
+position:absolute;margin:0;top:20px;left:20px;max-width:200px;height:auto;" />
+
+<div style="font-size:1.5em;font-weight:700;margin-top:200px;">Control estadístico de procesos</div>
+<div style="font-size:1.4em;font-weight:500;color:#333333;">Especificaciones y capacidad</div>
+<div style="font-size:1.2em;margin-top:40px;color:#333333;">Jordi Cuadros, Lucinio González</div>
+<div style="margin-top:80px;color:#333333;">Octubre de 2018</div>
+
+
+# Especificaciones
+
+## ¿Qué son las especificaciones?
+
+**Especificación**
+
+Información proporcionada por el fabricante de un producto, la cual describe sus componentes, características y funcionamiento. A menudo constituye el compromiso con el cliente.
+
+- Características
+    - Atributos: conformidad
+    - Variables: valor dentro de unos límites (LIE, LSE)
+- Las especificaciones no estan especificadas por el proceso productivo ni se determinan estadísticamente.
+
+
+## ¿Cómo se relacionan con el proceso productivo?
+
+- La probabilidad con la que se cumplirán unas especificaciones depende de las características del proceso.
+    - Valor central
+    - Variabilidad natural
+
+- Distintos procesos productivos pueden tolerar distintos niveles de no conformidad.
+
+
+## El concepto de capacidad
+
+La capacidad del proceso es la aptitud que tiene éste para producir dentro del intervalo fijado por las especificaciones.
+
+![](im001.png){style=width:60%;margin-left:-30%;}
+
+----
+
+Para realizar un estudio de capacidad de un proceso, se ha de cumplir las siguientes condiciones:
+
+- El proceso debe estar bajo control estadístico, es decir media y variabilidad estable a lo largo del tiempo.
+- Los datos deben seguir una distribución normal.
+- La muestra debe ser representativa (materiales de partida, ajustes de máquina, cambio de operarios, condiciones ambientales, desgaste...).
+
+----
+
+En estas condiciones, se puede usar la distribución normal para establecer la capacidad del proceso y relacionar
+
+- las características del mismo (valor central y variabilidad natural), con
+- las especificaciones (valor nominal, límite inferior/superior de la especificación).
+
+
+A partir de la misma puede también determinarse la probabilidad de obtener unidades no conformes con una determinada especificación.
+
+
+# Distribución normal
+
+## Definición
+
+La **distribución normal** es una distribución teórica simétrica comúnmente usada para la modelización matemática de valores afectados de error aleatorio.
+
+![](im002.svg){style=width:60%;margin-left:-30%;}
+
+<span style="font-size:18pt;">https://commons.wikimedia.org/wiki/File:Standard_deviation_diagram_micro.svg</span>
+
+
+## Ejemplos
+
+Sea un proceso productivo en el que se fabrican láminas de acero. Se ha establecido que la dureza promedio de las piezas producidas es 316 HB y la desviación estándar de las mismas es 25 HB.
+
+Asumiendo que esta variable, sigue una distribución normal determina:
+
+- ¿Qué proporción de piezas tienen un dureza inferior a 250 HB? ¿Y una superior a 350 HB?
+- Si se establecen una especificaciones de 320 ± 40 HB, ¿qué proporción de piezas quedarán fuera de especificaciones?
+- ¿Qué valor de dureza corresponde es superior al del 95 % de las piezas producidas? 
+
+
+## Inferencia sobre la normalidad
+
+Para contrastar la hipótesis de si un conjunto de datos sigue una distribución normal se usan distintas pruebas y técnicas estadísticas:
+
+- Prueba de Shapiro-Wilk
+- Prueba de Anderson-Darling
+- Gráfico cuantil-cuantil (QQ) o gráfico de normalidad
+
+
+## Pruebas de normalidad
+
+Las pruebas de hipótesis para la normalidad de uso más común son las de:
+
+- Shapiro-Wilk
+- Anderson-Darling
+
+Ambas pruebas son muy parecidas y la elección de una sobre la otra depende de las costumbres en el campo de aplicación.
+
+En ambos casos, la hipótesis nula corresponde a asumir que la variable sigue una distribución normal de media y varianza iguales a la media y a la varianza de los datos de la muestra.
+
+
+## Gráfico de normalidad
+
+El gráfico cuantil-cuantil permite comparar dos distribuciones comparando los cuantiles de cada dato de acuerdo con las mismas. Si ambas distribuciones son iguales, los cuantiles deben quedar alineados entorno a una recta.
+
+El gráfico de normalidad usa la misma idea representando *y* vs *z*<sub>norm</sub> en los ejes. Esta es una de las formas más habituales de contrastar la normalidad.
+
+----
+
+![](im003.gif){style=width:60%;margin-left:-30%;}
+
+<span style="font-size:18pt;">https://www.itl.nist.gov/div898/handbook/eda/section3/eda33l.htm</span>
+
+
+## Ejemplo
+
+Determina si los datos que figuran en https://www.itl.nist.gov/div898/handbook/datasets/MONITOR-6_5_2.DAT estan normalmente distribuidos.
+
+``` {r, echo = FALSE}
+df <- read.table("https://www.itl.nist.gov/div898/handbook/datasets/MONITOR-6_5_2.DAT",
+                 skip=25)
+datos <- df[,1]
+
+kable_styling(kable(matrix(datos,ncol=6)), font_size=20)
+```
+
+----
+
+``` {r, echo = TRUE}
+shapiro.test(datos)
+```
+
+----
+
+``` {r, echo = TRUE, eval = FALSE}
+if(!require("nortest")) {
+  install.packages("nortest", repos="https://cloud.r-project.org/",
+         quiet=TRUE, type="binary")
+  library("normtest")
+}
+
+``` {r, echo = TRUE}
+ad.test(datos)
+```
+
+----
+
+``` {r, echo = TRUE}
+qqnorm(datos)
+qqline(datos)
+```
+
+
+# Índices de capacidad
+
+## Cp
+
+
+## Cpk
+
+
+# Capacidad y rendimiento
+
+
+# Estimación de la capacidad en procesos no normales
+
+
