@@ -112,7 +112,7 @@ if(!require("kableExtra")) {
 #' 
 #' Sea un proceso productivo en el que se fabrican láminas de acero. Se ha establecido que la dureza promedio de las piezas producidas es 316 HB y la desviación estándar de las mismas es 25 HB.
 #' 
-#' Asumiendo que esta variable, sigue una distribución normal determina:
+#' Asumiendo que esta variable sigue una distribución normal, determina:
 #' 
 #' - ¿Qué proporción de piezas tienen un dureza inferior a 250 HB? ¿Y una superior a 350 HB?
 #' - Si se establecen una especificaciones de 320 ± 40 HB, ¿qué proporción de piezas quedarán fuera de especificaciones?
@@ -222,9 +222,9 @@ qqline(datos)
 #' 
 #' $\hat \sigma$ se determina como la desviación estándar de una muestra suficiente (*n* $>=$ 50) de valores de la variable de control tomados de forma representativa estando el proceso bajo control estadístico.
 #' 
-#' Se han calculado previamente gráficos de control Xbarra o I, el valor de $\hat \sigma$ se puede calcular a partir de los límites de control.
+#' Se han calculado previamente gráficos de control Xbarra o I, el valor de $\hat \sigma$  se puede calcular a partir de las líneas de control.
 #' 
-#' $$\hat \sigma = {{LSC - LC} \over {3\ \sqrt{n}}}$$
+#' $$\hat \sigma = {{(LSC - LC) \ \sqrt{n}}  \over {3}}$$
 #' 
 #' siendo *n* = 1 para el gráfico de individuos.
 #' 
