@@ -194,15 +194,179 @@ qqline(datos)
 
 # Índices de capacidad
 
+## Capacidad
+
+*Process capability compares the output of an in-control process to the specification limits by using capability indices. The comparison is made by forming the ratio of the spread between the process specifications (the specification "width") to the spread of the process values, as measured by 6 process standard deviation units (the process "width").*
+
+<span style="font-size:18pt;">https://www.itl.nist.gov/div898/handbook/pmc/section1/pmc16.htm</span>
+
+
 ## Cp
+
+Se define como **índice de capacidad Cp**, la relación entre la amplitud de la especificación y la variabilidad del proceso, establecida como 6 veces la desviación estándar de la variable de proceso en control.
+
+<p>&nbsp;</p>
+
+$$C_p = {{LSE - LIE} \over {6 \hat \sigma}}$$
+
+donde $\hat \sigma$ es la estimación desviación estándar de la variable de control.
+
+----
+
+El índice de capacidad *Cp* es un buen indicador para procesos centrados en el valor nominal (VN), con dos límites de especificación.
+
+El valor 1 del índice corresponde a un nivel de calidad 3$\sigma$ y suele ser un criterio mínimo para cualquier proceso productivo. 
+
+----
+
+$\hat \sigma$ se determina como la desviación estándar de una muestra suficiente (*n* $>=$ 50) de valores de la variable de control tomados de forma representativa estando el proceso bajo control estadístico.
+
+Se han calculado previamente gráficos de control Xbarra o I, el valor de $\hat \sigma$ se puede calcular a partir de los límites de control.
+
+$$\hat \sigma = {{LSC - LC} \over {3\ \sqrt{n}}}$$
+
+siendo *n* = 1 para el gráfico de individuos.
 
 
 ## Cpk
 
+Si el proceso no está centrado en el valor nominal (*target*) del proceso, o no tiene especificaciones simétricas, el capacidad debe tener en cuenta el valor central del proceso (LC o $\hat \mu$).
 
-# Capacidad y rendimiento
+----
+
+En estos casos, se usa el **índice de capacidad Cpk** que se evalúa de acuerdo con la expresión siguiente.
+
+$$C_{pk} = {{\min(LSE - \hat \mu ; \hat \mu - LIE)} \over {3 \hat \sigma}}$$
+
+
+- Si el *Cpk* resulta inferior a 0, se toma como 0.
+- Si el proceso está centrado, LC = VN, entonces *Cp* = *Cpk*. Si no está centrado, *Cp* > *Cpk*.
+
+
+## Procesos con una sola especificación (LIE o LSE)
+
+En algunos procesos y para algunas variables solo uno de los límites de control resulta significativo. Por ejemplo, pureza, riqueza de un componente de interés, opacidad/transparencia, flujo luminoso, rugosidad, composición en una impureza...
+
+En estos casos, la capacidad se define considerando solo uno de los dos límites de especificación.
+
+----
+
+<p>&nbsp;</p>
+
+$$C_{pl} = {{\hat \mu - LIE} \over {3 \hat \sigma}}$$
+
+$$C_{pu} = {{LSE - \hat \mu} \over {3 \hat \sigma}}$$
+
+
+## Interpretación de la capacidad
+
+<p>&nbsp;</p>
+
+
+| Para procesos              |  Bilateral   |   Unilateral  |
+|:---------------------------|:------------:|:-------------:|
+| ... existentes  					 |1,33          |1,25           |
+| ... nuevos                 |1,50          |1,45           |
+| ... críticos existentes    |1,50          |1,45           |
+| ... críticos nuevos        |1,67          |1,45           |
+
+<p>&nbsp;</p>
+
+<p class="bibref">Montgomery, Douglas (2004). *Introduction to Statistical Quality Control*. New York, New York: John Wiley & Sons, Inc. p. 776</p>
+
+----
+
+- En un proceso *Six Sigma*, el índice de capacidad debe ser superior o igual a 2.
+- En cualquier caso, un índice de capacidad superior a 2,5 puede indicar un consumo excesivo de recursos en pro de la calidad y reflejar una oportunidad para la reducción de costes.
+
+----
+
+- Si Cp ≥ 1 y Cpk ≥ 1
+    - El proceso es capaz, no necesita mejora.
+- Si Cp >1 y Cpk < 1
+    - El proceso es capaz, pero requiere corrección para centrar los resultados.
+- Si Cp <1
+    - El proceso no es capaz.
+    - Se puede trabajar con un proceso incapaz, estableciendo un control 100% de las unidades fabricadas (control automático o manual).
+    - Es aconsejable, rediseñar el proceso para reducir la variabilidad y aumentar la capacidad del proceso.
+
+
+## Ejemplo
+ 
+Se desea establecer la capacidad de una línea de envasado de un perfume en botellines de 50 ml. Los datos de las últimas muestras tomadas están en el archivo <a href="perfume.txt">perfume.txt</a>.
+
+¿Es el proceso capaz si se ha establecido que el volumen debe estar entre 49,9 y 50,1 mL?
+
+----
+
+<p>&nbsp;</p>
+
+```{r, echo = FALSE, results = 'asis'}
+datos <- read.table("perfume.txt")
+colnames(datos) <- c("x")
+
+kable_styling(kable(matrix(datos[,1],ncol=6)), font_size=22)
+```
+
+
+## Capacidad y número de defectos (en control)
+
+El número de unidades no conformes con la especificación se establecen calculando la probablidad de obtener un valor superior a LSE o un valor inferior a LIE.
+
+Para un proceso con ambos límites de especificación
+
+$$P(nc) = P(x > LSE) + P(x < LIE)$$
+$$P(nc) = P(z > 3 C_{pk}) + P(z < -3 C_{pk})$$
+
+Se suele indicar en DPMO (*defects per milion oportunities*).
+
+
+## Otros índices de capacidad
+
+Existen otros índices, de aplicación menos común que incorporan consideraciones adicionales sobre *Cp* y *Cpk*.
+
+Pueden encontrarse descritos en la bibliografia. Por ejemplo, en
+<p class="bibref">Senvar, O., & Tozan, H. (2010). Process capability and six sigma methodology including fuzzy and lean approaches. In *Products and Services; from R&D to Final Solutions*. InTech.</p>
+
+
+## Relación entre capacidad y control
+
+En un proceso ideal...
+
+![](im004.png)
+
+----
+
+<p>&nbsp;</p>
+
+Debe tenerse en cuenta que:
+
+- El proceso puede estar en control y no cumplir especificaciones.
+- El proceso puede cumplir especificaciones y no estar en control.
+
+
+¿Cómo serían en estos casos los gráficos de control de individuos (si añadimos las líneas de especificación)?
+
+
+
+<!-- # Capacidad y rendimiento -->
 
 
 # Estimación de la capacidad en procesos no normales
 
+## ¿Qué hacemos si los datos no están normalmente distribuidos?
 
+En este caso, hay dos alternativas:
+
+- usar estimadores no paramétricos para la dispersión (cuantiles),
+- usar transformaciones de variables:
+    - logaritmo, inversa, cuadrado...
+    - transformada de Box-Cox,
+        - https://www.encyclopediaofmath.org/index.php/Box%E2%80%93Cox_transformation
+    - transformada de Johnson
+        - https://rexplorations.wordpress.com/2015/11/03/johnson-transformation-for-non-normal-data/
+        
+        
+    
+    
+    
