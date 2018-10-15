@@ -327,6 +327,8 @@ kable_styling(kable(matrix(datos[,1],ncol=6)), font_size=22)
 #' Existen otros índices, de aplicación menos común que incorporan consideraciones adicionales sobre *Cp* y *Cpk*.
 #' 
 #' Pueden encontrarse descritos en la bibliografia. Por ejemplo, en
+#' <p class="bibref">Kotz, S., & Johnson, N. L. (2002). Process capability indices—a review, 1992–2000. *Journal of quality technology*, 34(1), 2-19.</p>
+#' <p class="bibref">Wu, C. W., Pearn, W. L., & Kotz, S. (2009). An overview of theory and practice on process capability indices for quality assurance. *International journal of production economics*, 117(2), 338-359.</p>
 #' <p class="bibref">Senvar, O., & Tozan, H. (2010). Process capability and six sigma methodology including fuzzy and lean approaches. In *Products and Services; from R&D to Final Solutions*. InTech.</p>
 #' 
 #' 
@@ -349,8 +351,62 @@ kable_styling(kable(matrix(datos[,1],ncol=6)), font_size=22)
 #' ¿Cómo serían en estos casos los gráficos de control de individuos (si añadimos las líneas de especificación)?
 #' 
 #' 
+#' # Capacidad y rendimiento
 #' 
-#' <!-- # Capacidad y rendimiento -->
+#' ## Límites de la capacidad
+#' 
+#' La capacidad definida, tal y como se ha discutido más arriba, incluye en el cálculo solo la variabilidad intragrupo o variabilidad natural. Por ello, debe interpretarse como la aptitud **potencial** del proceso para cumplir con los requerimientos del cliente (las especificaciones).
+#' 
+#' Si el proceso es estable y esta en control, esta es una medida adecuada y por ello, a veces, es denominada **capacidad a corto plazo**.
+#' 
+#' 
+#' ## Rendimiento o capacidad a largo plazo
+#' 
+#' Para describir, la aptitud del proceso para cumplir con las especificaciones de forma más **real** o *a largo plazo**, se establecen los índices *Pp* y *Ppk*. Estos se calculan usando la variabilidad calculada usando todas las observaciones del proceso, la variabilidad global, independientemente de si este está en control o no.
+#' 
+#' $$P_p = { {LSE - LIE} \over {6 \sigma_{global} } }$$
+#' 
+#' $$P_{pk} = { {\min(LSE - \hat \mu ; \hat \mu - LIE)} \over {3 \sigma_{global} } }$$
+#' 
+#' ----
+#' 
+#' Si se observa divergencia entre los valores de *Cpk* y *Ppk*, ello indica que el proceso no está bajo control estadístico.
+#' 
+#' Puede encontrarse más información en
+#' 
+#' - <span style="word-break:break-all;">https://c.ymcdn.com/sites/casss.site-ym.com/resource/resmgr/CMC_No_Am_Jul_Spkr_Slds/2015_CMCS_DiMartinoMark.pdf</span>
+#' - http://blog.minitab.com/blog/michelle-paret/process-capability-statistics-cpk-vs-ppk
+#' 
+#' 
+#' ## Ejemplo
+#' 
+#' <div style="font-size:20pt;">En un horno de una incineradora de residuos urbanos es quemado el contenido de los camiones que llegan con los residuos previamente seleccionados. La escoria producida por el horno como resultado de la combustión, es analizada en el laboratorio de control de calidad que para determinar su composición y supervisar que la combustión haya sido correcta.
+#' 
+#' Se sabe que una combustión correcta necesita que la temperatura del horno no sea inferior a 850 ºC. Para no incrementar los costes de combustible, se ha establecido que el horno debe trabajar entre 840 ºC y 860 ºC. 
+#' 
+#' Hoy es su primer dia de trabajo como ingeniero y le encargan que supervise la temperatura del horno, entre otras cosas; para ello le entregan el registro de temperaturas de los últimos días (ver fichero <a href="horno.csv">horno.csv</a>). El fichero que ha recibido tiene registrado la temperatura media del horno cada diez minutos.
+#' 
+#' Estudia la capacidad del proceso.
+#' </div>
+#' 
+#' 
+#' ## Proporción de no conformes a largo plazo
+#' 
+#' Cunado el proceso está en control, el número de unidades no conformes con la especificación se establece como
+#' 
+#' $$P(nc) = P(z > 3 C_{pk}) + P(z < -3 C_{pk})$$
+#' 
+#' A largo plazo y atendiendo que el proceso puede tener una deriva de 1,5 desviaciones estándar sin ser detectado como fuera de control, se considera la proporción de no conformes como
+#' 
+#' $$P(nc) = P(z > 3 C_{pk}-1,5) + P(z < -3 C_{pk}-1,5)$$
+#' 
+#' <span style="font-size:18pt;">https://www.isixsigma.com/new-to-six-sigma/dmaic/15-sigma-process-shift/</span>
+#' 
+#' ----
+#' 
+#' <p class="bibref">Rudisill, F., & Druley, S. (2004). Which Six Sigma Metric Should I Use?. *Quality Progress*, 37(3), 104.<p>
+#' 
+#' ![](im005.png)
 #' 
 #' 
 #' # Estimación de la capacidad en procesos no normales
@@ -362,12 +418,28 @@ kable_styling(kable(matrix(datos[,1],ncol=6)), font_size=22)
 #' - usar estimadores no paramétricos para la dispersión (cuantiles),
 #' - usar transformaciones de variables:
 #'     - logaritmo, inversa, cuadrado...
-#'     - transformada de Box-Cox,
-#'         - https://www.encyclopediaofmath.org/index.php/Box%E2%80%93Cox_transformation
-#'     - transformada de Johnson
-#'         - https://rexplorations.wordpress.com/2015/11/03/johnson-transformation-for-non-normal-data/
+#'     - transformada de Box-Cox (1964),
+#'         - <span style="word-break:break-all;">https://www.encyclopediaofmath.org/index.php/Box%E2%80%93Cox_transformation</span>
+#'     - transformada de Johnson (1949)
+#'         - <span style="word-break:break-all;">https://rexplorations.wordpress.com/2015/11/03/johnson-transformation-for-non-normal-data/</span>
+#' 
+#' 
+#' ## Estimadores no parámetricos
+#' 
+#' A partir de los cuantiles de los datos o de la distribución que estos siguen, puede calcularse *Cp* y *Cpk* de acuerdo con las fórmulas siguientes
+#' 
+#' $$C_p = { {LSE - LIE} \over {X_{0,99865} - X_{0,00135}}}$$
+#' 
+#' $$C_{pk} = \min \Bigg( {{LSE - X_{0,5}} \over {X_{0,99865} - X_{0,5}}} ; {X_{0,5} - LIE \over {X_{0,5} - X_{0,00135}}}\Bigg)$$
+#' 
 #'         
-#'         
-#'     
-#'     
-#'     
+#' # Referencias normativas
+#' 
+#' ##
+#' 
+#' - ASTM E2281-15. Standard Practice for Process Capability and Performance Measurement. https://www.astm.org/Standards/E2281.htm
+#' - AIAG (Automotive Industry Action Group). Statistical Process Control. Reference Manual. http://www.aiag.org/
+#' - ISO 22514-2:2017. Statistical methods in process management -- Capability and performance -- Part 2: Process capability and performance of time-dependent process models https://www.iso.org/standard/71617.html
+#' - UNE-ISO 22514-1:2017. Métodos estadísticos en la gestión de procesos. Capacidad y rendimiento. Parte 1: Principios y conceptos generales. https://www.une.org/encuentra-tu-norma/busca-tu-norma/norma/?c=N0057911
+#' 
+#' 

@@ -8,6 +8,10 @@ html, body, div, section, p {
   transition: all 0s;
 }
 
+a {
+  word-break: break-all;
+}
+
 .reveal h1, .reveal h2, .reveal h3, .reveal h4, .reveal h5, .reveal h6 {
     margin: 0 0 20px 0;
     font-family: "Open Sans","Arial","Helvetica",sans-serif;
