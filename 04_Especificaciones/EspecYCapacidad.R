@@ -12,8 +12,6 @@
 #'       previewLinks: false
 #'       transition: 0
 #'       background_transition: 0
-#' editor_options: 
-#'   chunk_output_type: console
 #' ---
 #' 
 ## ----setup, include=FALSE------------------------------------------------
@@ -202,13 +200,10 @@ qqline(datos)
 #' <span style="font-size:18pt;">https://www.itl.nist.gov/div898/handbook/pmc/section1/pmc16.htm</span>
 #' 
 #' 
-#' ## Cp
+#' ## *Cp*
 #' 
 #' Se define como **índice de capacidad Cp**, la relación entre la amplitud de la especificación y la variabilidad del proceso, establecida como 6 veces la desviación estándar de la variable de proceso en control.
-#' 
-#' <p>&nbsp;</p>
-#' 
-#' $$C_p = {{LSE - LIE} \over {6 \hat \sigma}}$$
+#' $$\\C_p = {{LSE - LIE} \over {6 \hat \sigma}}$$
 #' 
 #' donde $\hat \sigma$ es la estimación desviación estándar de la variable de control.
 #' 
@@ -223,22 +218,20 @@ qqline(datos)
 #' $\hat \sigma$ se determina como la desviación estándar de una muestra suficiente (*n* $>=$ 50) de valores de la variable de control tomados de forma representativa estando el proceso bajo control estadístico.
 #' 
 #' Se han calculado previamente gráficos de control Xbarra o I, el valor de $\hat \sigma$  se puede calcular a partir de las líneas de control.
+#' $$\\\hat \sigma = {{(LSC - LC) \ \sqrt{n}}  \over {3}}$$
 #' 
-#' $$\hat \sigma = {{(LSC - LC) \ \sqrt{n}}  \over {3}}$$
 #' 
 #' siendo *n* = 1 para el gráfico de individuos.
 #' 
 #' 
-#' ## Cpk
+#' ## *Cpk*
 #' 
 #' Si el proceso no está centrado en el valor nominal (*target*) del proceso, o no tiene especificaciones simétricas, el capacidad debe tener en cuenta el valor central del proceso (LC o $\hat \mu$).
 #' 
 #' ----
 #' 
 #' En estos casos, se usa el **índice de capacidad Cpk** que se evalúa de acuerdo con la expresión siguiente.
-#' 
-#' $$C_{pk} = {{\min(LSE - \hat \mu ; \hat \mu - LIE)} \over {3 \hat \sigma}}$$
-#' 
+#' $$\\C_{pk} = {{\min(LSE - \hat \mu ; \hat \mu - LIE)} \over {3 \hat \sigma}}$$
 #' 
 #' - Si el *Cpk* resulta inferior a 0, se toma como 0.
 #' - Si el proceso está centrado, LC = VN, entonces *Cp* = *Cpk*. Si no está centrado, *Cp* > *Cpk*.
@@ -254,10 +247,8 @@ qqline(datos)
 #' 
 #' <p>&nbsp;</p>
 #' 
-#' $$C_{pl} = {{\hat \mu - LIE} \over {3 \hat \sigma}}$$
-#' 
-#' $$C_{pu} = {{LSE - \hat \mu} \over {3 \hat \sigma}}$$
-#' 
+#' $$C_{pl} = {{\hat \mu - LIE} \over {3 \hat \sigma}} \\ \\
+#' C_{pu} = {{LSE - \hat \mu} \over {3 \hat \sigma}}$$
 #' 
 #' ## Interpretación de la capacidad
 #' 
@@ -282,11 +273,11 @@ qqline(datos)
 #' 
 #' ----
 #' 
-#' - Si Cp ≥ 1 y Cpk ≥ 1
+#' - Si *Cp* ≥ 1 y *Cpk* ≥ 1
 #'     - El proceso es capaz, no necesita mejora.
-#' - Si Cp >1 y Cpk < 1
+#' - Si *Cp* > 1 y *Cpk* < 1
 #'     - El proceso es capaz, pero requiere corrección para centrar los resultados.
-#' - Si Cp <1
+#' - Si *Cp* < 1
 #'     - El proceso no es capaz.
 #'     - Se puede trabajar con un proceso incapaz, estableciendo un control 100% de las unidades fabricadas (control automático o manual).
 #'     - Es aconsejable, rediseñar el proceso para reducir la variabilidad y aumentar la capacidad del proceso.
@@ -316,8 +307,8 @@ kable_styling(kable(matrix(datos[,1],ncol=6)), font_size=22)
 #' 
 #' Para un proceso con ambos límites de especificación
 #' 
-#' $$P(nc) = P(x > LSE) + P(x < LIE)$$
-#' $$P(nc) = P(z > 3 C_{pk}) + P(z < -3 C_{pk})$$
+#' $$P(nc) = P(x > LSE) + P(x < LIE) \\ \\
+#' P(nc) = P(z > 3 C_{pk}) + P(z < -3 C_{pk})$$
 #' 
 #' Se suele indicar en DPMO (*defects per milion oportunities*).
 #' 
@@ -327,6 +318,7 @@ kable_styling(kable(matrix(datos[,1],ncol=6)), font_size=22)
 #' Existen otros índices, de aplicación menos común que incorporan consideraciones adicionales sobre *Cp* y *Cpk*.
 #' 
 #' Pueden encontrarse descritos en la bibliografia. Por ejemplo, en
+#' 
 #' <p class="bibref">Kotz, S., & Johnson, N. L. (2002). Process capability indices—a review, 1992–2000. *Journal of quality technology*, 34(1), 2-19.</p>
 #' <p class="bibref">Wu, C. W., Pearn, W. L., & Kotz, S. (2009). An overview of theory and practice on process capability indices for quality assurance. *International journal of production economics*, 117(2), 338-359.</p>
 #' <p class="bibref">Senvar, O., & Tozan, H. (2010). Process capability and six sigma methodology including fuzzy and lean approaches. In *Products and Services; from R&D to Final Solutions*. InTech.</p>
@@ -362,11 +354,10 @@ kable_styling(kable(matrix(datos[,1],ncol=6)), font_size=22)
 #' 
 #' ## Rendimiento o capacidad a largo plazo
 #' 
-#' Para describir, la aptitud del proceso para cumplir con las especificaciones de forma más **real** o *a largo plazo**, se establecen los índices *Pp* y *Ppk*. Estos se calculan usando la variabilidad calculada usando todas las observaciones del proceso, la variabilidad global, independientemente de si este está en control o no.
+#' Para describir, la aptitud del proceso para cumplir con las especificaciones de forma más **real** o **a largo plazo**, se establecen los índices *Pp* y *Ppk*. Estos se calculan usando la variabilidad calculada usando todas las observaciones del proceso, la variabilidad global, independientemente de si este está en control o no.
 #' 
-#' $$P_p = { {LSE - LIE} \over {6 \sigma_{global} } }$$
-#' 
-#' $$P_{pk} = { {\min(LSE - \hat \mu ; \hat \mu - LIE)} \over {3 \sigma_{global} } }$$
+#' $$P_p = { {LSE - LIE} \over {6 \sigma_{global} } } \\ \\
+#' P_{pk} = { {\min(LSE - \hat \mu ; \hat \mu - LIE)} \over {3 \sigma_{global} } }$$
 #' 
 #' ----
 #' 
@@ -393,12 +384,10 @@ kable_styling(kable(matrix(datos[,1],ncol=6)), font_size=22)
 #' ## Proporción de no conformes a largo plazo
 #' 
 #' Cunado el proceso está en control, el número de unidades no conformes con la especificación se establece como
-#' 
-#' $$P(nc) = P(z > 3 C_{pk}) + P(z < -3 C_{pk})$$
+#' $$\\P(nc) = P(z > 3 C_{pk}) + P(z < -3 C_{pk}) \\$$
 #' 
 #' A largo plazo y atendiendo que el proceso puede tener una deriva de 1,5 desviaciones estándar sin ser detectado como fuera de control, se considera la proporción de no conformes como
-#' 
-#' $$P(nc) = P(z > 3 C_{pk}-1,5) + P(z < -3 C_{pk}-1,5)$$
+#' $$P(nc) = P(z > 3 C_{pk}-1,5) + \\ P(z < -3 C_{pk}-1,5)$$
 #' 
 #' <span style="font-size:18pt;">https://www.isixsigma.com/new-to-six-sigma/dmaic/15-sigma-process-shift/</span>
 #' 
@@ -428,9 +417,8 @@ kable_styling(kable(matrix(datos[,1],ncol=6)), font_size=22)
 #' 
 #' A partir de los cuantiles de los datos o de la distribución que estos siguen, puede calcularse *Cp* y *Cpk* de acuerdo con las fórmulas siguientes
 #' 
-#' $$C_p = { {LSE - LIE} \over {X_{0,99865} - X_{0,00135}}}$$
-#' 
-#' $$C_{pk} = \min \Bigg( {{LSE - X_{0,5}} \over {X_{0,99865} - X_{0,5}}} ; {X_{0,5} - LIE \over {X_{0,5} - X_{0,00135}}}\Bigg)$$
+#' $$C_p = { {LSE - LIE} \over {X_{0,99865} - X_{0,00135}}}\\ \\
+#' C_{pk} = \min \Bigg( {{LSE - X_{0,5}} \over {X_{0,99865} - X_{0,5}}} ; {X_{0,5} - LIE \over {X_{0,5} - X_{0,00135}}}\Bigg)$$
 #' 
 #'         
 #' # Referencias normativas

@@ -81,3 +81,8 @@ a {
 .reveal .smaller table {
   font-size:0.6em;
 }
+
+p > .math {
+  text-align: center;
+  margin:auto;
+}
