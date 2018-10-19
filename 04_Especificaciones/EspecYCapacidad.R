@@ -420,7 +420,205 @@ kable_styling(kable(matrix(datos[,1],ncol=6)), font_size=22)
 #' $$C_p = { {LSE - LIE} \over {X_{0,99865} - X_{0,00135}}}\\ \\
 #' C_{pk} = \min \Bigg( {{LSE - X_{0,5}} \over {X_{0,99865} - X_{0,5}}} ; {X_{0,5} - LIE \over {X_{0,5} - X_{0,00135}}}\Bigg)$$
 #' 
-#'         
+#' 
+#' ## Transformada de Box-Cox
+#' 
+#' La transformada de Box-Cox corresponde al cambio de variable siguiente
+#' $$\\y_{i}^{(\lambda )} =
+#' \begin{cases} \dfrac {y_{i}^{\lambda }-1} {\lambda} &\text{si }\lambda \neq 0
+#' \\
+#' \ln y_{i} &\text{si }\lambda =0\end{cases}$$
+#' 
+#' 
+#' ## Ejemplo
+#' 
+#' Transforma los datos de turbidez que siguen en un conjunto de datos que pueda provenir de una variable normalmente distribuida (adaptado de http://rcompanion.org/handbook/I_12.html)
+#' 
+## ---- echo = TRUE--------------------------------------------------------
+Turbidity <- c(1.0, 1.2, 1.1, 1.1, 2.4,
+               2.2, 2.6, 4.1, 5.0, 10.0,
+               4.0, 4.1, 4.2, 4.1, 5.1,
+               4.5, 5.0, 15.2, 10.0, 20.0,
+               1.1, 1.1, 1.2, 1.6, 2.2,
+               3.0, 4.0, 10.5)
+
+#' 
+#' ----
+#' 
+## ---- echo=TRUE, eval=FALSE----------------------------------------------
+## ggplot(NULL, aes(x=Turbidity)) +
+##   geom_histogram(binwidth = 2,fill="lightgrey",color="black") +
+##   theme_classic()
+## 
+## ggplot(NULL, aes(sample=Turbidity)) +
+##   geom_qq() + geom_qq_line() +
+##   theme_classic()
+
+#' 
+#' ----
+#' 
+## ---- echo=FALSE---------------------------------------------------------
+ggplot(NULL, aes(x=Turbidity)) +
+  geom_histogram(binwidth = 2,fill="lightgrey",color="black") +
+  theme_classic()
+
+#' 
+#' ----
+#' 
+## ---- echo=FALSE---------------------------------------------------------
+ggplot(NULL, aes(sample=Turbidity)) +
+  geom_qq() + geom_qq_line() +
+  theme_classic()
+
+#' 
+#' ----
+#' 
+## ---- echo=TRUE----------------------------------------------------------
+shapiro.test(Turbidity)
+ad.test(Turbidity)
+
+#' 
+#' ----
+#' 
+## ---- echo=TRUE, eval=FALSE----------------------------------------------
+## if(!require("MASS")) {
+##   install.packages("MASS", repos="https://cloud.r-project.org/",
+##          quiet=TRUE, type="binary")
+##   library("MASS")
+## }
+
+#' 
+## ---- include=FALSE------------------------------------------------------
+if(!require("MASS")) {
+  install.packages("MASS", repos="https://cloud.r-project.org/",
+         quiet=TRUE, type="binary")
+  library("MASS")
+}
+
+#' 
+## ---- echo = TRUE, eval = FALSE------------------------------------------
+## Box <- boxcox(Turbidity ~ 1,
+##              lambda = seq(-3,3,0.01)
+##              )
+
+#' 
+#' ----
+#' 
+## ---- echo = FALSE-------------------------------------------------------
+Box <- boxcox(Turbidity ~ 1,              
+             lambda = seq(-3,3,0.01)      
+             )
+
+#' 
+#' ----
+#' 
+## ---- echo = TRUE--------------------------------------------------------
+Cox <- data.frame(Box$x, Box$y)
+Cox2 <- Cox[with(Cox, order(-Cox$Box.y)),] 
+Cox2[1,]                                  
+lambda <- Cox2[1, "Box.x"]
+
+if(lambda == 0) {
+  T_box <- log(Turbidity)
+} else {
+  T_box <- (Turbidity ^ lambda - 1)/lambda
+}
+
+#' 
+#' ----
+#' 
+## ---- echo=TRUE, eval=FALSE----------------------------------------------
+## ggplot(NULL, aes(x=T_box)) +
+##   geom_histogram(binwidth = 2,fill="lightgrey",color="black") +
+##   theme_classic()
+## 
+## ggplot(NULL, aes(sample=T_box)) +
+##   geom_qq() + geom_qq_line() +
+##   theme_classic()
+
+#' 
+#' ----
+#' 
+## ---- echo=FALSE---------------------------------------------------------
+ggplot(NULL, aes(x=T_box)) +
+  geom_histogram(binwidth = .2,fill="lightgrey",color="black") +
+  theme_classic()
+
+#' 
+#' ----
+#' 
+## ---- echo=FALSE---------------------------------------------------------
+ggplot(NULL, aes(sample=T_box)) +
+  geom_qq() + geom_qq_line() +
+  theme_classic()
+
+#' 
+#' ----
+#' 
+## ---- echo=TRUE----------------------------------------------------------
+shapiro.test(T_box)
+ad.test(T_box)
+
+#' 
+#' ## Transformada de Johnson
+#' 
+## ---- echo=TRUE, eval=FALSE----------------------------------------------
+## if(!require("Johnson")) {
+##   install.packages("Johnson", repos="https://cloud.r-project.org/",
+##          quiet=TRUE, type="binary")
+##   library("Johnson")
+## }
+
+#' 
+## ---- include=FALSE------------------------------------------------------
+if(!require("Johnson")) {
+  install.packages("Johnson", repos="https://cloud.r-project.org/",
+         quiet=TRUE, type="binary")
+  library("Johnson")
+}
+
+#' 
+## ---- echo = TRUE--------------------------------------------------------
+John <- RE.Johnson(Turbidity)
+T_johnson <- John$transformed
+
+#' 
+#' ----
+#' 
+## ---- echo=TRUE, eval=FALSE----------------------------------------------
+## ggplot(NULL, aes(x=T_johnson)) +
+##   geom_histogram(binwidth = 2,fill="lightgrey",color="black") +
+##   theme_classic()
+## 
+## ggplot(NULL, aes(sample=T_johnson)) +
+##   geom_qq() + geom_qq_line() +
+##   theme_classic()
+
+#' 
+#' ----
+#' 
+## ---- echo=FALSE---------------------------------------------------------
+ggplot(NULL, aes(x=T_johnson)) +
+  geom_histogram(binwidth = .2,fill="lightgrey",color="black") +
+  theme_classic()
+
+#' 
+#' ----
+#' 
+## ---- echo=FALSE---------------------------------------------------------
+ggplot(NULL, aes(sample=T_johnson)) +
+  geom_qq() + geom_qq_line() +
+  theme_classic()
+
+#' 
+#' ----
+#' 
+## ---- echo=TRUE----------------------------------------------------------
+shapiro.test(T_johnson)
+ad.test(T_johnson)
+
+#' 
+#' 
 #' # Referencias normativas
 #' 
 #' ##
