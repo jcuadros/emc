@@ -27,6 +27,3 @@ for(i in seq(RmdFiles)) {
   purl(RmdFiles[i],gsub(".Rmd",".R",RmdFiles[i],fixed=TRUE),
        encoding ="UTF-8", documentation = 2)
 }
-
-
-  
