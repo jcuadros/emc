@@ -202,7 +202,7 @@ qqline(datos)
 ## *Cp*
 
 Se define como **índice de capacidad Cp**, la relación entre la amplitud de la especificación y la variabilidad del proceso, establecida como 6 veces la desviación estándar de la variable de proceso en control.
-$$\\C_p = {{LSE - LIE} \over {6 \hat \sigma}}$$
+$$\\C_p = { {LSE - LIE} \over {6 \hat \sigma} }$$
 
 donde $\hat \sigma$ es la estimación desviación estándar de la variable de control.
 
