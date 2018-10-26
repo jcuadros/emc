@@ -2246,7 +2246,7 @@ if(!require("tidyverse")) {
 #' ----
 #' 
 ## ---- echo = TRUE--------------------------------------------------------
-df <- flights %>% select(origin, dest, arr_delay) %>% 
+df <- flights %>% dplyr::select(origin, dest, arr_delay) %>% 
   filter(origin == "LGA" & (dest == "IAD" | dest == "BWI")) %>%
   mutate(arr_delay_h=arr_delay/60) %>% 
   arrange(-arr_delay_h)

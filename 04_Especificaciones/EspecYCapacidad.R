@@ -203,7 +203,7 @@ qqline(datos)
 #' ## *Cp*
 #' 
 #' Se define como **índice de capacidad Cp**, la relación entre la amplitud de la especificación y la variabilidad del proceso, establecida como 6 veces la desviación estándar de la variable de proceso en control.
-#' $$\\C_p = {{LSE - LIE} \over {6 \hat \sigma}}$$
+#' $$\\C_p = { {LSE - LIE} \over {6 \hat \sigma} }$$
 #' 
 #' donde $\hat \sigma$ es la estimación desviación estándar de la variable de control.
 #' 
@@ -218,7 +218,7 @@ qqline(datos)
 #' $\hat \sigma$ se determina como la desviación estándar de una muestra suficiente (*n* $>=$ 50) de valores de la variable de control tomados de forma representativa estando el proceso bajo control estadístico.
 #' 
 #' Se han calculado previamente gráficos de control Xbarra o I, el valor de $\hat \sigma$  se puede calcular a partir de las líneas de control.
-#' $$\\\hat \sigma = {{(LSC - LC) \ \sqrt{n}}  \over {3}}$$
+#' $$\\\hat \sigma = { {(LSC - LC) \ \sqrt{n}}  \over {3} }$$
 #' 
 #' 
 #' siendo *n* = 1 para el gráfico de individuos.
@@ -231,7 +231,7 @@ qqline(datos)
 #' ----
 #' 
 #' En estos casos, se usa el **índice de capacidad Cpk** que se evalúa de acuerdo con la expresión siguiente.
-#' $$\\C_{pk} = {{\min(LSE - \hat \mu ; \hat \mu - LIE)} \over {3 \hat \sigma}}$$
+#' $$\\C_{pk} = { {\min(LSE - \hat \mu ; \hat \mu - LIE)} \over {3 \hat \sigma} }$$
 #' 
 #' - Si el *Cpk* resulta inferior a 0, se toma como 0.
 #' - Si el proceso está centrado, LC = VN, entonces *Cp* = *Cpk*. Si no está centrado, *Cp* > *Cpk*.
@@ -247,8 +247,8 @@ qqline(datos)
 #' 
 #' <p>&nbsp;</p>
 #' 
-#' $$C_{pl} = {{\hat \mu - LIE} \over {3 \hat \sigma}} \\ \\
-#' C_{pu} = {{LSE - \hat \mu} \over {3 \hat \sigma}}$$
+#' $$C_{pl} = { {\hat \mu - LIE} \over {3 \hat \sigma} } \\ \\
+#' C_{pu} = { {LSE - \hat \mu} \over {3 \hat \sigma} }$$
 #' 
 #' ## Interpretación de la capacidad
 #' 
@@ -418,7 +418,7 @@ kable_styling(kable(matrix(datos[,1],ncol=6)), font_size=22)
 #' A partir de los cuantiles de los datos o de la distribución que estos siguen, puede calcularse *Cp* y *Cpk* de acuerdo con las fórmulas siguientes
 #' 
 #' $$C_p = { {LSE - LIE} \over {X_{0,99865} - X_{0,00135}}}\\ \\
-#' C_{pk} = \min \Bigg( {{LSE - X_{0,5}} \over {X_{0,99865} - X_{0,5}}} ; {X_{0,5} - LIE \over {X_{0,5} - X_{0,00135}}}\Bigg)$$
+#' C_{pk} = \min \Bigg( { {LSE - X_{0,5}} \over {X_{0,99865} - X_{0,5} } } ; {X_{0,5} - LIE \over {X_{0,5} - X_{0,00135}}}\Bigg)$$
 #' 
 #' 
 #' ## Transformada de Box-Cox

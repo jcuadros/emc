@@ -92,7 +92,7 @@ if(!require("kableExtra")) {
 #' 
 #' En un instrumento graduado, a menudo se considera la mitad del paso (si este es fácil de apreciar).
 #' 
-#' Un sistema de medida es adecuado si permite determinar un número suficiente de categorías (valores distintos) en el rango de trabajo (tolerancia, LSE - LIE, o variablidad del proceso, LSC- LIC).
+#' Un sistema de medida es adecuado si permite determinar un número suficiente de categorías (valores distintos) en el rango de trabajo (tolerancia, $LSE - LIE$, o variablidad del proceso, $(LSC- LIC) \sqrt{n}$.
 #' 
 #' 
 #' ## Procedimiento
@@ -178,7 +178,7 @@ if(!require("kableExtra")) {
 #' 
 #' ----
 #' 
-#' Los valores obtenidos se muestran en tabla adjunta (y en el fichero <a href="constante.txt">constante.txt</a>).
+#' Los valores obtenidos se muestran en tabla adjunta, de arriba a abajo y de izquierda a derecha ,y en el fichero <a href="constante.txt">constante.txt</a>.
 #' 
 ## ---- echo = FALSE, results = 'asis'-------------------------------------
 datos <- read.table("constante.txt", header=FALSE, dec=",")
@@ -215,7 +215,7 @@ kable_styling(kable(matrix(datos[,1],ncol=5)), font_size=24)
 #' 
 #' La **reproducibilidad** es la variabilidad asociada al cambio de operador y/o de instrumento.
 #' 
-#' Los estudios de repetibilidad y reprodubilidad se denominan *Gauge/Gage R&R*.
+#' Los estudios de repetibilidad y reproducibilidad se denominan *Gauge/Gage R&R*.
 #' 
 #' ----
 #' 
@@ -317,7 +317,7 @@ kable_styling(kable(matrix(datos[,1],ncol=5)), font_size=24)
 #' 
 #' ----
 #' 
-#' <div style="font-size:30px;">
+#' <div style="font-size:20px;">
 #' 
 #' $$ \begin{align}
 #'    \\ \sigma^2_{repetibilidad}  &= MS_{Equipment}
@@ -336,14 +336,15 @@ kable_styling(kable(matrix(datos[,1],ncol=5)), font_size=24)
 #' 
 #' ----
 #' 
-#' <div style="font-size:30px;">
+#' <div style="font-size:20px;">
 #' 
 #' $$ \begin{align}
 #'    \\ \%ContribVarianza(x) &= 100 \  \dfrac {\sigma^2_{x}}{\sigma^2_{total}}
 #'    \\ \sigma_{x}  &= \sqrt {\sigma^2_{x}}
 #'    \\ StudyVariation(x) &= 6 \  \sigma_{x}
 #'    \\ \%StudyVariation(x) &= 100 \  \dfrac {\sigma_{x}}{\sigma_{total}}
-#'    \\ \%Tolerance(x) &= 100 \  \dfrac {6 \ \sigma_{x}}{min(LSE - LIE; LSC -LIC)}
+#'    \\ \%Tolerance(x) &= 100 \ 
+#'    \\ &\ \dfrac {6 \ \sigma_{x}}{min(LSE - LIE; (LSC -LIC) \sqrt{n}) }
 #'    \end{align}
 #' $$
 #' 

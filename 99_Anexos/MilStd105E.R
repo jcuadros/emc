@@ -20,7 +20,7 @@
 knitr::opts_chunk$set(echo = FALSE, dev="svg")
 
 #' 
-## ----include=FALSE-------------------------------------------------------
+## ---- include=FALSE------------------------------------------------------
 if(!require("tidyverse")) {
   install.packages("tidyverse")
   library("tidyverse")
@@ -64,8 +64,8 @@ df105t2r <- df105t2r %>% mutate(AcRe=ifelse(LetterSize < Size, "\U21D3",
                          ifelse(LetterSize > Size, "\U21D1",
                                 paste(as.character(Ac),
                            as.character(Re), sep=" - "))))
-df105t2p <- df105t2r %>%  filter(AQL <= 0.65) %>% 
-  select(Letter,Size=LetterSize,AQL,AcRe) %>%
+df105t2p <- df105t2r %>%  filter(AQL <= 0.65) %>% dplyr::select(-Size) %>%  
+  rename(Size=LetterSize) %>%
   spread(AQL,AcRe)
 kable_styling(kable(df105t2p), font_size=16)
 
@@ -73,8 +73,9 @@ kable_styling(kable(df105t2p), font_size=16)
 #' ## Tabla 2. M. simple >> ins. normal {.smaller}
 #' 
 ## ---- echo = FALSE, results = 'asis'-------------------------------------
-df105t2p <- df105t2r %>%  filter(AQL > 0.65 & AQL <= 25) %>% 
-  select(Letter,Size=LetterSize,AQL,AcRe) %>%
+df105t2p <- df105t2r %>%  filter(AQL > 0.65 & AQL <= 25) %>%
+  dplyr::select(-Size) %>%  
+  rename(Size=LetterSize) %>%
   spread(AQL,AcRe)
 kable_styling(kable(df105t2p), font_size=16)
 
@@ -82,8 +83,9 @@ kable_styling(kable(df105t2p), font_size=16)
 #' ## Tabla 2. M. simple >> ins. normal {.smaller}
 #' 
 ## ---- echo = FALSE, results = 'asis'-------------------------------------
-df105t2p <- df105t2r %>%  filter(AQL > 25) %>% 
-  select(Letter,Size=LetterSize,AQL,AcRe) %>%
+df105t2p <- df105t2r %>%  filter(AQL > 25) %>%
+  dplyr::select(-Size) %>%  
+  rename(Size=LetterSize) %>%
   spread(AQL,AcRe)
 kable_styling(kable(df105t2p), font_size=16)
 
