@@ -92,7 +92,7 @@ La discriminación, o resolución de un sistema de medida, es el mínimo cambio 
 
 En un instrumento graduado, a menudo se considera la mitad del paso (si este es fácil de apreciar).
 
-Un sistema de medida es adecuado si permite determinar un número suficiente de categorías (valores distintos) en el rango de trabajo (tolerancia, $LSE - LIE$, o variablidad del proceso, $(LSC- LIC) \sqrt{n}$.
+Un sistema de medida es adecuado si permite determinar un número suficiente de categorías (valores distintos) en el rango de trabajo (tolerancia, $LSE - LIE$, o variablidad del proceso, $(LSC- LIC) \sqrt{n}$).
 
 
 ## Procedimiento
