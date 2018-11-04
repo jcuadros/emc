@@ -100,12 +100,12 @@ La incertidumbre (o semiamplitud del intervalo de confianza) depende normalmente
 De esta forma, cuando mayor sea el tamaño de muestra menor será la incertidumbre del resultado, o lo que es lo mismo el riesgo de tomar una decisión incorrecta.
 
 
-# Muestreo de aceptación por atributos (MIL STD 105)
+# Muestreo de aceptación por atributos (MIL-STD-105)
 
 ## Conceptos
 
 - Inspección por atributos
-    - Inspección por la que el elemento se clasifica simplemente como conforme o no conforme con respecto a un requisito especificado o conjunto de requisitos especificados.
+    - Inspección por la que el elemento se clasifica simplemente como conforme o no-conforme con respecto a un requisito especificado o conjunto de requisitos especificados.
 - No-conformidad
     - Es el incumplimiento de una especificación. Su aparición se supone que es al azar e independientes unas de otras.
 - Lote
@@ -139,6 +139,7 @@ La primera norma fue la MIL-STD-105. La primera versión de la misma, MIL-STD-10
 La cuarta edición, MIL-STD-105D, de 1963, sirvió de base a las normas ANSI/ASQ Z1.4 y la ISO 2859.
 
 La quinta edición, MIL-STD-105E (https://archive.org/details/MIL-STD-105E_1), de 1989, es la última edición existente.
+
 
 ## MIL-STD-105E
 
@@ -250,18 +251,196 @@ Habrá que verificar que los tapones cumplen con las exigencias de  calidad exam
 ¿Cuántos tapones tengo que revisar si el nivel de calidad aceptable se ha establecido en el 1 %?
 
 
-<!-- # Muestreo de aceptación por variables (MIL STD 414) -->
+# Muestreo de aceptación por variables (MIL-STD-414)
 
+## Conceptos
+
+- Inspección por variables
+    - Inspección en la que una propiedad del elemento es medida y puesta en comparación con los límites de especificación para la propiedad medida. En esta comparación, la distancia a los límites se tiene en cuenta para la extracción de conclusiones.
+- No-conformidad
+    - Corresponde a la presencia de un valor más allá de los límites de especificación.
+- Lote
+    - Agregación de productos fabricados bajo un sistema común de causas que le dota de una uniformidad inherente.
+
+
+## Objetivos y lotes
+
+El muestreo de aceptación por variables persigue los mismos objetivos que el muestreo de aceptación por atributos: mantener unos riesgos controlados del productor y del consumidor, e inducir a una producción de mayor calidad.
+
+Los criterios para la formación de lotes (homogéneos y grandes) siguen siendo válidos.
+
+
+## Normas para el muestreo de aceptación por variables
+
+- MIL-STD-414 - Sampling procedures and tables for inspection by variables for percent defective. https://archive.org/details/MIL-STD-414  
+- ANSI/ASQ Z1.9 - Sampling procedures and tables for inspection by variables for percent nonconforming
+- ISO 3951 - Sampling procedures for inspection by variables. https://www.iso.org/standard/57490.html
+
+La primera de ellas, la MIL-STD-414, está fechada en 1957. Esta ha servido de referencia para las demás normas.
+
+
+## MIL-STD-414
+
+Esta norma asume que:
+
+- Se considera una sola característica medible sobre una escala continua.
+- El error de medición es despreciable.
+- La fabricación está bajo control estadístico.
+- La variable se distribuye de acuerdo a una distribución normal.
+
+----
+
+La norma ML-STD-414 permite obtener 
+
+- a partir de 
+    - nivel de calidad aceptable (*AQL*: *acceptance quality limit*)
+    - tamaño de lote (*lot or batch size*)
+    - plan de muestreo (*sampling plan*)
+    - nivel de inspección (*inspection level*)
+    - procedimiento de inspección (*inspection procedure*)
+    - límites de especificación (*LIE* o *L*, y *LSE* o *U*)
+
+----
+
+<p>&nbsp;</p>
+
+- se obtiene
+    - el tamaño de la muestra a inspeccionar (*sample size*)
+    - un conjunto de criterios para establecer si el lote es aceptable o no
+
+----
+
+La norma propone distintos procedimientos en función de la forma como se calcula la variabilidad de la variable:
+
+- calculada a partir de la desviación estándar de la muestra, 
+- calculada a partir del rango de la muestra, o
+- conocida,
+
+del número de límites de especificación, y del número de níveles de calidad aceptables (*AQL*) distintos.
+
+Solo consideraremos el método de la desviación estándar para dos límites de especificación con *AQL* iguales.
+
+----
+
+Habiéndose fijado *a priori*
+
+- los límites de especificación (*L* y *U*),
+- el nivel de calidad aceptable (*AQL*),
+- el nivel de inspección (*inspection level*), por defecto el IV
+
+----
+
+### Procedimiento - Selección de los criterios de inspección
+
+1. Consultar en la tabla A-2, el código de tamaño de muestra, para el nivel de inspección y el tamaño de lote a inspeccionar.
+
+----
+
+![](im007.png){style=width:80%;margin-left:-40%;}
+
+----
+
+<p>&nbsp;</p>
+
+2. De acuerdo con el procedimiento de inspección (reducido, normal o estricto), se selecciona la tabla adecuada (B-3 para normal o estricto -parte inferior-, o B-4 para reducido).
+3. Con el *AQL* y el código de tamaño de muestra, se lee en la tabla
+    - el tamaño de muestra,
+    - y la proporción de no-conformes máxima aceptable (*M*).
+
+----
+
+![](im008.png)
+
+----
+
+### Procedimiento - Inspección
+
+4. Se seleccionan de acuerdo con un muestreo adecuado las unidades que deben ser inspeccionadas. Se determina la propiedad de interés para cada una de estas unidades.
+5. Se determina el promedio ($\bar X$) y la desviación estándar ($s$) de las medidas.
+6. Se rechaza el lote si el promedio se encuentra fuera de los límites de especificación ($\bar X > U$ o $\bar X < L$).
+7. Se calculan los índices de calidad para cada uno de los límites de especificación
+
+$$ \\
+Q_L = \dfrac {\bar X - L}{s} \\
+Q_U = \dfrac {U - \bar X}{s} $$
+
+----
+
+8. Se determina la proporción de no-conformes para ambos límites de especificación (usando la tabla B-5) ($p_L$ y $p_U$).
+
+![](im009.png)
+
+----
+
+9. Se suman $p_L$ y $p_U$ para obtener la proporción de no-conformes.
+
+$$\\
+  p = p_L +p_U$$
+
+10. Si la proporción de no-conformes ($p$) es mayor que la máxima tabulada (*M*) se rechaza el lote. En caso contrario, el lote se acepta.
+
+
+## Cambio del procedimiento de inspección
+
+Se empieza el proceso con inspección normal.
+
+
+### Inspección estricta
+
+Se establece cuando
+
+- el promedio estimado de proceso ($\bar p$), promedio de las *k* (por defecto 10) últimas proporciones de no-conformes ($p$), es superior al *AQL*, o
+- un número superior a *T* lotes (tabla B-6) tiene una proporción de no-conformes al *AQL*.
+
+Se vuelve a la inspección normal
+
+- el promedio estimado de proceso ($\bar p$) es inferior o igual al *AQL*, 
+
+----
+
+![](im010.png)
+
+----
+
+### Inspección reducida
+
+Se establece si
+
+- ninguno de los *k* lotes previos ha sido rechazado,
+- ninguno de los lotes anterior tiene una proporción de no-conformes ($p$) superior a un valor tabulado (tabla B-7), y
+- la producción es estable.
+
+Se vuelve al procedimiento normal cuando
+
+- un lote es rechazado,
+- el promedio estimado de proceso ($\bar p$) es superior al *AQL*,
+- la producción es inestable, o
+- se produce cualquier otra situación que inste a volver a normal.
+
+----
+
+![](im011.png)
+
+
+## Ejemplo
+
+Reproducir el ejemplo B-3 que figura en la norma MIL-STD-414.
+
+![](im011.png)
 
 
 # Sistemas alternativos de muestreo de aceptación
 
 ##
 
-Los sistemas de aceptación considerados estan siendo sustituidos en algunos casos por sistemas basados en la aceptación a 0. En estos casos, el lote solo es aceptable si no existen unidades no conformes.
+Los sistemas de aceptación considerados estan siendo sustituidos en algunos casos por sistemas basados en la aceptación a 0, y sistemas de muestreo de aceptación secuencial.
 
-La referencia en estos casos es la norma MIL-STD-1916 cuya primera edición es de 1996 (
+En el primer caso, el lote solo es aceptable si no existen unidades no-conformes. La referencia en estos casos es la norma MIL-STD-1916 cuya primera edición es de 1996 (
 https://variation.com/wp-content/uploads/standards/mil-std-1916.pdf).
+
+----
+
+En el segundo caso, el tamaño de muestra no se establece a priori sino que se incrementa de forma secuencial cuando aun no es posible llegar a una conclusión de aceptación o rechazo. Una descripción puede encontrarse en https://www.itl.nist.gov/div898/handbook/pmc/section2/pmc26.htm y una norma de referencia es la MIL-STD-1235C de 1988 (https://elsmar.com/pdf_files/Military%20Standards/mil%20std%201235c.pdf). Los sistemas de muestreo secuencial también están incluidos en las normas ISO 2859 e ISO 3951.
 
 
 # Referencias normativas
@@ -274,4 +453,10 @@ https://variation.com/wp-content/uploads/standards/mil-std-1916.pdf).
 - ANSI/ASQ Z1.9 - Sampling procedures and tables for inspection by variables for percent nonconforming
 - ISO 2859 - Sampling procedures for inspection by attributes. https://www.iso.org/obp/ui/#iso:std:iso:28590
 - ISO 3951 - Sampling procedures for inspection by variables. https://www.iso.org/standard/57490.html
+
+----
+
 - MIL-STD-1916 - DOD PREFERRED METHODS FOR ACCEPTANCE OF PRODUCT. https://variation.com/wp-content/uploads/standards/mil-std-1916.pdf
+- MIL-STD-1235 - Single- and multi-level continous sampling procedures and tables for inspection by attributes. Functional curves of continous sampling plans. https://elsmar.com/pdf_files/Military%20Standards/mil%20std%201235c.pdf
+
+Una lista más completa de normas para muestreos de aceptación puede encontrarse en https://variation.com/acceptance-sampling-standards/
