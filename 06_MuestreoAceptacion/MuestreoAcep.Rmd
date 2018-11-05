@@ -429,6 +429,13 @@ Reproducir el ejemplo B-3 que figura en la norma MIL-STD-414.
 ![](im011.png)
 
 
+## Ejemplo 2
+
+Las especificación para el pH de un champú señala que se debe encontrar entre 5,5 y 6,5.  Se ha fabricado un lote piloto de 100 unidades. ¿Cómo debería proceder para determinar la aceptación o no del lote?
+
+Una vez determinado el tamaño de muestra selecciona el archivo phNNNN.txt que corresponda (sustituyendo NNNN por el tamaño de muestra escrito con 4 dígitos) y determina si el lote es aceptable o no, para un AQL de 0,1 %.
+
+
 # Sistemas alternativos de muestreo de aceptación
 
 ##
