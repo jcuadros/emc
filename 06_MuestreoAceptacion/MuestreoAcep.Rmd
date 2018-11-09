@@ -295,7 +295,6 @@ La norma ML-STD-414 permite obtener
 - a partir de 
     - nivel de calidad aceptable (*AQL*: *acceptance quality limit*)
     - tamaño de lote (*lot or batch size*)
-    - plan de muestreo (*sampling plan*)
     - nivel de inspección (*inspection level*)
     - procedimiento de inspección (*inspection procedure*)
     - límites de especificación (*LIE* o *L*, y *LSE* o *U*)
@@ -336,7 +335,7 @@ Habiéndose fijado *a priori*
 
 ----
 
-![](im007.png){style=width:80%;margin-left:-40%;}
+![](im007.png){style=width:40%;margin-left:-20%;}
 
 ----
 
@@ -357,7 +356,10 @@ Habiéndose fijado *a priori*
 
 4. Se seleccionan de acuerdo con un muestreo adecuado las unidades que deben ser inspeccionadas. Se determina la propiedad de interés para cada una de estas unidades.
 5. Se determina el promedio ($\bar X$) y la desviación estándar ($s$) de las medidas.
-6. Se rechaza el lote si el promedio se encuentra fuera de los límites de especificación ($\bar X > U$ o $\bar X < L$).
+6. Se rechaza el lote si el promedio se encuentra fuera de los límites de especificación ($\  \bar X > U \  $  o $\  \bar X < L \  $).
+
+----
+
 7. Se calculan los índices de calidad para cada uno de los límites de especificación
 
 $$ \\
@@ -384,13 +386,14 @@ $$\\
 
 Se empieza el proceso con inspección normal.
 
+----
 
 ### Inspección estricta
 
 Se establece cuando
 
 - el promedio estimado de proceso ($\bar p$), promedio de las *k* (por defecto 10) últimas proporciones de no-conformes ($p$), es superior al *AQL*, o
-- un número superior a *T* lotes (tabla B-6) tiene una proporción de no-conformes al *AQL*.
+- un número superior a *T* lotes (tabla B-6) tiene una proporción de no-conformes superior al *AQL*.
 
 Se vuelve a la inspección normal
 
@@ -426,7 +429,7 @@ Se vuelve al procedimiento normal cuando
 
 Reproducir el ejemplo B-3 que figura en la norma MIL-STD-414.
 
-![](im011.png)
+![](im012.png)
 
 
 ## Ejemplo 2
