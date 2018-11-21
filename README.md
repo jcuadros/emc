@@ -12,7 +12,7 @@ Incluye los siguientes apartados:
 - Análisis de los sistemas de medida: [MSA.html](https://cdn.rawgit.com/jcuadros/emc/master/05_MSA/MSA.html) -- [versión imprimible](https://cdn.rawgit.com/jcuadros/emc/master/05_MSA/MSA.html?print-pdf)
 - Muestreo de aceptación: [MuestreoAcep.html](https://cdn.rawgit.com/jcuadros/emc/master/06_MuestreoAceptacion/MuestreoAcep.html) -- [versión imprimible](https://cdn.rawgit.com/jcuadros/emc/master/06_MuestreoAceptacion/MuestreoAcep.html?print-pdf)
 - Previsión: [Prevision.html](https://cdn.rawgit.com/jcuadros/emc/master/07_Prevision/Prevision.html) -- [versión imprimible](https://cdn.rawgit.com/jcuadros/emc/master/07_Prevision/Prevision.html?print-pdf)
-
+- Previsión: [DisExp.html](https://cdn.rawgit.com/jcuadros/emc/master/08_DisenoExperimentos/DisExp.html) -- [versión imprimible](https://cdn.rawgit.com/jcuadros/emc/master/08_DisenoExperimentos/DisExp.html?print-pdf)
 ----
 Presentaciones creadas con RMarkdown y revealjs.
 
