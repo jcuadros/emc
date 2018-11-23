@@ -348,10 +348,10 @@ En este caso, es frecuente querer comparar los valores centrales o/y las variabi
 
 El análisis para la comparación de los valores centrales se realiza en dos pasos:
 
-1. Estudio de la normalidad de cada variable
+1. Estudio de la normalidad para cada nivel
     - Prueba de Shapiro-Wilk
     - Gráfico QQ
-2. Inferencia sobre las medias (o las medianas) de las variables
+2. Inferencia sobre las medias (o las medianas) de los niveles
     - Prueba t de Welch (para variables normalmente distribuidas)
     - Prueba de Mann-Whitney (o de Wilcoxon)
 
@@ -359,10 +359,10 @@ El análisis para la comparación de los valores centrales se realiza en dos pas
 
 Para la comparación de las variabilidades se procede del modo siguiente:
 
-1. Estudio de la normalidad de cada variable
+1. Estudio de la normalidad para cada nivel
     - Prueba de Shapiro-Wilk
     - Gráfico QQ
-2. Inferencia sobre las medias (o las medianas) de las variables
+2. Inferencia sobre las varianzas de los resultados de ambos niveles
     - Prueba F (para variables normalmente distribuidas)
     - Prueba de Levene (o de Brown–Forsythe)
 
@@ -374,6 +374,46 @@ En una papelera, se ha decidido modificar la composición de las fibras usadas p
 Los resultados de la resistencia a la tracción para distintas producciones (en psi) se muestran en el fichero 'papel.txt'.
 
 ¿Qué conclusiones puedes sacar de los mismos?
+
+
+## Diseño de un factor con más de dos niveles
+
+Corresponde a aquella situación en que se desea establecer si más de dos valores de la variable independiente llevan a resultados equivalentes.
+
+Estos resultados pueden ser equivalentes en cuanto a sus valores centrales o/y  sus variabilidades.
+
+----
+
+El análisis para la comparación de los valores centrales se realiza en dos pasos:
+
+1. Estudio de la normalidad para cada nivel
+    - Prueba de Shapiro-Wilk
+    - Gráfico QQ
+  Esta prueba se puede substituir por una prueba de normalidad de los residuales *a posteriori*.
+  
+----
+  
+2. Inferencia sobre las medias (o las medianas) de los niveles
+    - Anova de Welch (para variables normalmente distribuidas)
+    - Prueba de Kruskal-Wallis
+
+----
+
+Para la comparación de las variabilidades se procede del modo siguiente:
+
+1. Estudio de la normalidad para cada nivel
+    - Prueba de Shapiro-Wilk
+    - Gráfico QQ
+2. Inferencia sobre las varianzas de los resultados de ambos niveles
+    - Prueba de Bartlett (para variables normalmente distribuidas)
+    - Prueba de Levene (o de Brown–Forsythe)
+
+
+## Ejemplo
+
+En la empresa donde estás haciendo las prácticas, estan evaluando la posibilidad de cambiar el proveedor de los pernos que usáis en el proceso de fabricación.
+
+Han recibido ofertas de tres proveedores y entre las distintas consideraciones a tener en cuenta está la resistencia a la tracción de los mismos. Hechos los experimentos pertinentes para muestras aleatorias de 12 pernos de cada proveedor, fichero 'pernos.txt', ¿se puede afirmar que tienen la misma resistencia a la tracción (en MN m<sup>-2</sup>)? ¿y la misma variabilidad en esta propiedad?
 
 
 <!-- # Investigación *ex-post-facto*: Análisis correlacional -->
