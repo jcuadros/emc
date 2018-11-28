@@ -26,6 +26,11 @@ if(!require("tidyverse")) {
          quiet=TRUE, type="binary")
   library("tidyverse")
 }
+if(!require("car")) {
+  install.packages("car", repos="https://cloud.r-project.org/",
+         quiet=TRUE, type="binary")
+  library("car")
+}
 if(!require("kableExtra")) {
   install.packages("kableExtra", repos="https://cloud.r-project.org/",
          quiet=TRUE, type="binary")
@@ -286,11 +291,11 @@ if(!require("kableExtra")) {
 #' El análisis de este diseño se realiza en dos pasos:
 #' 
 #' 1. Estudio de la normalidad de las diferencias
-#'     - Prueba de Shapiro-Wilk
-#'     - Gráfico QQ
+#'     - Prueba de Shapiro-Wilk,  ```shapiro.test(...)```
+#'     - Gráfico QQ,  ```ggplot(... aes(sample=...)) + geom_qq(...)```
 #' 2. Inferencia sobre la media (o la mediana) de la distribución de las diferencias
-#'     - Prueba t (para variables normalmente distribuidas)
-#'     - Prueba de Wilcoxon
+#'     - Prueba t (para variables normalmente distribuidas),  ```t.test(...)```
+#'     - Prueba de Wilcoxon,  ```wilcox.test(...)```
 #' 
 #' 
 #' ## Ejemplo
@@ -348,38 +353,157 @@ wilcox.test(datos$Dif)
 #' 
 #' El análisis para la comparación de los valores centrales se realiza en dos pasos:
 #' 
-#' 1. Estudio de la normalidad de cada variable
-#'     - Prueba de Shapiro-Wilk
-#'     - Gráfico QQ
-#' 2. Inferencia sobre las medias (o las medianas) de las variables
-#'     - Prueba t de Welch (para variables normalmente distribuidas)
-#'     - Prueba de Mann-Whitney (o de Wilcoxon)
+#' 1. Estudio de la normalidad para cada nivel
+#'     - Prueba de Shapiro-Wilk,  ```shapiro.test(...)```
+#'     - Gráfico QQ,  ```ggplot(... aes(sample=...)) + geom_qq(...)```
+#' 2. Inferencia sobre las medias (o las medianas) de los niveles
+#'     - Prueba t de Welch (para variables normalmente distribuidas),  ```t.test(...)```
+#'     - Prueba de Mann-Whitney (o de Wilcoxon),  ```wilcox.test(...)```
 #' 
 #' ----
 #' 
 #' Para la comparación de las variabilidades se procede del modo siguiente:
 #' 
-#' 1. Estudio de la normalidad de cada variable
-#'     - Prueba de Shapiro-Wilk
-#'     - Gráfico QQ
-#' 2. Inferencia sobre las medias (o las medianas) de las variables
-#'     - Prueba F (para variables normalmente distribuidas)
-#'     - Prueba de Levene (o de Brown–Forsythe)
+#' 1. Estudio de la normalidad para cada nivel
+#'     - Prueba de Shapiro-Wilk,  ```shapiro.test(...)```
+#'     - Gráfico QQ,  ```ggplot(... aes(sample=...)) + geom_qq(...)```
+#' 2. Inferencia sobre las varianzas de los resultados de ambos niveles
+#'     - Prueba F (para variables normalmente distribuidas),  ```var.test(...)```
+#'     - Prueba de Levene (o de Brown–Forsythe),  ```car::leveneTest(...)```
 #' 
 #' 
 #' ## Ejemplo
 #' 
-#' En una papelera, se ha decidido modificar la composición de las fibras usadas para la fabricación del papel para valorar si una mayor proporción de fibras de eucaliptus, da lugar a un papel con mejores propiedades mecánicas (y menor variabilidad en las mismas).
+#' En una papelera, se ha decidido modificar la composición de las fibras usadas para la fabricación del papel para valorar si una mayor proporción de fibras de eucalipto, da lugar a un papel con mejores propiedades mecánicas (y menor variabilidad en las mismas).
 #' 
 #' Los resultados de la resistencia a la tracción para distintas producciones (en psi) se muestran en el fichero 'papel.txt'.
 #' 
 #' ¿Qué conclusiones puedes sacar de los mismos?
+#' 
+#' ----
+#' 
+#' <style>
+#' .container{
+#'     display: flex;
+#' }
+#' .col{
+#'     flex: 1;
+#' }
+#' </style>
+#' 
+#' <div class="container">
+#' 
+#' <div class="col">
+#' 
+## ---- echo = FALSE, results = 'asis'-------------------------------------
+datos <- read.table("papel.txt", sep="\t", header=TRUE)
+datos$Prop <- factor(datos$Prop)
+kable_styling(kable(datos[1:11,],row.names=FALSE), font_size=28)
+
+#' 
+#' </div>
+#' <div class="col">
+#' 
+## ---- echo = FALSE, results = 'asis'-------------------------------------
+kable_styling(kable(datos[12:22,],row.names=FALSE), font_size=28)
+
+#' 
+#' </div>
+#' </div>
+#' 
+#' ----
+#' 
+## ---- eval = FALSE, echo = TRUE------------------------------------------
+## datos <- read.table("papel.txt", sep="\t", header=TRUE)
+## datos$Prop <- factor(datos$Prop)
+## ggplot(datos, aes(x=Prop,y=Resist)) +
+##   geom_boxplot() +
+##   theme_classic()
+
+#' 
+#' ----
+#' 
+## ---- echo = FALSE-------------------------------------------------------
+ggplot(datos, aes(x=Prop,y=Resist)) +
+  geom_boxplot() +
+  theme_classic()
+
+#' 
+#' ----
+#' 
+## ---- echo = TRUE--------------------------------------------------------
+by(datos$Resist,datos$Prop,shapiro.test)
+
+#' 
+#' ----
+#' 
+## ---- echo = TRUE--------------------------------------------------------
+t.test(datos$Resist ~ datos$Prop,
+       alternative = "less")
+
+#' 
+#' ----
+#' 
+## ---- echo = TRUE--------------------------------------------------------
+var.test(datos$Resist ~ datos$Prop,
+       alternative = "greater")
+
+#' 
+#' ----
+#' 
+#' ### Conclusiones
+#' 
+#' Un mayor proporción de fibras de eucalipto parece dar lugar a un papel más resistente.
+#' La variabilidad del proceso, respecto a esta propiedad, no parece disminuir.
+#' 
+#' 
+#' ## Diseño de un factor con más de dos niveles
+#' 
+#' Corresponde a aquella situación en que se desea establecer si más de dos valores de la variable independiente llevan a resultados equivalentes.
+#' 
+#' Estos resultados pueden ser equivalentes en cuanto a sus valores centrales o/y  sus variabilidades.
+#' 
+#' ----
+#' 
+#' El análisis para la comparación de los valores centrales se realiza en dos pasos:
+#' 
+#' 1. Estudio de la normalidad para cada nivel
+#'     - Prueba de Shapiro-Wilk,  ```shapiro.test(...)```
+#'     - Gráfico QQ,  ```ggplot(... aes(sample=...)) + geom_qq(...)```
+#' 
+#' Esta prueba se puede substituir por una prueba de normalidad de los residuales *a posteriori*.
+#'   
+#' ----
+#'   
+#' 2. Inferencia sobre las medias (o las medianas) de los niveles
+#'     - Anova de Welch (para variables normalmente distribuidas),  ```oneway.test(...)```
+#'     - Prueba de Kruskal-Wallis,   ```kruskal.test(...)```
+#' 
+#' ----
+#' 
+#' Para la comparación de las variabilidades se procede del modo siguiente:
+#' 
+#' 1. Estudio de la normalidad para cada nivel
+#'     - Prueba de Shapiro-Wilk,  ```shapiro.test(...)```
+#'     - Gráfico QQ, ```ggplot(... aes(sample=...)) + geom_qq(...)```
+#' 2. Inferencia sobre las varianzas de los resultados de ambos niveles
+#'     - Prueba de Bartlett (para variables normalmente distribuidas),  ```bartlett.test(...)```
+#'     - Prueba de Levene (o de Brown–Forsythe),  ```car::leveneTest(...)```
+#' 
+#' 
+#' ## Ejemplo
+#' 
+#' En la empresa donde estás haciendo las prácticas, estan evaluando la posibilidad de cambiar el proveedor de los pernos que usáis en el proceso de fabricación.
+#' 
+#' Han recibido ofertas de tres proveedores y entre las distintas consideraciones a tener en cuenta está la resistencia a la tracción de los mismos. Hechos los experimentos pertinentes para muestras aleatorias de 12 pernos de cada proveedor, fichero 'pernos.txt', ¿se puede afirmar que tienen la misma resistencia a la tracción (en MN m<sup>-2</sup>)? ¿y la misma variabilidad en esta propiedad?
 #' 
 #' 
 #' <!-- # Investigación *ex-post-facto*: Análisis correlacional -->
 #' 
 #' 
 #' # Referencias
+#' 
+#' ##
 #' 
 #' - MIL-STD-1629A. Procedures for performing a failure mode, effects and criticality analysis . http://www.barringer1.com/mil_files/MIL-STD-1629RevA.pdf
 #' - IEC 60812. Analysis techniques for system reliability – Procedure for failure mode and effects analysis (FMEA)

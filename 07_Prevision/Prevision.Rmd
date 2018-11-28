@@ -688,6 +688,8 @@ de los residuales (MAPE/MAPD , MSE/MSD...)
 
 # Referencias adicionales
 
+##
+
 - Hyndman, R.J.; Athanasopoulos, G. (2018). Forecasting: Principles and Practice,http://otexts.org/fpp2/
 - NIST/SEMATECH (2013). NIST/SEMATECH. e-Handbook of Statistical Methods, http://www.itl.nist.gov/div898/handbook
 - ForPrin (2018). The Forecasting Principles, http://www.forecastingprinciples.com/
