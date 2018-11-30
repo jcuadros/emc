@@ -270,7 +270,9 @@ En este curso se discutirán
 - Se comprueban los supuestos de la prueba y se lleva a cabo la misma (si los supuestos se cumplen) .
 
 
-## Diseños de un factor
+# Diseños experimentales de un factor
+
+## Aspectos generales y tipos
 
 - Criterios generales
     - Con repetición
@@ -497,6 +499,147 @@ En la empresa donde estás haciendo las prácticas, estan evaluando la posibilid
 
 Han recibido ofertas de tres proveedores y entre las distintas consideraciones a tener en cuenta está la resistencia a la tracción de los mismos. Hechos los experimentos pertinentes para muestras aleatorias de 12 pernos de cada proveedor, fichero 'pernos.txt', ¿se puede afirmar que tienen la misma resistencia a la tracción (en MN m<sup>-2</sup>)? ¿y la misma variabilidad en esta propiedad?
 
+
+# Diseños experimentales de más de un factor
+
+## Diseño factor a factor (*OFAT*)
+
+El diseño consiste en realizar distintos experimentos de un factor manteniendo constantes los demás factores que desea estudiarse.
+
+
+## Diseño factor a factor - Problemas
+
+Cuando el proceso tiene más de un factor identificado como variable experimental (o como bloqueo), el análisis factor a factor (diseños de 1 factor) resulta demasiado costoso y poco eficiente
+
+- Requiere demasiado experimentos
+- No aprovecha toda la experimentación para reducir el error de medida
+- No permite evaluar el efecto de las interacciones
+- No facilita la reutilización de experiencias para la ampliación de los estudios experimentales
+
+
+## Objetivos de los diseños factoriales
+
+Se denominan diseños factoriales, aquellos diseños experimentales que incorporan más de un factor (variable experimental).
+
+----
+
+![](im006.png){style=width:60%;margin-left:-30%;}
+
+<span class="bibref">https://www.itl.nist.gov/div898/handbook/pri/section3/pri33.htm</span>
+
+
+## Tipos de diseños factoriales
+
+- Diseños factoriales completos
+    - ... de 2 niveles, con y sin repetición
+    - ... con más de 2 niveles en algun factor
+- Diseños factoriales fraccionados
+    - Diseños factoriales saturados
+    - Diseños de Plackett-Burman
+- Diseños para superfícies de respuestas
+    - Diseños centrales compuestos
+    - Diseños de Box-Behnken
+    
+
+## Diseños factoriales completos de dos niveles
+
+Simbología y terminología
+
+- Se indican como 2<sup>*k*</sup>, donde *k* es el número de factores y el resultado de 2<sup>*k*</sup>, el número de experimentos a realizar.
+- Se suelen usar letras mayúsculas (A-Z) para identificar los **factores**.
+- Para cada factor, existe un nivel bajo (que no se indica) y un nivel alto (que se indica en minúsculas).
+Un conjunto de niveles para cada factor establece unas **condiciones experimentales**.
+
+----
+
+Matriz de diseño
+
+- Consiste en el conjunto de condiciones experimentales que deben ser experimentadas.
+- En un diseño factorial completo, corresponde a todas las combinaciones de niveles de los distintos factores.
+- Suele construirse de acuerdo con el orden de Yates...
+
+----
+
+Para 2<sup>3</sup>...
+
+|     |  A  |  B  |  C  |
+|:---:|:---:|:---:|:---:|
+|  -  |  -  |  -  |  -  |
+|  a  |  +  |  -  |  -  |
+|  b  |  -  |  +  |  -  |
+|  ab |  +  |  +  |  -  |
+|  c  |  -  |  -  |  +  |
+|  ac |  +  |  -  |  +  |
+|  ab |  -  |  +  |  +  |
+| abc |  +  |  +  |  +  |
+
+----
+
+<p>&nbsp;</p>
+
+En estos diseños se cumple que
+
+- En el análisis de cada factor, es el resto de los factores están bloqueados.
+- Cada nivel de cada factor, se experimenta más de una vez.
+- Para cada factor, los dos niveles están balanceados.
+
+
+## Interacciones
+
+- Las interacciones corresponden a la presencia/ausencia simultánea de dos o más factores.
+- Se calculan multiplicando las columnas correspondientes a los factores implicados.
+- En un diseño factorial completo las columnas de los factores y de las interacciones son todas ortogonales entre sí. Es decir que puede estudiarse el efecto de todos los factores y de todas las interacciones.
+- El estudio de cada interacción también está balanceado, implica múltiples observaciones en cada nivel y mantiene bloqueados los demás factores e interacciones.
+
+
+## Diseño factorial - Realización de los experimentos
+
+- En orden aleatorio, para evitar problemas de autocorrelación
+- Si se hacen réplicas estas deben ser completamente genuinas. Deben abordarse como ensayos independientes
+
+Los resultados se añaden a la matriz de diseño del diseño experimental.
+
+
+## Análisis de un diseño factorial - Método de los efectos
+
+- Para cada nivel de cada factor se calcula el promedio de los resultados experimentales
+- El efecto (de un factor, *efecto principal*, o de una interacción) se estima como 
+
+$$ \\
+  Ef_{FoI} = {\bar y}_{FoI+} - {\bar y}_{FoI-}$$
+
+----
+
+Para facilitar el análisis se suelen usar tres tipos de representaciones gráficas
+
+- Gráficos de los efectos (principales)
+- Gráficos de las interacciones de primer orden
+- Diagrama de Pareto
+
+
+## Análisis de un diseño factorial - Consideraciones
+
+Son consideraciones habituales en el análisis de los diseños factoriales completos
+
+- Las interacciones de más de dos factores no son relevantes
+    … aunque cuidado con las combinaciones críticas
+- Las interacciones de dos factores solo son relevantes si lo son los factores (principio de la herencia)
+    … aunque cuidado con los óptimos
+- Cuando un efecto no es relevante puede excluirse del análisis y tratar los resultados como si se tratara de réplicas.
+
+
+## Ejemplo
+
+Estudia el efecto de los distintos factores en el rendimiento de plantas de pallar (*Phaseolus lunatus*). Los datos están recogidos en el archivo 'bean.csv'.
+
+
+Problema adaptado de 
+
+Box, G. E., Hunter, J. S., & Hunter, W. G. (2005). *Statistics for experimenters: design, innovation, and discovery*. 2nd edition. New York: Wiley-Interscience.
+
+
+
+<!-- ## Análisis de un diseño factorial -- Uso de técnicas multivariantes -->
 
 <!-- # Investigación *ex-post-facto*: Análisis correlacional -->
 
