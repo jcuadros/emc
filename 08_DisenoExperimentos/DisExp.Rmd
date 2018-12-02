@@ -570,7 +570,7 @@ Para 2<sup>3</sup>...
 |  ab |  +  |  +  |  -  |
 |  c  |  -  |  -  |  +  |
 |  ac |  +  |  -  |  +  |
-|  ab |  -  |  +  |  +  |
+|  bc |  -  |  +  |  +  |
 | abc |  +  |  +  |  +  |
 
 ----
@@ -632,14 +632,71 @@ Son consideraciones habituales en el análisis de los diseños factoriales compl
 
 Estudia el efecto de los distintos factores en el rendimiento de plantas de pallar (*Phaseolus lunatus*). Los datos están recogidos en el archivo 'bean.csv'.
 
+Los factores considerados son:
 
-Problema adaptado de 
+- A: profundidad de plantado: -, 0,5 in; +, 1,5 in
+- B: número de riegos por día: -, 1; +, 2
+- C: tipo de semilla: -, baby; +, grande
 
-Box, G. E., Hunter, J. S., & Hunter, W. G. (2005). *Statistics for experimenters: design, innovation, and discovery*. 2nd edition. New York: Wiley-Interscience.
+
+Problema adaptado de Box, G. E., Hunter, J. S., & Hunter, W. G. (2005). *Statistics for experimenters: design, innovation, and discovery*. 2nd edition. New York: Wiley-Interscience.
 
 
+## Estimación del error de los efectos
 
-<!-- ## Análisis de un diseño factorial -- Uso de técnicas multivariantes -->
+El error estándar de los efectos ($s_ef$) puede estimarse medinate distintas estrategias
+
+- media de las desviación estándar de las repeticiones, dividida $\sqrt{2^{k-2} r}$,
+- desviación estandár de los residuales, dividido por $\sqrt {2^{k-2} r}$,
+- desviación estándar de los efectos menos significativos,
+- 1,5 veces la mediana del valor absoluto de los efectos cuyo valor absoluto es inferior a 3,75 (2,5 · 1,5) veces la mediana del valor absoluto de todos los efectos
+
+<p class="bibref">
+https://onlinecourses.science.psu.edu/stat503/node/36/
+https://www.weibull.com/hotwire/issue113/relbasics113.htm 
+</p>
+
+----
+
+Un efecto es significativo si es mayor, en valor absoluto, que 
+
+$$ //
+Ef_{c} = s_{ef} * t_{1-frac{\alpha}{2}, r 2^k - 2^k}$$
+
+
+## Análisis de un diseño factorial - Regresión multilineal
+
+Los mismos resultados que se obtienen por el método de los efectos se pueden obtener mediante una regresión lineal multivariante.
+
+Si los factores se codifican como -1 y 1 (como enteros), los coeficientes que se obtienen son la mitad de los efectos correspondientes. 
+
+----
+
+Las fórmulas más comunes son
+
+- ```y ~ A+B+C+...``` , solo efectos principales,
+- ```y ~ (A+B+C+...)^2``` , efectos principales e interacciones de primer orden,
+- ```y ~ (A+B+C+...)^k``` , efectos principales e interacciones hasta orden *k*-1 (debe sustituirse *k*),
+- ```y ~ ...+A:B+...``` , incluir una interacción concreta
+
+----
+
+También puede analizarse el experimento mediante el uso de regresiones con variables ficticias, pero los resultados suelen ser más difíciles de interpretar debido al uso de referencias distintas al promedio experimental.
+
+
+## Ejemplo
+
+Con el objetivo de estudiar el efecto de temperatura (A), pH (B) y velocidad de agitación (C) en el rendimiento de un proceso químico, el ingeniero de planta ha realizado un diseño factorial completo 2<sup>3</sup>.
+
+Los rendimientos obtenidos, en orden de Yates, son los siguientes: 60; 61; 54; 75; 58; 61; 55; 75.
+
+Determina los efectos principales y las interacciones e interpreta los resultados obtenidos.
+
+
+Problema adaptado de Box, G. E., Hunter, J. S., & Hunter, W. G. (2005). *Statistics for experimenters: design, innovation, and discovery*. 2nd edition. New York: Wiley-Interscience.
+
+
+<!-- # Diseños factoriales fraccionados -->
 
 <!-- # Investigación *ex-post-facto*: Análisis correlacional -->
 
