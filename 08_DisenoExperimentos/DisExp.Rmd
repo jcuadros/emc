@@ -644,10 +644,10 @@ Problema adaptado de Box, G. E., Hunter, J. S., & Hunter, W. G. (2005). *Statist
 
 ## Estimación del error de los efectos
 
-El error estándar de los efectos ($s_ef$) puede estimarse medinate distintas estrategias
+El error estándar de los efectos ($\ s_{ef}\ $) puede estimarse medinate distintas estrategias
 
-- media de las desviación estándar de las repeticiones, dividida $\sqrt{2^{k-2} r}$,
-- desviación estandár de los residuales, dividido por $\sqrt {2^{k-2} r}$,
+- media de las desviación estándar de las repeticiones, dividida por $\ \sqrt{2^{k-2}·r} \ $ 
+- desviación estandár de los residuales, dividido por $\ \sqrt {2^{k-2}·r} \ $
 - desviación estándar de los efectos menos significativos,
 - 1,5 veces la mediana del valor absoluto de los efectos cuyo valor absoluto es inferior a 3,75 (2,5 · 1,5) veces la mediana del valor absoluto de todos los efectos
 
@@ -660,8 +660,8 @@ https://www.weibull.com/hotwire/issue113/relbasics113.htm
 
 Un efecto es significativo si es mayor, en valor absoluto, que 
 
-$$ //
-Ef_{c} = s_{ef} * t_{1-frac{\alpha}{2}, r 2^k - 2^k}$$
+$$ \\
+Ef_{c} = s_{ef} * t_{1-\frac{\alpha}{2}, r·2^k - 2^k}$$
 
 
 ## Análisis de un diseño factorial - Regresión multilineal
