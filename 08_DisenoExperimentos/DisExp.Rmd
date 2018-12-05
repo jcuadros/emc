@@ -191,7 +191,7 @@ En este curso se discutirán
 - Investigación *ex-post-facto*: Análisis correlacional
 
 
-# Investigación experimental: Diseño de experimentos
+# Investigación experimental
 
 ## Objetivos en un diseño experimental
 
@@ -641,6 +641,150 @@ Los factores considerados son:
 
 Problema adaptado de Box, G. E., Hunter, J. S., & Hunter, W. G. (2005). *Statistics for experimenters: design, innovation, and discovery*. 2nd edition. New York: Wiley-Interscience.
 
+----
+
+```{r, echo = FALSE, results = 'asis'}
+datos <- read.table("bean.csv", sep=";", header=TRUE)
+colnames(datos)[1] <- "A"
+kable_styling(kable(datos,row.names=FALSE), font_size=28)
+```
+
+----
+
+### Matriz de diseño con interacciones y respuestas
+
+```{r, echo = TRUE, eval = FALSE}
+datos <- gather(datos,"rep","yield",Rep1:Rep3)
+
+datos$AB <- datos$A * datos$B
+datos$AC <- datos$A * datos$C
+datos$BC <- datos$B * datos$C
+datos$ABC <- datos$A * datos$B * datos$C
+
+datos$rep <- NULL
+datos <- cbind(datos[,-4],yield=datos[,4])
+```
+
+----
+
+```{r, echo = FALSE}
+datos <- gather(datos,"rep","yield",Rep1:Rep3)
+
+datos$AB <- datos$A * datos$B
+datos$AC <- datos$A * datos$C
+datos$BC <- datos$B * datos$C
+datos$ABC <- datos$A * datos$B * datos$C
+
+datos$rep <- NULL
+datos <- cbind(datos[,-4],yield=datos[,4])
+
+kable_styling(kable(head(datos,12),row.names=FALSE), font_size=28)
+```
+
+----
+
+### Cálculo de los efectos
+
+```{r, echo = TRUE}
+efectos <- datos[,1:7] * datos[,8]
+efectos <- colSums(efectos) / 12
+efectos
+```
+
+----
+
+```{r, echo = TRUE}
+mediasA <- datos %>% group_by(A) %>% summarise(media=mean(yield))
+colnames(mediasA)[1] <- "nivel"
+mediasA$factor <- "A"
+
+mediasB <- datos %>% group_by(B) %>% summarise(media=mean(yield))
+colnames(mediasB)[1] <- "nivel"
+mediasB$factor <- "B"
+
+mediasC <- datos %>% group_by(C) %>% summarise(media=mean(yield))
+colnames(mediasC)[1] <- "nivel"
+mediasC$factor <- "C"
+
+medias <- rbind(mediasA,mediasB,mediasC)
+```
+
+----
+
+```{r, eval = FALSE, echo = TRUE}
+ggplot(medias,aes(x=factor(nivel),y=media,group=1))+
+  geom_point() +
+  geom_line() +
+  facet_grid(.~factor)+
+  theme_classic()
+```
+
+----
+
+```{r, echo = FALSE}
+ggplot(medias,aes(x=factor(nivel),y=media,group=1))+
+  geom_point() +
+  geom_line() +
+  facet_grid(.~factor)+
+  theme_classic()
+```
+
+----
+
+```{r, echo = TRUE, eval = FALSE}
+interacciones <- datos %>% group_by(A,B) %>% 
+  summarise(media=mean(yield))
+
+ggplot(interacciones, 
+       aes(x=factor(A),y=media,color=factor(B),group=factor(B))) +
+  geom_point() +
+  geom_line() +
+  theme_classic()
+```
+
+----
+
+```{r, echo = FALSE}
+interacciones <- datos %>% group_by(A,B) %>% 
+  summarise(media=mean(yield))
+
+ggplot(interacciones, 
+       aes(x=factor(A),y=media,color=factor(B),group=factor(B))) +
+  geom_point() +
+  geom_line() +
+  theme_classic()
+```
+
+----
+
+```{r, echo = TRUE, eval = FALSE}
+efectosO <- efectos[order(abs(efectos))]
+efectosO <- data.frame(variable=factor(names(efectosO),
+                                       levels=names(efectosO)),
+                       efecto=efectosO)
+
+ggplot(efectosO,aes(x=variable,y=abs(efecto),fill=efecto>0)) +
+  geom_bar(stat="identity",color="black")+
+  coord_flip()+
+  theme_classic()+
+  theme(legend.position="none")
+```
+
+----
+
+```{r, echo = FALSE}
+efectosO <- efectos[order(abs(efectos))]
+efectosO <- data.frame(variable=factor(names(efectosO),
+                                       levels=names(efectosO)),
+                       efecto=efectosO)
+
+ggplot(efectosO,aes(x=variable,y=abs(efecto),fill=efecto>0)) +
+  geom_bar(stat="identity",color="black")+
+  coord_flip()+
+  theme_classic()+
+  theme(legend.position="none")
+```
+
 
 ## Estimación del error de los efectos
 
@@ -648,11 +792,11 @@ El error estándar de los efectos ($\ s_{ef}\ $) puede estimarse medinate distin
 
 - media de las desviación estándar de las repeticiones, dividida por $\ \sqrt{2^{k-2}·r} \ $ 
 - desviación estandár de los residuales, dividido por $\ \sqrt {2^{k-2}·r} \ $
-- desviación estándar de los efectos menos significativos,
+- desviación estándar de los efectos menos significativos o de las interacciones de mayor orden
 - 1,5 veces la mediana del valor absoluto de los efectos cuyo valor absoluto es inferior a 3,75 (2,5 · 1,5) veces la mediana del valor absoluto de todos los efectos
 
 <p class="bibref">
-https://onlinecourses.science.psu.edu/stat503/node/36/
+https://onlinecourses.science.psu.edu/stat503/node/36/ <br />
 https://www.weibull.com/hotwire/issue113/relbasics113.htm 
 </p>
 
@@ -663,6 +807,35 @@ Un efecto es significativo si es mayor, en valor absoluto, que
 $$ \\
 Ef_{c} = s_{ef} * t_{1-\frac{\alpha}{2}, r·2^k - 2^k}$$
 
+----
+
+```{r, echo = TRUE}
+(sef <- 1.5 * median(abs(efectos[abs(efectos) < 
+          3.75 * median(abs(efectos))])))
+(efc <- sef * qt(0.975, 24 - 8))
+```
+
+----
+  
+```{r, echo = TRUE, eval = FALSE}
+ggplot(efectosO,aes(x=variable,y=abs(efecto),fill=efecto>0)) +
+  geom_bar(stat="identity",color="black")+
+  geom_hline(yintercept=efc)+
+  coord_flip()+
+  theme_classic()+
+  theme(legend.position="none")
+```
+
+----
+
+```{r, echo = FALSE}
+ggplot(efectosO,aes(x=variable,y=abs(efecto),fill=efecto>0)) +
+  geom_bar(stat="identity",color="black")+
+  geom_hline(yintercept=efc)+
+  coord_flip()+
+  theme_classic()+
+  theme(legend.position="none")
+```
 
 ## Análisis de un diseño factorial - Regresión multilineal
 
@@ -683,6 +856,19 @@ Las fórmulas más comunes son
 
 También puede analizarse el experimento mediante el uso de regresiones con variables ficticias, pero los resultados suelen ser más difíciles de interpretar debido al uso de referencias distintas al promedio experimental.
 
+----
+
+```{r, echo = TRUE}
+ajuste <- lm(yield~(A+B+C)^3,datos)
+summary(ajuste)
+```
+
+----
+
+```{r, echo = TRUE}
+ajuste <- lm(yield~A+B+C,datos)
+summary(ajuste)
+```
 
 ## Ejemplo
 
@@ -703,12 +889,20 @@ Problema adaptado de Box, G. E., Hunter, J. S., & Hunter, W. G. (2005). *Statist
 
 # Referencias
 
-##
+## 
 
-- MIL-STD-1629A. Procedures for performing a failure mode, effects and criticality analysis . http://www.barringer1.com/mil_files/MIL-STD-1629RevA.pdf
+- ARP9136. Aerospace Series - Root Cause Analysis and Problem Solving (9S Methodology)
+- Box, G. E., Hunter, J. S., & Hunter, W. G. (2005). *Statistics for experimenters: design, innovation, and discovery*. 2nd edition. New York: Wiley-Interscience.
 - IEC 60812. Analysis techniques for system reliability – Procedure for failure mode and effects analysis (FMEA)
+- MIL-STD-1629A. Procedures for performing a failure mode, effects and criticality analysis . http://www.barringer1.com/mil_files/MIL-STD-1629RevA.pdf
 - MIL-STD-882E. System Safety.
 https://www.system-safety.org/Documents/MIL-STD-882E.pdf
--  ARP9136. Aerospace Series - Root Cause Analysis and Problem Solving (9S Methodology)
+- Montgomery, D. C. (2017). Design and analysis of experiments. John Wiley & Sons.
+
+----
+
+- NIST/SEMATECH e-Handbook of Statistical Methods, http://www.itl.nist.gov/div898/handbook/, 5-dic-2018
+- Oehlert, G. W. (2010). A first course in design and analysis of experiments. https://conservancy.umn.edu/bitstream/handle/11299/168002/A%20First%20Course%20in%20Design%20and%20Analysis%20of%20Experiments_OehlertG_2010.pdf
+- The Pennsylvania State University. STAT 503. https://onlinecourses.science.psu.edu/stat503. 5-dic-2018
 
 
