@@ -882,9 +882,391 @@ Determina los efectos principales y las interacciones e interpreta los resultado
 Problema adaptado de Box, G. E., Hunter, J. S., & Hunter, W. G. (2005). *Statistics for experimenters: design, innovation, and discovery*. 2nd edition. New York: Wiley-Interscience.
 
 
-<!-- # Diseños factoriales fraccionados -->
+## Diseños factoriales completos de más de 2 niveles por factor
 
-<!-- # Investigación *ex-post-facto*: Análisis correlacional -->
+La misma lógica de construcción usada para diseños factoriales completos de 2 níveles puede para diseños en los que intervienen factores con más niveles. 
+
+Sin embargo, el coste se incrementa de forma notable y el análisis suele ser algo más complejo.
+
+Si las variables son cuantitativas, suelen evitarse y reservar el estudio de curvaturas para diseño experimental posterior, via diseños específicos o la adición de puntos centrales.
+
+----
+
+![](im007.png){style=width:60%;margin-left:-30%;}
+
+<p class="bibref">https://www.itl.nist.gov/div898/handbook/pri/section3/pri339.htm</p>
+
+
+## Diseños factoriales fraccionados
+
+Habida cuenta que en muchos casos consideramos como menos relevantes las interacciones, podemos usar las combinaciones de niveles asociadas a una interacción (ortogonales a los factores) para añadir un nuevo factor y determinar su efecto >>> DISEÑOS FRACCIONADOS
+
+$$ \\
+2^{f-c}\\$$
+
+*f*: factores, *c*: factores confundidos
+
+
+## Diseños factoriales fraccionados - Matriz del diseño
+
+Ejemplo: 2<sup>5-1</sup>
+
+- 5 factores
+- 1 de los cuales confundido
+- 2<sup>4</sup> condiciones experimentales: 16 experimentos, si no hay repetición
+- E = ABCD
+
+----
+
+![](im008.png){style=width:80%;margin-left:-40%;}
+
+
+## Diseños factoriales fraccionados - Relación de definición
+
+Al incorporar un factor como confundido, se producen efectos que no pueden ser diferenciados.
+
+**Relación de definición de un diseño fraccionado**: Corresponde al producto de factores que da lugar al vector de unidades
+
+- Para 2<sup>5-1</sup> y E = ABCD, I = ABCDE
+- Para 2<sup>5-2</sup> y E = ABC y D = AB, I = ABD = ABCE = CDE
+- Para 2<sup>5-2</sup> y E = AB y D = AC, I = ABE = ACD = BCDE
+- Para 2<sup>7-4</sup> y E = AB, D = AC, F = BC, G = ABC, I = ABE = ACD = BCF = ABCG = BCDE = ACEF = ABDF = CEG = BDG = AFG
+
+----
+
+<p>&nbsp;</p>
+
+**Resolución de un diseño fraccionado**: Número de factores de la relación de definición del diseño más corta: III, IV, V…
+
+<p>&nbsp;</p>
+
+|     |                                                                                  |
+|:---:|:---------------------------------------------------------------------------------|
+| III |Factores principales confundidos con interacciones de dos factores                |
+| IV  |Factores principales confundidos con interacciones de tres factores. Las interacciones de dos factores estan confundidas entre sí.                                                 |
+|  V  |Factores principales confundidos son interacciones de cuatro factores. Las interacciones de dos factores pueden determinarse.                                                        |
+
+
+## Diseños factoriales fraccionados - Principales diseños
+
+<style>
+.container{
+    display: flex;
+}
+.col{
+    flex: 1;
+}
+</style>
+
+<div class="container">
+
+<div class="col">
+
+<table BORDER=3 COLS=3 WIDTH="90%" style="font-size:20px;">
+  <tr>
+  <td>
+  <center><b>Number of Factors, *k*</b></center>
+  </td>
+  
+  <td>
+  <center><b>Design Specification</b></center>
+  </td>
+  
+  <td>
+  <center><b>Number of Runs, *N*</b></center>
+  </td>
+  </tr>
+  
+  <tr>
+  <td>
+  <center><b>3</b></center>
+  </td>
+  
+  <td>
+  <center><b><a href="https://www.itl.nist.gov/div898/handbook/pri/section3/eqns/2to3m1.txt">2<sub>III</sub><sup>3-1</sup></a></b></center>
+  </td>
+  
+  <td>
+  <center><b>4</b></center>
+  </td>
+  </tr>
+  
+  <tr>
+  <td>
+  <center><b>4</b></center>
+  </td>
+  
+  <td>
+  <center><b><a href="https://www.itl.nist.gov/div898/handbook/pri/section3/eqns/2to4m1.txt">2<sub>IV</sub><sup>4-1</sup></a></b></center>
+  </td>
+  
+  <td>
+  <center><b>8</b></center>
+  </td>
+  </tr>
+  
+  <tr>
+  <td>
+  <center><b>5</b></center>
+  </td>
+  
+  <td>
+  <center><b><a href="https://www.itl.nist.gov/div898/handbook/pri/section3/eqns/2to5m1.txt">2<sub>V</sub><sup>5-1</sup></a></b></center>
+  </td>
+  
+  <td>
+  <center><b>16</b></center>
+  </td>
+  </tr>
+  
+  <tr>
+  <td>
+  <center><b>5</b></center>
+  </td>
+  
+  <td>
+  <center><b><a href="https://www.itl.nist.gov/div898/handbook/pri/section3/eqns/2to5m2.txt">2<sub>III</sub><sup>5-2</sup></a></b></center>
+  </td>
+  
+  <td>
+  <center><b>8</b></center>
+  </td>
+  </tr>
+  
+  <tr>
+  <td>
+  <center><b>6</b></center>
+  </td>
+  
+  <td>
+  <center><b><a href="https://www.itl.nist.gov/div898/handbook/pri/section3/eqns/2to6m1.txt">2<sub>VI</sub><sup>6-1</sup></a></b></center>
+  </td>
+  
+  <td>
+  <center><b>32</b></center>
+  </td>
+  </tr>
+  
+  <tr>
+  <td>
+  <center><b>6</b></center>
+  </td>
+  
+  <td>
+  <center><b><a href="https://www.itl.nist.gov/div898/handbook/pri/section3/eqns/2to6m2.txt">2<sub>IV</sub><sup>6-2</sup></a></b></center>
+  </td>
+  
+  <td>
+  <center><b>16</b></center>
+  </td>
+  </tr>
+  
+  <tr>
+  <td>
+  <center><b>6</b></center>
+  </td>
+  
+  <td>
+  <center><b><a href="https://www.itl.nist.gov/div898/handbook/pri/section3/eqns/2to6m3.txt">2<sub>III</sub><sup>6-3</sup></a></b></center>
+  </td>
+  
+  <td>
+  <center><b>8</b></center>
+  </td>
+  </tr>
+</table>
+
+</div>
+<div class="col">
+
+<table BORDER=3 COLS=3 WIDTH="90%" style="font-size:20px;">
+  <tr>
+  <td>
+  <center><b>Number of Factors, *k*</b></center>
+  </td>
+  
+  <td>
+  <center><b>Design Specification</b></center>
+  </td>
+  
+  <td>
+  <center><b>Number of Runs, *N*</b></center>
+  </td>
+  </tr>
+
+  <tr>
+  <td>
+  <center><b>7</b></center>
+  </td>
+  
+  <td>
+  <center><b><a href="https://www.itl.nist.gov/div898/handbook/pri/section3/eqns/2to7m1.txt">2<sub>VII</sub><sup>7-1</sup></a></b></center>
+  </td>
+  
+  <td>
+  <center><b>64</b></center>
+  </td>
+  </tr>
+  
+  <tr>
+  <td>
+  <center><b>7</b></center>
+  </td>
+  
+  <td>
+  <center><b><a href="https://www.itl.nist.gov/div898/handbook/pri/section3/eqns/2to7m2.txt">2<sub>IV</sub><sup>7-2</sup></a></b></center>
+  </td>
+  
+  <td>
+  <center><b>32</b></center>
+  </td>
+  </tr>
+  
+  <tr>
+  <td>
+  <center><b>7</b></center>
+  </td>
+  
+  <td>
+  <center><b><a href="https://www.itl.nist.gov/div898/handbook/pri/section3/eqns/2to7m3.txt">2<sub>IV</sub><sup>7-3</sup></a></b></center>
+  </td>
+  
+  <td>
+  <center><b>16</b></center>
+  </td>
+  </tr>
+  
+  <tr>
+  <td>
+  <center><b>7</b></center>
+  </td>
+  
+  <td>
+  <center><b><a href="https://www.itl.nist.gov/div898/handbook/pri/section3/eqns/2to7m4.txt">2<sub>III</sub><sup>7-4</sup></a></b></center>
+  </td>
+  
+  <td>
+  <center><b>8</b></center>
+  </td>
+  </tr>
+  
+  <tr>
+  <td>
+  <center><b>8</b></center>
+  </td>
+  
+  <td>
+  <center><b><a href="https://www.itl.nist.gov/div898/handbook/pri/section3/eqns/2to8m1.txt">2<sub>VIII</sub><sup>8-1</sup></a></b></center>
+  </td>
+  
+  <td>
+  <center><b>128</b></center>
+  </td>
+  </tr>
+  
+  <tr>
+  <td>
+  <center><b>8</b></center>
+  </td>
+  
+  <td>
+  <center><b><a href="https://www.itl.nist.gov/div898/handbook/pri/section3/eqns/2to8m2.txt">2<sub>V</sub><sup>8-2</sup></a></b></center>
+  </td>
+  
+  <td>
+  <center><b>64</b></center>
+  </td>
+  </tr>
+  
+  <tr>
+  <td>
+  <center><b>8</b></center>
+  </td>
+  
+  <td>
+  <center><b><a href="https://www.itl.nist.gov/div898/handbook/pri/section3/eqns/2to8m3.txt">2<sub>IV</sub><sup>8-3</sup></a></b></center>
+  </td>
+  
+  <td>
+  <center><b>32</b></center>
+  </td>
+  </tr>
+  
+  <tr>
+  <td>
+  <center><b>8</b></center>
+  </td>
+  
+  <td>
+  <center><b><a href="https://www.itl.nist.gov/div898/handbook/pri/section3/eqns/2to8m4.txt">2<sub>IV</sub><sup>8-4</sup></a></b></center>
+  </td>
+  
+  <td>
+  <center><b>16</b></center>
+  </td>
+  </tr>
+</table>
+
+</div>
+</div>
+
+<p class="bibref">https://www.itl.nist.gov/div898/handbook/pri/section3/pri3347.htm</p>
+
+
+## Ejemplo
+
+En un determinado proceso, se está estudiando el rendimiento de la reacción en función de los parámetros siguientes:
+
+- A: velocidad de alimentación (10 o 15 L/min)
+- B: catalizador (1 o 2 %)
+- C: velocidad de agitación (100 o 120 rpm)
+- D: temperatura (140 o 180 ºC)
+- E: concentración del reactivo  (30 o 40 %)
+
+Los valores de los distintos experimentos se encuentran en el archivo 'reactor.csv'.
+
+Selecciona, de estos experimentos, los que corresponden al mínimo diseño que permitiría realizar el estudio, analizalo y compara los resultados con los que se obtienen con el diseño factorial completo.
+
+Problema adaptado de Box, G. E., Hunter, J. S., & Hunter, W. G. (2005). *Statistics for experimenters: design, innovation, and discovery*. 2nd edition. New York: Wiley-Interscience.
+
+
+## Diseños factoriales saturados
+
+Son aquellos diseños factoriales fraccionados de resolución III construidos para la evaluación del mayor número posible de factores
+
+- 2<sup>3-1</sup>  ⇒ 3 factores, 4 experimentos
+- 2<sup>7-4</sup>  ⇒ 7 factores, 8 experimentos
+- 2<sup>15-11</sup>  ⇒ 15 factores, 16 experimentos
+
+
+## Diseños de Plackett-Burman
+
+Consisten en diseños saturados (solo permiten evaluar efectos principales) con 4 *k* experimentos
+
+- Se construyen a partir de columnas ortogonales
+    - Balanceadas
+    - Bloqueo de los demás factores
+- Permiten evaluar los efectos de de 4 *k* - 1 factores
+- Para números de experimentos que son potencias de 2, coinciden con los diseños factoriales fraccionados saturados
+
+<p class="bibref">https://en.wikipedia.org/wiki/Plackett%E2%80%93Burman_design</p>
+
+
+## Diseños factoriales fraccionados - Siguientes pasos
+
+- Eliminar los factores cuyo efecto no es diferenciable del ruido estadístico
+- Desplegar (foldover) el diseño fraccionado ampliando el número de experimentos para resolver las confusiones
+    - En resolución III, imagen especular del diseño
+    - Cambiar signos en columna/factor
+- Otros diseños más específicos
+
+<p class="bibref">https://www.itl.nist.gov/div898/handbook/pri/section3/pri338.htm</p>
+
+
+<!-- ## Diseños para superfícies de respuesta -->
+
+
+<!-- # Investigación *ex-post-facto* -->
 
 
 # Referencias
@@ -904,5 +1286,6 @@ https://www.system-safety.org/Documents/MIL-STD-882E.pdf
 - NIST/SEMATECH e-Handbook of Statistical Methods, http://www.itl.nist.gov/div898/handbook/, 5-dic-2018
 - Oehlert, G. W. (2010). A first course in design and analysis of experiments. https://conservancy.umn.edu/bitstream/handle/11299/168002/A%20First%20Course%20in%20Design%20and%20Analysis%20of%20Experiments_OehlertG_2010.pdf
 - The Pennsylvania State University. STAT 503. https://onlinecourses.science.psu.edu/stat503. 5-dic-2018
+- TIBCO Software Inc (2018). Design of Experiments: Science, Industrial DOE. http://www.statsoft.com/Textbook/Experimental-Design. 9-dic-2018
 
 

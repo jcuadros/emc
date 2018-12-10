@@ -191,7 +191,7 @@ if(!require("kableExtra")) {
 #' - Investigación *ex-post-facto*: Análisis correlacional
 #' 
 #' 
-#' # Investigación experimental: Diseño de experimentos
+#' # Investigación experimental
 #' 
 #' ## Objetivos en un diseño experimental
 #' 
@@ -641,18 +641,162 @@ var.test(datos$Resist ~ datos$Prop,
 #' 
 #' Problema adaptado de Box, G. E., Hunter, J. S., & Hunter, W. G. (2005). *Statistics for experimenters: design, innovation, and discovery*. 2nd edition. New York: Wiley-Interscience.
 #' 
+#' ----
+#' 
+## ---- echo = FALSE, results = 'asis'-------------------------------------
+datos <- read.table("bean.csv", sep=";", header=TRUE)
+colnames(datos)[1] <- "A"
+kable_styling(kable(datos,row.names=FALSE), font_size=28)
+
+#' 
+#' ----
+#' 
+#' ### Matriz de diseño con interacciones y respuestas
+#' 
+## ---- echo = TRUE, eval = FALSE------------------------------------------
+## datos <- gather(datos,"rep","yield",Rep1:Rep3)
+## 
+## datos$AB <- datos$A * datos$B
+## datos$AC <- datos$A * datos$C
+## datos$BC <- datos$B * datos$C
+## datos$ABC <- datos$A * datos$B * datos$C
+## 
+## datos$rep <- NULL
+## datos <- cbind(datos[,-4],yield=datos[,4])
+
+#' 
+#' ----
+#' 
+## ---- echo = FALSE-------------------------------------------------------
+datos <- gather(datos,"rep","yield",Rep1:Rep3)
+
+datos$AB <- datos$A * datos$B
+datos$AC <- datos$A * datos$C
+datos$BC <- datos$B * datos$C
+datos$ABC <- datos$A * datos$B * datos$C
+
+datos$rep <- NULL
+datos <- cbind(datos[,-4],yield=datos[,4])
+
+kable_styling(kable(head(datos,12),row.names=FALSE), font_size=28)
+
+#' 
+#' ----
+#' 
+#' ### Cálculo de los efectos
+#' 
+## ---- echo = TRUE--------------------------------------------------------
+efectos <- datos[,1:7] * datos[,8]
+efectos <- colSums(efectos) / 12
+efectos
+
+#' 
+#' ----
+#' 
+## ---- echo = TRUE--------------------------------------------------------
+mediasA <- datos %>% group_by(A) %>% summarise(media=mean(yield))
+colnames(mediasA)[1] <- "nivel"
+mediasA$factor <- "A"
+
+mediasB <- datos %>% group_by(B) %>% summarise(media=mean(yield))
+colnames(mediasB)[1] <- "nivel"
+mediasB$factor <- "B"
+
+mediasC <- datos %>% group_by(C) %>% summarise(media=mean(yield))
+colnames(mediasC)[1] <- "nivel"
+mediasC$factor <- "C"
+
+medias <- rbind(mediasA,mediasB,mediasC)
+
+#' 
+#' ----
+#' 
+## ---- eval = FALSE, echo = TRUE------------------------------------------
+## ggplot(medias,aes(x=factor(nivel),y=media,group=1))+
+##   geom_point() +
+##   geom_line() +
+##   facet_grid(.~factor)+
+##   theme_classic()
+
+#' 
+#' ----
+#' 
+## ---- echo = FALSE-------------------------------------------------------
+ggplot(medias,aes(x=factor(nivel),y=media,group=1))+
+  geom_point() +
+  geom_line() +
+  facet_grid(.~factor)+
+  theme_classic()
+
+#' 
+#' ----
+#' 
+## ---- echo = TRUE, eval = FALSE------------------------------------------
+## interacciones <- datos %>% group_by(A,B) %>%
+##   summarise(media=mean(yield))
+## 
+## ggplot(interacciones,
+##        aes(x=factor(A),y=media,color=factor(B),group=factor(B))) +
+##   geom_point() +
+##   geom_line() +
+##   theme_classic()
+
+#' 
+#' ----
+#' 
+## ---- echo = FALSE-------------------------------------------------------
+interacciones <- datos %>% group_by(A,B) %>% 
+  summarise(media=mean(yield))
+
+ggplot(interacciones, 
+       aes(x=factor(A),y=media,color=factor(B),group=factor(B))) +
+  geom_point() +
+  geom_line() +
+  theme_classic()
+
+#' 
+#' ----
+#' 
+## ---- echo = TRUE, eval = FALSE------------------------------------------
+## efectosO <- efectos[order(abs(efectos))]
+## efectosO <- data.frame(variable=factor(names(efectosO),
+##                                        levels=names(efectosO)),
+##                        efecto=efectosO)
+## 
+## ggplot(efectosO,aes(x=variable,y=abs(efecto),fill=efecto>0)) +
+##   geom_bar(stat="identity",color="black")+
+##   coord_flip()+
+##   theme_classic()+
+##   theme(legend.position="none")
+
+#' 
+#' ----
+#' 
+## ---- echo = FALSE-------------------------------------------------------
+efectosO <- efectos[order(abs(efectos))]
+efectosO <- data.frame(variable=factor(names(efectosO),
+                                       levels=names(efectosO)),
+                       efecto=efectosO)
+
+ggplot(efectosO,aes(x=variable,y=abs(efecto),fill=efecto>0)) +
+  geom_bar(stat="identity",color="black")+
+  coord_flip()+
+  theme_classic()+
+  theme(legend.position="none")
+
+#' 
 #' 
 #' ## Estimación del error de los efectos
 #' 
-#' El error estándar de los efectos ($s_ef$) puede estimarse medinate distintas estrategias
+#' El error estándar de los efectos ($\ s_{ef}\ $) puede estimarse medinate distintas estrategias
 #' 
-#' - media de las desviación estándar de las repeticiones, dividida $\sqrt{2^{k-2} r}$,
-#' - desviación estandár de los residuales, dividido por $\sqrt {2^{k-2} r}$,
-#' - desviación estándar de los efectos menos significativos,
+#' - media de las desviación estándar de las repeticiones, dividida por $\ \sqrt{2^{k-2}·r} \ $ 
+#' - desviación estandár de los residuales, dividido por $\ \sqrt {2^{k-2}·r} \ $
+#' - desviación estándar de los efectos menos significativos o de las interacciones de mayor orden
 #' - 1,5 veces la mediana del valor absoluto de los efectos cuyo valor absoluto es inferior a 3,75 (2,5 · 1,5) veces la mediana del valor absoluto de todos los efectos
 #' 
 #' <p class="bibref">
-#' https://onlinecourses.science.psu.edu/stat503/node/36/
+#' https://onlinecourses.science.psu.edu/stat503/node/36/ <br />
 #' https://www.weibull.com/hotwire/issue113/relbasics113.htm 
 #' </p>
 #' 
@@ -660,9 +804,38 @@ var.test(datos$Resist ~ datos$Prop,
 #' 
 #' Un efecto es significativo si es mayor, en valor absoluto, que 
 #' 
-#' $$ //
-#' Ef_{c} = s_{ef} * t_{1-frac{\alpha}{2}, r 2^k - 2^k}$$
+#' $$ \\
+#' Ef_{c} = s_{ef} * t_{1-\frac{\alpha}{2}, r·2^k - 2^k}$$
 #' 
+#' ----
+#' 
+## ---- echo = TRUE--------------------------------------------------------
+(sef <- 1.5 * median(abs(efectos[abs(efectos) < 
+          3.75 * median(abs(efectos))])))
+(efc <- sef * qt(0.975, 24 - 8))
+
+#' 
+#' ----
+#'   
+## ---- echo = TRUE, eval = FALSE------------------------------------------
+## ggplot(efectosO,aes(x=variable,y=abs(efecto),fill=efecto>0)) +
+##   geom_bar(stat="identity",color="black")+
+##   geom_hline(yintercept=efc)+
+##   coord_flip()+
+##   theme_classic()+
+##   theme(legend.position="none")
+
+#' 
+#' ----
+#' 
+## ---- echo = FALSE-------------------------------------------------------
+ggplot(efectosO,aes(x=variable,y=abs(efecto),fill=efecto>0)) +
+  geom_bar(stat="identity",color="black")+
+  geom_hline(yintercept=efc)+
+  coord_flip()+
+  theme_classic()+
+  theme(legend.position="none")
+
 #' 
 #' ## Análisis de un diseño factorial - Regresión multilineal
 #' 
@@ -683,6 +856,19 @@ var.test(datos$Resist ~ datos$Prop,
 #' 
 #' También puede analizarse el experimento mediante el uso de regresiones con variables ficticias, pero los resultados suelen ser más difíciles de interpretar debido al uso de referencias distintas al promedio experimental.
 #' 
+#' ----
+#' 
+## ---- echo = TRUE--------------------------------------------------------
+ajuste <- lm(yield~(A+B+C)^3,datos)
+summary(ajuste)
+
+#' 
+#' ----
+#' 
+## ---- echo = TRUE--------------------------------------------------------
+ajuste <- lm(yield~A+B+C,datos)
+summary(ajuste)
+
 #' 
 #' ## Ejemplo
 #' 
@@ -696,19 +882,410 @@ var.test(datos$Resist ~ datos$Prop,
 #' Problema adaptado de Box, G. E., Hunter, J. S., & Hunter, W. G. (2005). *Statistics for experimenters: design, innovation, and discovery*. 2nd edition. New York: Wiley-Interscience.
 #' 
 #' 
-#' <!-- # Diseños factoriales fraccionados -->
+#' ## Diseños factoriales completos de más de 2 niveles por factor
 #' 
-#' <!-- # Investigación *ex-post-facto*: Análisis correlacional -->
+#' La misma lógica de construcción usada para diseños factoriales completos de 2 níveles puede para diseños en los que intervienen factores con más niveles. 
+#' 
+#' Sin embargo, el coste se incrementa de forma notable y el análisis suele ser algo más complejo.
+#' 
+#' Si las variables son cuantitativas, suelen evitarse y reservar el estudio de curvaturas para diseño experimental posterior, via diseños específicos o la adición de puntos centrales.
+#' 
+#' ----
+#' 
+#' ![](im007.png){style=width:60%;margin-left:-30%;}
+#' 
+#' <p class="bibref">https://www.itl.nist.gov/div898/handbook/pri/section3/pri339.htm</p>
+#' 
+#' 
+#' ## Diseños factoriales fraccionados
+#' 
+#' Habida cuenta que en muchos casos consideramos como menos relevantes las interacciones, podemos usar las combinaciones de niveles asociadas a una interacción (ortogonales a los factores) para añadir un nuevo factor y determinar su efecto >>> DISEÑOS FRACCIONADOS
+#' 
+#' $$ \\
+#' 2^{f-c}\\$$
+#' 
+#' *f*: factores, *c*: factores confundidos
+#' 
+#' 
+#' ## Diseños factoriales fraccionados - Matriz del diseño
+#' 
+#' Ejemplo: 2<sup>5-1</sup>
+#' 
+#' - 5 factores
+#' - 1 de los cuales confundido
+#' - 2<sup>4</sup> condiciones experimentales: 16 experimentos, si no hay repetición
+#' - E = ABCD
+#' 
+#' ----
+#' 
+#' ![](im008.png){style=width:80%;margin-left:-40%;}
+#' 
+#' 
+#' ## Diseños factoriales fraccionados - Relación de definición
+#' 
+#' Al incorporar un factor como confundido, se producen efectos que no pueden ser diferenciados.
+#' 
+#' **Relación de definición de un diseño fraccionado**: Corresponde al producto de factores que da lugar al vector de unidades
+#' 
+#' - Para 2<sup>5-1</sup> y E = ABCD, I = ABCDE
+#' - Para 2<sup>5-2</sup> y E = ABC y D = AB, I = ABD = ABCE = CDE
+#' - Para 2<sup>5-2</sup> y E = AB y D = AC, I = ABE = ACD = BCDE
+#' - Para 2<sup>7-4</sup> y E = AB, D = AC, F = BC, G = ABC, I = ABE = ACD = BCF = ABCG = BCDE = ACEF = ABDF = CEG = BDG = AFG
+#' 
+#' ----
+#' 
+#' <p>&nbsp;</p>
+#' 
+#' **Resolución de un diseño fraccionado**: Número de factores de la relación de definición del diseño más corta: III, IV, V…
+#' 
+#' <p>&nbsp;</p>
+#' 
+#' |     |                                                                                  |
+#' |:---:|:---------------------------------------------------------------------------------|
+#' | III |Factores principales confundidos con interacciones de dos factores                |
+#' | IV  |Factores principales confundidos con interacciones de tres factores. Las interacciones de dos factores estan confundidas entre sí.                                                 |
+#' |  V  |Factores principales confundidos son interacciones de cuatro factores. Las interacciones de dos factores pueden determinarse.                                                        |
+#' 
+#' 
+#' ## Diseños factoriales fraccionados - Principales diseños
+#' 
+#' <style>
+#' .container{
+#'     display: flex;
+#' }
+#' .col{
+#'     flex: 1;
+#' }
+#' </style>
+#' 
+#' <div class="container">
+#' 
+#' <div class="col">
+#' 
+#' <table BORDER=3 COLS=3 WIDTH="90%" style="font-size:20px;">
+#'   <tr>
+#'   <td>
+#'   <center><b>Number of Factors, *k*</b></center>
+#'   </td>
+#'   
+#'   <td>
+#'   <center><b>Design Specification</b></center>
+#'   </td>
+#'   
+#'   <td>
+#'   <center><b>Number of Runs, *N*</b></center>
+#'   </td>
+#'   </tr>
+#'   
+#'   <tr>
+#'   <td>
+#'   <center><b>3</b></center>
+#'   </td>
+#'   
+#'   <td>
+#'   <center><b><a href="https://www.itl.nist.gov/div898/handbook/pri/section3/eqns/2to3m1.txt">2<sub>III</sub><sup>3-1</sup></a></b></center>
+#'   </td>
+#'   
+#'   <td>
+#'   <center><b>4</b></center>
+#'   </td>
+#'   </tr>
+#'   
+#'   <tr>
+#'   <td>
+#'   <center><b>4</b></center>
+#'   </td>
+#'   
+#'   <td>
+#'   <center><b><a href="https://www.itl.nist.gov/div898/handbook/pri/section3/eqns/2to4m1.txt">2<sub>IV</sub><sup>4-1</sup></a></b></center>
+#'   </td>
+#'   
+#'   <td>
+#'   <center><b>8</b></center>
+#'   </td>
+#'   </tr>
+#'   
+#'   <tr>
+#'   <td>
+#'   <center><b>5</b></center>
+#'   </td>
+#'   
+#'   <td>
+#'   <center><b><a href="https://www.itl.nist.gov/div898/handbook/pri/section3/eqns/2to5m1.txt">2<sub>V</sub><sup>5-1</sup></a></b></center>
+#'   </td>
+#'   
+#'   <td>
+#'   <center><b>16</b></center>
+#'   </td>
+#'   </tr>
+#'   
+#'   <tr>
+#'   <td>
+#'   <center><b>5</b></center>
+#'   </td>
+#'   
+#'   <td>
+#'   <center><b><a href="https://www.itl.nist.gov/div898/handbook/pri/section3/eqns/2to5m2.txt">2<sub>III</sub><sup>5-2</sup></a></b></center>
+#'   </td>
+#'   
+#'   <td>
+#'   <center><b>8</b></center>
+#'   </td>
+#'   </tr>
+#'   
+#'   <tr>
+#'   <td>
+#'   <center><b>6</b></center>
+#'   </td>
+#'   
+#'   <td>
+#'   <center><b><a href="https://www.itl.nist.gov/div898/handbook/pri/section3/eqns/2to6m1.txt">2<sub>VI</sub><sup>6-1</sup></a></b></center>
+#'   </td>
+#'   
+#'   <td>
+#'   <center><b>32</b></center>
+#'   </td>
+#'   </tr>
+#'   
+#'   <tr>
+#'   <td>
+#'   <center><b>6</b></center>
+#'   </td>
+#'   
+#'   <td>
+#'   <center><b><a href="https://www.itl.nist.gov/div898/handbook/pri/section3/eqns/2to6m2.txt">2<sub>IV</sub><sup>6-2</sup></a></b></center>
+#'   </td>
+#'   
+#'   <td>
+#'   <center><b>16</b></center>
+#'   </td>
+#'   </tr>
+#'   
+#'   <tr>
+#'   <td>
+#'   <center><b>6</b></center>
+#'   </td>
+#'   
+#'   <td>
+#'   <center><b><a href="https://www.itl.nist.gov/div898/handbook/pri/section3/eqns/2to6m3.txt">2<sub>III</sub><sup>6-3</sup></a></b></center>
+#'   </td>
+#'   
+#'   <td>
+#'   <center><b>8</b></center>
+#'   </td>
+#'   </tr>
+#' </table>
+#' 
+#' </div>
+#' <div class="col">
+#' 
+#' <table BORDER=3 COLS=3 WIDTH="90%" style="font-size:20px;">
+#'   <tr>
+#'   <td>
+#'   <center><b>Number of Factors, *k*</b></center>
+#'   </td>
+#'   
+#'   <td>
+#'   <center><b>Design Specification</b></center>
+#'   </td>
+#'   
+#'   <td>
+#'   <center><b>Number of Runs, *N*</b></center>
+#'   </td>
+#'   </tr>
+#' 
+#'   <tr>
+#'   <td>
+#'   <center><b>7</b></center>
+#'   </td>
+#'   
+#'   <td>
+#'   <center><b><a href="https://www.itl.nist.gov/div898/handbook/pri/section3/eqns/2to7m1.txt">2<sub>VII</sub><sup>7-1</sup></a></b></center>
+#'   </td>
+#'   
+#'   <td>
+#'   <center><b>64</b></center>
+#'   </td>
+#'   </tr>
+#'   
+#'   <tr>
+#'   <td>
+#'   <center><b>7</b></center>
+#'   </td>
+#'   
+#'   <td>
+#'   <center><b><a href="https://www.itl.nist.gov/div898/handbook/pri/section3/eqns/2to7m2.txt">2<sub>IV</sub><sup>7-2</sup></a></b></center>
+#'   </td>
+#'   
+#'   <td>
+#'   <center><b>32</b></center>
+#'   </td>
+#'   </tr>
+#'   
+#'   <tr>
+#'   <td>
+#'   <center><b>7</b></center>
+#'   </td>
+#'   
+#'   <td>
+#'   <center><b><a href="https://www.itl.nist.gov/div898/handbook/pri/section3/eqns/2to7m3.txt">2<sub>IV</sub><sup>7-3</sup></a></b></center>
+#'   </td>
+#'   
+#'   <td>
+#'   <center><b>16</b></center>
+#'   </td>
+#'   </tr>
+#'   
+#'   <tr>
+#'   <td>
+#'   <center><b>7</b></center>
+#'   </td>
+#'   
+#'   <td>
+#'   <center><b><a href="https://www.itl.nist.gov/div898/handbook/pri/section3/eqns/2to7m4.txt">2<sub>III</sub><sup>7-4</sup></a></b></center>
+#'   </td>
+#'   
+#'   <td>
+#'   <center><b>8</b></center>
+#'   </td>
+#'   </tr>
+#'   
+#'   <tr>
+#'   <td>
+#'   <center><b>8</b></center>
+#'   </td>
+#'   
+#'   <td>
+#'   <center><b><a href="https://www.itl.nist.gov/div898/handbook/pri/section3/eqns/2to8m1.txt">2<sub>VIII</sub><sup>8-1</sup></a></b></center>
+#'   </td>
+#'   
+#'   <td>
+#'   <center><b>128</b></center>
+#'   </td>
+#'   </tr>
+#'   
+#'   <tr>
+#'   <td>
+#'   <center><b>8</b></center>
+#'   </td>
+#'   
+#'   <td>
+#'   <center><b><a href="https://www.itl.nist.gov/div898/handbook/pri/section3/eqns/2to8m2.txt">2<sub>V</sub><sup>8-2</sup></a></b></center>
+#'   </td>
+#'   
+#'   <td>
+#'   <center><b>64</b></center>
+#'   </td>
+#'   </tr>
+#'   
+#'   <tr>
+#'   <td>
+#'   <center><b>8</b></center>
+#'   </td>
+#'   
+#'   <td>
+#'   <center><b><a href="https://www.itl.nist.gov/div898/handbook/pri/section3/eqns/2to8m3.txt">2<sub>IV</sub><sup>8-3</sup></a></b></center>
+#'   </td>
+#'   
+#'   <td>
+#'   <center><b>32</b></center>
+#'   </td>
+#'   </tr>
+#'   
+#'   <tr>
+#'   <td>
+#'   <center><b>8</b></center>
+#'   </td>
+#'   
+#'   <td>
+#'   <center><b><a href="https://www.itl.nist.gov/div898/handbook/pri/section3/eqns/2to8m4.txt">2<sub>IV</sub><sup>8-4</sup></a></b></center>
+#'   </td>
+#'   
+#'   <td>
+#'   <center><b>16</b></center>
+#'   </td>
+#'   </tr>
+#' </table>
+#' 
+#' </div>
+#' </div>
+#' 
+#' <p class="bibref">https://www.itl.nist.gov/div898/handbook/pri/section3/pri3347.htm</p>
+#' 
+#' 
+#' ## Ejemplo
+#' 
+#' En un determinado proceso, se está estudiando el rendimiento de la reacción en función de los parámetros siguientes:
+#' 
+#' - A: velocidad de alimentación (10 o 15 L/min)
+#' - B: catalizador (1 o 2 %)
+#' - C: velocidad de agitación (100 o 120 rpm)
+#' - D: temperatura (140 o 180 ºC)
+#' - E: concentración del reactivo  (30 o 40 %)
+#' 
+#' Los valores de los distintos experimentos se encuentran en el archivo 'reactor.csv'.
+#' 
+#' Selecciona, de estos experimentos, los que corresponden al mínimo diseño que permitiría realizar el estudio, analizalo y compara los resultados con los que se obtienen con el diseño factorial completo.
+#' 
+#' Problema adaptado de Box, G. E., Hunter, J. S., & Hunter, W. G. (2005). *Statistics for experimenters: design, innovation, and discovery*. 2nd edition. New York: Wiley-Interscience.
+#' 
+#' 
+#' ## Diseños factoriales saturados
+#' 
+#' Son aquellos diseños factoriales fraccionados de resolución III construidos para la evaluación del mayor número posible de factores
+#' 
+#' - 2<sup>3-1</sup>  ⇒ 3 factores, 4 experimentos
+#' - 2<sup>7-4</sup>  ⇒ 7 factores, 8 experimentos
+#' - 2<sup>15-11</sup>  ⇒ 15 factores, 16 experimentos
+#' 
+#' 
+#' ## Diseños de Plackett-Burman
+#' 
+#' Consisten en diseños saturados (solo permiten evaluar efectos principales) con 4 *k* experimentos
+#' 
+#' - Se construyen a partir de columnas ortogonales
+#'     - Balanceadas
+#'     - Bloqueo de los demás factores
+#' - Permiten evaluar los efectos de de 4 *k* - 1 factores
+#' - Para números de experimentos que son potencias de 2, coinciden con los diseños factoriales fraccionados saturados
+#' 
+#' <p class="bibref">https://en.wikipedia.org/wiki/Plackett%E2%80%93Burman_design</p>
+#' 
+#' 
+#' ## Diseños factoriales fraccionados - Siguientes pasos
+#' 
+#' - Eliminar los factores cuyo efecto no es diferenciable del ruido estadístico
+#' - Desplegar (foldover) el diseño fraccionado ampliando el número de experimentos para resolver las confusiones
+#'     - En resolución III, imagen especular del diseño
+#'     - Cambiar signos en columna/factor
+#' - Otros diseños más específicos
+#' 
+#' <p class="bibref">https://www.itl.nist.gov/div898/handbook/pri/section3/pri338.htm</p>
+#' 
+#' 
+#' <!-- ## Diseños para superfícies de respuesta -->
+#' 
+#' 
+#' <!-- # Investigación *ex-post-facto* -->
 #' 
 #' 
 #' # Referencias
 #' 
-#' ##
+#' ## 
 #' 
-#' - MIL-STD-1629A. Procedures for performing a failure mode, effects and criticality analysis . http://www.barringer1.com/mil_files/MIL-STD-1629RevA.pdf
+#' - ARP9136. Aerospace Series - Root Cause Analysis and Problem Solving (9S Methodology)
+#' - Box, G. E., Hunter, J. S., & Hunter, W. G. (2005). *Statistics for experimenters: design, innovation, and discovery*. 2nd edition. New York: Wiley-Interscience.
 #' - IEC 60812. Analysis techniques for system reliability – Procedure for failure mode and effects analysis (FMEA)
+#' - MIL-STD-1629A. Procedures for performing a failure mode, effects and criticality analysis . http://www.barringer1.com/mil_files/MIL-STD-1629RevA.pdf
 #' - MIL-STD-882E. System Safety.
 #' https://www.system-safety.org/Documents/MIL-STD-882E.pdf
-#' -  ARP9136. Aerospace Series - Root Cause Analysis and Problem Solving (9S Methodology)
+#' - Montgomery, D. C. (2017). Design and analysis of experiments. John Wiley & Sons.
+#' 
+#' ----
+#' 
+#' - NIST/SEMATECH e-Handbook of Statistical Methods, http://www.itl.nist.gov/div898/handbook/, 5-dic-2018
+#' - Oehlert, G. W. (2010). A first course in design and analysis of experiments. https://conservancy.umn.edu/bitstream/handle/11299/168002/A%20First%20Course%20in%20Design%20and%20Analysis%20of%20Experiments_OehlertG_2010.pdf
+#' - The Pennsylvania State University. STAT 503. https://onlinecourses.science.psu.edu/stat503. 5-dic-2018
+#' - TIBCO Software Inc (2018). Design of Experiments: Science, Industrial DOE. http://www.statsoft.com/Textbook/Experimental-Design. 9-dic-2018
 #' 
 #' 
