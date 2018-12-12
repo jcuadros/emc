@@ -102,7 +102,7 @@ position:absolute;margin:0;top:20px;left:20px;max-width:200px;height:auto;" />
 - Establecer un equipo de trabajo.
 - Preguntarse el porqué hasta encontrar causas actuables (últimas).
 - Seguir varias causas si aparecen más de una.
-- Identificar actuaciones a los distintos niveles. Distribuir esfuerzos y costes en los distintos níveles.
+- Identificar actuaciones a los distintos niveles. Distribuir esfuerzos y costes en los distintos niveles.
 - **NUNCA** dejar como causas últimas errores individuales. Las causas siempre estan en los procesos.
 
 ----
@@ -884,7 +884,7 @@ Problema adaptado de Box, G. E., Hunter, J. S., & Hunter, W. G. (2005). *Statist
 
 ## Diseños factoriales completos de más de 2 niveles por factor
 
-La misma lógica de construcción usada para diseños factoriales completos de 2 níveles puede para diseños en los que intervienen factores con más niveles. 
+La misma lógica de construcción usada para diseños factoriales completos de 2 niveles puede para diseños en los que intervienen factores con más niveles. 
 
 Sin embargo, el coste se incrementa de forma notable y el análisis suele ser algo más complejo.
 
@@ -1223,6 +1223,10 @@ En un determinado proceso, se está estudiando el rendimiento de la reacción en
 - D: temperatura (140 o 180 ºC)
 - E: concentración del reactivo  (30 o 40 %)
 
+----
+
+<p>&nbsp;</p>
+
 Los valores de los distintos experimentos se encuentran en el archivo 'reactor.csv'.
 
 Selecciona, de estos experimentos, los que corresponden al mínimo diseño que permitiría realizar el estudio, analizalo y compara los resultados con los que se obtienen con el diseño factorial completo.
@@ -1248,6 +1252,7 @@ Consisten en diseños saturados (solo permiten evaluar efectos principales) con 
     - Bloqueo de los demás factores
 - Permiten evaluar los efectos de de 4 *k* - 1 factores
 - Para números de experimentos que son potencias de 2, coinciden con los diseños factoriales fraccionados saturados
+- En aquellos diseños que no son potencias de 2, las interacciones no se confunden directamente con un factor sino con una combinación lineal de los mismos.
 
 <p class="bibref">https://en.wikipedia.org/wiki/Plackett%E2%80%93Burman_design</p>
 
@@ -1263,10 +1268,96 @@ Consisten en diseños saturados (solo permiten evaluar efectos principales) con 
 <p class="bibref">https://www.itl.nist.gov/div898/handbook/pri/section3/pri338.htm</p>
 
 
-<!-- ## Diseños para superfícies de respuesta -->
+## Diseños para superfícies de respuesta
+
+- Adición de puntos centrales
+- Diseños para modelos cuadráticos
+    - Diseños centrales compuestos de Box-Wilson, https://www.itl.nist.gov/div898/handbook/pri/section3/pri3361.htm
+    - Diseños de Box-Behnken, https://www.itl.nist.gov/div898/handbook/pri/section3/pri3362.htm
+    
+    
+## Adición de puntos centrales
+
+Una recomendación habitual en los diseños factoriales (especialmente en los saturados) consiste en la adición de puntos centrales
+
+- Entre 3 y 7 puntos
+- Equiespaciados en la secuencia experimental. Si son 3, al principio, en el medio y al final.
+
+----
+
+Permiten
+
+- **Comprobar la estabilidad del proceso**. El resultado debe ser estable
+- **Comprobar la existencia de curvatura**. La media de los valores centrales debe coincidir con la media de los demás puntos
+- **Estimar el error de los efectos (en diseños saturados)**
 
 
-<!-- # Investigación *ex-post-facto* -->
+## Diseños centrales compuestos de Box-Wilson
+
+Permiten reutilizar los experimentos del diseño factorial completo.
+
+![](im009.png){style=width:80%;margin-left:-40%;}
+
+<span class="bibref">https://www.itl.nist.gov/div898/handbook/pri/section3/pri3361.htm</span>
+
+## Diseños de Box-Behnken
+
+Tienen un diseño independiente de los diseños factoriales completos.
+
+![](im010.png){style=width:50%;margin-left:-25%;}
+
+<span class="bibref">https://www.itl.nist.gov/div898/handbook/pri/section3/pri3362.htm</span>
+
+
+# Investigación *ex-post-facto*
+
+## Situación
+
+Corresponde a aquellas investigaciones en las que no es posible modificar las variables influyentes. Parte de valores recogidos de distintas variables sin que se haya podido establecer un control experimental a través de un diseño concreto.
+
+Los estudios se hacen entonces a partir de los datos ya disponibles.
+
+
+## Consideraciones 
+
+Estos análisis no permiten inferir causalidad ya que no hay una intervención experimental controlada.
+
+Los análisis correlacionales se basan en observar las relaciones existentes entre variables a partir de
+
+- Diagramas de dispersión (*small multiples*)
+- Coeficientes de correlación
+- Modelos de regresión
+- Técnicas de aprendizaje automático (*machine learning*)
+
+## Diagramas de dispersión (small multiples)
+
+![](im011.png){style=width:90%;margin-left:-45%;}
+
+<span class="bibref">http://dataremixed.com/2012/10/interactive-visualizations-or-small-multiples/</span>
+
+
+## Coeficientes de correlación
+
+![](im012.png){style=width:50%;margin-left:-25%;}
+
+<span class="bibref">http://www.sthda.com/english/wiki/visualize-correlation-matrix-using-correlogram</span>
+
+
+
+## Modelos de regresión
+
+Ya hemos visto durante el curso algunos usos de modelos de regresión (especialmente lineal). Las mismas ideas se aplican en este caso.
+
+
+## Técnicas de aprendizaje automático
+
+El objetivo general de las técnicas de *machine learning* es poder predecir. 
+
+Las técnicas básicas suelen agruparse en
+
+- **Clasificación**. Establecer la pertenencia de un individuo a un grupo
+- **Regresión**. Determinar el valor de una propiedad cuantitativa
+- **Clustering**. Agrupar en grupos significativos
 
 
 # Referencias
