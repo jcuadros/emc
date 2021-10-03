@@ -1,7 +1,7 @@
 # Enseñanza del control estadístico de procesos -- Materiales docentes
 
 Este sitio incluye presentaciones y materiales creados para la enseñanza del control estadístico de proceso en R.
-Puede ser consultado en [https://jcuadros.github.com/emc](https://jcuadros.github.com/emc).
+Puede ser consultado en [https://jcuadros.github.io/emc/](https://jcuadros.github.io/emc/).
 
 Incluye los siguientes apartados:
 
