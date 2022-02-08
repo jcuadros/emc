@@ -14,11 +14,11 @@
 #'       background_transition: 0
 #' ---
 #' 
-## ----setup, include=FALSE------------------------------------------------
+## ----setup, include=FALSE--------------------------------------------------
 knitr::opts_chunk$set(echo = FALSE, dev="svg")
 
 #' 
-## ----include=FALSE-------------------------------------------------------
+## ----include=FALSE---------------------------------------------------------
 if(!require("tidyverse")) {
   install.packages("tidyverse", repos="https://cloud.r-project.org/",
          quiet=TRUE, type="binary")
@@ -218,7 +218,7 @@ if(!require("kableExtra")) {
 #' <p>&nbsp;</p>
 #' 
 #' 
-## ---- echo = FALSE, results = 'asis'-------------------------------------
+## ---- echo = FALSE, results = 'asis'---------------------------------------
 df <- data.frame(c("QUÉ", "CÓMO", "MÉTODO", "DÓNDE", "QUIÉN", "CUÁNDO" ),
                  c("Satisfacción de clientes externos e internos", "Utilización eficiente de reursos", "Mejora contínua", "Aplicación de todos los procesos y actividades", "Participación de todas las personas de la empresa", "Siempre"))
 tb <- kable_styling(kable(df))
@@ -354,7 +354,7 @@ gsub("<thead>.*</thead>", "", tb)
 #' <p>&nbsp;</p>
 #' <p>&nbsp;</p>
 #' 
-## ---- echo = FALSE, results = 'asis'-------------------------------------
+## ---- echo = FALSE, results = 'asis'---------------------------------------
 df <- data.frame(c("YELLOW BELT", "GREEN BELT", "BLACK BELT"),
                  c("Miembros de proyecto Six Sigma. Implementa y da soporte en los proyectos.",
                    "Apoya en la recogida y análisis de datos en proyecto Six Sigma. Puede liderar pequeños proyectos.",

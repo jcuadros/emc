@@ -14,11 +14,11 @@
 #'       background_transition: 0
 #' ---
 #' 
-## ----setup, include=FALSE------------------------------------------------
+## ----setup, include=FALSE--------------------------------------------------
 knitr::opts_chunk$set(echo = FALSE, dev="svg")
 
 #' 
-## ----include=FALSE-------------------------------------------------------
+## ----include=FALSE---------------------------------------------------------
 if(!require("tidyverse")) {
   install.packages("tidyverse", repos="https://cloud.r-project.org/",
          quiet=TRUE, type="binary")
@@ -27,7 +27,7 @@ if(!require("tidyverse")) {
 if(!require("nortest")) {
   install.packages("nortest", repos="https://cloud.r-project.org/",
          quiet=TRUE, type="binary")
-  library("normtest")
+  library("nortest")
 }
 if(!require("kableExtra")) {
   install.packages("kableExtra", repos="https://cloud.r-project.org/",
@@ -155,7 +155,7 @@ if(!require("kableExtra")) {
 #' 
 #' Determina si los datos que figuran en https://www.itl.nist.gov/div898/handbook/datasets/MONITOR-6_5_2.DAT estan normalmente distribuidos.
 #' 
-## ---- echo = FALSE-------------------------------------------------------
+## ---- echo = FALSE---------------------------------------------------------
 df <- read.table("https://www.itl.nist.gov/div898/handbook/datasets/MONITOR-6_5_2.DAT",
                  skip=25)
 datos <- df[,1]
@@ -165,27 +165,26 @@ kable_styling(kable(matrix(datos,ncol=6)), font_size=20)
 #' 
 #' ----
 #' 
-## ---- echo = TRUE--------------------------------------------------------
+## ---- echo = TRUE----------------------------------------------------------
 shapiro.test(datos)
 
 #' 
 #' ----
 #' 
-## ---- echo = TRUE, eval = FALSE------------------------------------------
+## ---- echo = TRUE, eval = FALSE--------------------------------------------
 ## if(!require("nortest")) {
 ##   install.packages("nortest", repos="https://cloud.r-project.org/",
 ##          quiet=TRUE, type="binary")
-##   library("normtest")
+##   library("nortest")
 ## }
 ## 
-
-## ---- echo = TRUE--------------------------------------------------------
-ad.test(datos)
+## ``` {r, echo = TRUE}
+## ad.test(datos)
 
 #' 
 #' ----
 #' 
-## ---- echo = TRUE--------------------------------------------------------
+## ---- echo = TRUE----------------------------------------------------------
 qqnorm(datos)
 qqline(datos)
 
@@ -293,7 +292,7 @@ qqline(datos)
 #' 
 #' <p>&nbsp;</p>
 #' 
-## ---- echo = FALSE, results = 'asis'-------------------------------------
+## ---- echo = FALSE, results = 'asis'---------------------------------------
 datos <- read.table("perfume.txt")
 colnames(datos) <- c("x")
 
@@ -434,7 +433,7 @@ kable_styling(kable(matrix(datos[,1],ncol=6)), font_size=22)
 #' 
 #' Transforma los datos de turbidez que siguen en un conjunto de datos que pueda provenir de una variable normalmente distribuida (adaptado de http://rcompanion.org/handbook/I_12.html)
 #' 
-## ---- echo = TRUE--------------------------------------------------------
+## ---- echo = TRUE----------------------------------------------------------
 Turbidity <- c(1.0, 1.2, 1.1, 1.1, 2.4,
                2.2, 2.6, 4.1, 5.0, 10.0,
                4.0, 4.1, 4.2, 4.1, 5.1,
@@ -445,7 +444,7 @@ Turbidity <- c(1.0, 1.2, 1.1, 1.1, 2.4,
 #' 
 #' ----
 #' 
-## ---- echo=TRUE, eval=FALSE----------------------------------------------
+## ---- echo=TRUE, eval=FALSE------------------------------------------------
 ## ggplot(NULL, aes(x=Turbidity)) +
 ##   geom_histogram(binwidth = 2,fill="lightgrey",color="black") +
 ##   theme_classic()
@@ -457,7 +456,7 @@ Turbidity <- c(1.0, 1.2, 1.1, 1.1, 2.4,
 #' 
 #' ----
 #' 
-## ---- echo=FALSE---------------------------------------------------------
+## ---- echo=FALSE-----------------------------------------------------------
 ggplot(NULL, aes(x=Turbidity)) +
   geom_histogram(binwidth = 2,fill="lightgrey",color="black") +
   theme_classic()
@@ -465,7 +464,7 @@ ggplot(NULL, aes(x=Turbidity)) +
 #' 
 #' ----
 #' 
-## ---- echo=FALSE---------------------------------------------------------
+## ---- echo=FALSE-----------------------------------------------------------
 ggplot(NULL, aes(sample=Turbidity)) +
   geom_qq() + geom_qq_line() +
   theme_classic()
@@ -473,14 +472,14 @@ ggplot(NULL, aes(sample=Turbidity)) +
 #' 
 #' ----
 #' 
-## ---- echo=TRUE----------------------------------------------------------
+## ---- echo=TRUE------------------------------------------------------------
 shapiro.test(Turbidity)
 ad.test(Turbidity)
 
 #' 
 #' ----
 #' 
-## ---- echo=TRUE, eval=FALSE----------------------------------------------
+## ---- echo=TRUE, eval=FALSE------------------------------------------------
 ## if(!require("MASS")) {
 ##   install.packages("MASS", repos="https://cloud.r-project.org/",
 ##          quiet=TRUE, type="binary")
@@ -488,7 +487,7 @@ ad.test(Turbidity)
 ## }
 
 #' 
-## ---- include=FALSE------------------------------------------------------
+## ---- include=FALSE--------------------------------------------------------
 if(!require("MASS")) {
   install.packages("MASS", repos="https://cloud.r-project.org/",
          quiet=TRUE, type="binary")
@@ -496,7 +495,7 @@ if(!require("MASS")) {
 }
 
 #' 
-## ---- echo = TRUE, eval = FALSE------------------------------------------
+## ---- echo = TRUE, eval = FALSE--------------------------------------------
 ## Box <- boxcox(Turbidity ~ 1,
 ##              lambda = seq(-3,3,0.01)
 ##              )
@@ -504,7 +503,7 @@ if(!require("MASS")) {
 #' 
 #' ----
 #' 
-## ---- echo = FALSE-------------------------------------------------------
+## ---- echo = FALSE---------------------------------------------------------
 Box <- boxcox(Turbidity ~ 1,              
              lambda = seq(-3,3,0.01)      
              )
@@ -512,7 +511,7 @@ Box <- boxcox(Turbidity ~ 1,
 #' 
 #' ----
 #' 
-## ---- echo = TRUE--------------------------------------------------------
+## ---- echo = TRUE----------------------------------------------------------
 Cox <- data.frame(Box$x, Box$y)
 Cox2 <- Cox[with(Cox, order(-Cox$Box.y)),] 
 Cox2[1,]                                  
@@ -527,7 +526,7 @@ if(lambda == 0) {
 #' 
 #' ----
 #' 
-## ---- echo=TRUE, eval=FALSE----------------------------------------------
+## ---- echo=TRUE, eval=FALSE------------------------------------------------
 ## ggplot(NULL, aes(x=T_box)) +
 ##   geom_histogram(binwidth = 2,fill="lightgrey",color="black") +
 ##   theme_classic()
@@ -539,7 +538,7 @@ if(lambda == 0) {
 #' 
 #' ----
 #' 
-## ---- echo=FALSE---------------------------------------------------------
+## ---- echo=FALSE-----------------------------------------------------------
 ggplot(NULL, aes(x=T_box)) +
   geom_histogram(binwidth = .2,fill="lightgrey",color="black") +
   theme_classic()
@@ -547,7 +546,7 @@ ggplot(NULL, aes(x=T_box)) +
 #' 
 #' ----
 #' 
-## ---- echo=FALSE---------------------------------------------------------
+## ---- echo=FALSE-----------------------------------------------------------
 ggplot(NULL, aes(sample=T_box)) +
   geom_qq() + geom_qq_line() +
   theme_classic()
@@ -555,14 +554,14 @@ ggplot(NULL, aes(sample=T_box)) +
 #' 
 #' ----
 #' 
-## ---- echo=TRUE----------------------------------------------------------
+## ---- echo=TRUE------------------------------------------------------------
 shapiro.test(T_box)
 ad.test(T_box)
 
 #' 
 #' ## Transformada de Johnson
 #' 
-## ---- echo=TRUE, eval=FALSE----------------------------------------------
+## ---- echo=TRUE, eval=FALSE------------------------------------------------
 ## if(!require("Johnson")) {
 ##   install.packages("Johnson", repos="https://cloud.r-project.org/",
 ##          quiet=TRUE, type="binary")
@@ -570,7 +569,7 @@ ad.test(T_box)
 ## }
 
 #' 
-## ---- include=FALSE------------------------------------------------------
+## ---- include=FALSE--------------------------------------------------------
 if(!require("Johnson")) {
   install.packages("Johnson", repos="https://cloud.r-project.org/",
          quiet=TRUE, type="binary")
@@ -578,14 +577,14 @@ if(!require("Johnson")) {
 }
 
 #' 
-## ---- echo = TRUE--------------------------------------------------------
+## ---- echo = TRUE----------------------------------------------------------
 John <- RE.Johnson(Turbidity)
 T_johnson <- John$transformed
 
 #' 
 #' ----
 #' 
-## ---- echo=TRUE, eval=FALSE----------------------------------------------
+## ---- echo=TRUE, eval=FALSE------------------------------------------------
 ## ggplot(NULL, aes(x=T_johnson)) +
 ##   geom_histogram(binwidth = 2,fill="lightgrey",color="black") +
 ##   theme_classic()
@@ -597,7 +596,7 @@ T_johnson <- John$transformed
 #' 
 #' ----
 #' 
-## ---- echo=FALSE---------------------------------------------------------
+## ---- echo=FALSE-----------------------------------------------------------
 ggplot(NULL, aes(x=T_johnson)) +
   geom_histogram(binwidth = .2,fill="lightgrey",color="black") +
   theme_classic()
@@ -605,7 +604,7 @@ ggplot(NULL, aes(x=T_johnson)) +
 #' 
 #' ----
 #' 
-## ---- echo=FALSE---------------------------------------------------------
+## ---- echo=FALSE-----------------------------------------------------------
 ggplot(NULL, aes(sample=T_johnson)) +
   geom_qq() + geom_qq_line() +
   theme_classic()
@@ -613,7 +612,7 @@ ggplot(NULL, aes(sample=T_johnson)) +
 #' 
 #' ----
 #' 
-## ---- echo=TRUE----------------------------------------------------------
+## ---- echo=TRUE------------------------------------------------------------
 shapiro.test(T_johnson)
 ad.test(T_johnson)
 

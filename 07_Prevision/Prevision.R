@@ -16,11 +16,11 @@
 #'   chunk_output_type: console
 #' ---
 #' 
-## ----setup, include=FALSE------------------------------------------------
+## ----setup, include=FALSE--------------------------------------------------
 knitr::opts_chunk$set(echo = FALSE, dev="svg")
 
 #' 
-## ----include=FALSE-------------------------------------------------------
+## ----include=FALSE---------------------------------------------------------
 if(!require("tidyverse")) {
   install.packages("tidyverse", repos="https://cloud.r-project.org/",
          quiet=TRUE, type="binary")
@@ -114,36 +114,36 @@ if(!require("kableExtra")) {
 #' 
 #' ### Uso de la función ```lm```
 #' 
-## ---- echo = FALSE-------------------------------------------------------
+## ---- echo = FALSE---------------------------------------------------------
 set.seed(123)
 
 #' 
-## ---- echo = TRUE--------------------------------------------------------
+## ---- echo = TRUE----------------------------------------------------------
 x <- seq(1, 2, length.out = 11)
 y <- round(3 * x + 5 + rnorm(11) / 10, 3)
 datos <- data.frame(x = x, y = y)
 
 #' 
-## ---- echo = FALSE-------------------------------------------------------
+## ---- echo = FALSE---------------------------------------------------------
 kable_styling(kable(datos), font_size=24)
 
 #' 
 #' ----
 #' 
-## ---- echo = FALSE-------------------------------------------------------
+## ---- echo = FALSE---------------------------------------------------------
 ggplot(datos, aes(x = x, y = y)) + geom_point() + theme_classic()
 
 #' 
 #' ----
 #' 
-## ---- eval = FALSE, echo = TRUE------------------------------------------
+## ---- eval = FALSE, echo = TRUE--------------------------------------------
 ## ajuste <- lm(y ~ x, datos)
 ## summary(ajuste)
 
 #' 
 #' <div style="font-size:24pt;">
 #' 
-## ---- echo = FALSE-------------------------------------------------------
+## ---- echo = FALSE---------------------------------------------------------
 ajuste <- lm(y ~ x, datos)
 summary(ajuste)
 
@@ -152,17 +152,17 @@ summary(ajuste)
 #' 
 #' ----
 #' 
-## ---- echo = TRUE--------------------------------------------------------
+## ---- echo = TRUE----------------------------------------------------------
 datos$yc <- ajuste$fitted
 
 #' 
-## ---- echo = FALSE-------------------------------------------------------
+## ---- echo = FALSE---------------------------------------------------------
 kable_styling(kable(datos), font_size=24)
 
 #' 
 #' ----
 #' 
-## ---- eval = FALSE, echo = TRUE------------------------------------------
+## ---- eval = FALSE, echo = TRUE--------------------------------------------
 ## ggplot(datos, aes(x = x, y = y)) +
 ##   geom_point() +
 ##   geom_line(aes(y = yc)) +
@@ -171,7 +171,7 @@ kable_styling(kable(datos), font_size=24)
 #' 
 #' ----
 #' 
-## ---- echo = FALSE-------------------------------------------------------
+## ---- echo = FALSE---------------------------------------------------------
 ggplot(datos, aes(x = x, y = y)) +
   geom_point() +
   geom_line(aes(y = yc)) + 
@@ -202,7 +202,7 @@ ggplot(datos, aes(x = x, y = y)) +
 #' 
 #' ----
 #' 
-## ---- echo = FALSE-------------------------------------------------------
+## ---- echo = FALSE---------------------------------------------------------
 ggplot(datos, aes(x = x, y = y)) +
   geom_point() +
   geom_line(aes(y = yc)) + 
@@ -211,13 +211,13 @@ ggplot(datos, aes(x = x, y = y)) +
 #' 
 #' ----
 #' 
-## ---- eval = FALSE, echo = TRUE------------------------------------------
+## ---- eval = FALSE, echo = TRUE--------------------------------------------
 ## summary(ajuste)
 
 #' 
 #' <div style="font-size:24pt;">
 #' 
-## ---- echo = FALSE-------------------------------------------------------
+## ---- echo = FALSE---------------------------------------------------------
 summary(ajuste)
 
 #' 
@@ -225,25 +225,25 @@ summary(ajuste)
 #' 
 #' ----
 #' 
-## ---- echo = TRUE, eval = FALSE------------------------------------------
+## ---- echo = TRUE, eval = FALSE--------------------------------------------
 ## plot(ajuste, which=1:2)
 
 #' 
 #' ----
 #' 
-## ---- echo = FALSE-------------------------------------------------------
+## ---- echo = FALSE---------------------------------------------------------
 plot(ajuste, which=1)
 
 #' 
 #' ----
 #' 
-## ---- echo = FALSE-------------------------------------------------------
+## ---- echo = FALSE---------------------------------------------------------
 plot(ajuste, which=2)
 
 #' 
 #' ----
 #' 
-## ---- echo = TRUE--------------------------------------------------------
+## ---- echo = TRUE----------------------------------------------------------
 shapiro.test(ajuste$residuals)
 
 #' 
@@ -251,7 +251,7 @@ shapiro.test(ajuste$residuals)
 #' 
 #' Si el modelo es correcto (y solo en este caso), este puede usarse para estimar valores de la variable dependiente.
 #' 
-## ---- echo = TRUE--------------------------------------------------------
+## ---- echo = TRUE----------------------------------------------------------
 predict(ajuste,data.frame(x = c(1.12,1.23)))
 
 #' 
@@ -261,13 +261,13 @@ predict(ajuste,data.frame(x = c(1.12,1.23)))
 #' 
 #' Si x es 1,12, la estimación del promedio es
 #' 
-## ---- echo = TRUE--------------------------------------------------------
+## ---- echo = TRUE----------------------------------------------------------
 predict(ajuste,data.frame(x = c(1.12)), interval="confidence")
 
 #' 
 #' y la estimación para un nuevo dato es
 #' 
-## ---- echo = TRUE--------------------------------------------------------
+## ---- echo = TRUE----------------------------------------------------------
 predict(ajuste,data.frame(x = c(1.12)), interval="prediction")
 
 #' 
@@ -320,7 +320,7 @@ predict(ajuste,data.frame(x = c(1.12)), interval="prediction")
 #' Sean las ventas de un determinado producto entre enero de 2013 y mediados de julio de 2016 las que figuran en el archivo "ventas.csv", ¿cuál seria una previsión razonable de las ventas de julio y agosto de 2016?
 #' 
 #' 
-## ---- echo = FALSE, results = 'asis'-------------------------------------
+## ---- echo = FALSE, results = 'asis'---------------------------------------
 datos <- read.table("ventas.csv", header=TRUE, dec=",",sep=";")
 kable_styling(kable(head(datos)), font_size=24)
 
@@ -329,7 +329,7 @@ kable_styling(kable(head(datos)), font_size=24)
 #' 
 #' ### Visualización de los datos
 #' 
-## ---- echo = TRUE, eval = FALSE------------------------------------------
+## ---- echo = TRUE, eval = FALSE--------------------------------------------
 ## datos$fecha <- paste(datos$ano,
 ##                      formatC(datos$mes, width=2,
 ##                              format="d", flag="0"),
@@ -341,7 +341,7 @@ kable_styling(kable(head(datos)), font_size=24)
 #' 
 #' ----
 #' 
-## ---- echo = FALSE-------------------------------------------------------
+## ---- echo = FALSE---------------------------------------------------------
 datos$fecha <- paste(datos$ano,
                      formatC(datos$mes, width=2,
                              format="d", flag="0"),
@@ -362,7 +362,7 @@ ggplot(datos,aes(x=fecha,y=ventas,group=1)) + geom_line() +
 #' 
 #' ## Ajuste de una constante
 #' 
-## ---- echo = TRUE, eval = FALSE------------------------------------------
+## ---- echo = TRUE, eval = FALSE--------------------------------------------
 ## datosAj <- datos[1:42,]
 ## datosAj$i <- 1:42
 ## datosAj <- rbind(datosAj,
@@ -380,7 +380,7 @@ ggplot(datos,aes(x=fecha,y=ventas,group=1)) + geom_line() +
 #' 
 #' ----
 #' 
-## ---- echo = TRUE, eval = FALSE------------------------------------------
+## ---- echo = TRUE, eval = FALSE--------------------------------------------
 ## ggplot(datosAj,aes(x=fecha,y=ventas,group=1)) + geom_line() +
 ##   geom_line(aes(y=fit), col="green")+
 ##   geom_ribbon(aes(ymin=lwr, ymax=upr), fill="green", alpha=0.05)+
@@ -391,7 +391,7 @@ ggplot(datos,aes(x=fecha,y=ventas,group=1)) + geom_line() +
 #' 
 #' ----
 #' 
-## ---- echo = FALSE, warning = FALSE--------------------------------------
+## ---- echo = FALSE, warning = FALSE----------------------------------------
 datosAj <- datos[1:42,]
 datosAj$i <- 1:42
 datosAj <- rbind(datosAj,
@@ -416,7 +416,7 @@ ggplot(datosAj,aes(x=fecha,y=ventas,group=1)) + geom_line() +
 #' 
 #' ----
 #' 
-## ---- echo = TRUE--------------------------------------------------------
+## ---- echo = TRUE----------------------------------------------------------
 
 print(datosAj[43:44,c(4,6:8)])
 
@@ -424,7 +424,7 @@ print(datosAj[43:44,c(4,6:8)])
 #' 
 #' ## Ajuste de una recta
 #' 
-## ---- echo = TRUE, eval = FALSE------------------------------------------
+## ---- echo = TRUE, eval = FALSE--------------------------------------------
 ## datosAj <- datos[1:42,]
 ## datosAj$i <- 1:42
 ## datosAj <- rbind(datosAj,
@@ -442,7 +442,7 @@ print(datosAj[43:44,c(4,6:8)])
 #' 
 #' ----
 #' 
-## ---- echo = TRUE, eval = FALSE------------------------------------------
+## ---- echo = TRUE, eval = FALSE--------------------------------------------
 ## ggplot(datosAj,aes(x=fecha,y=ventas,group=1)) + geom_line() +
 ##   geom_line(aes(y=fit), col="green")+
 ##   geom_ribbon(aes(ymin=lwr, ymax=upr), fill="green", alpha=0.05)+
@@ -453,7 +453,7 @@ print(datosAj[43:44,c(4,6:8)])
 #' 
 #' ----
 #' 
-## ---- echo = FALSE, warning = FALSE--------------------------------------
+## ---- echo = FALSE, warning = FALSE----------------------------------------
 datosAj <- datos[1:42,]
 datosAj$i <- 1:42
 datosAj <- rbind(datosAj,
@@ -478,7 +478,7 @@ ggplot(datosAj,aes(x=fecha,y=ventas,group=1)) + geom_line() +
 #' 
 #' ----
 #' 
-## ---- echo = TRUE--------------------------------------------------------
+## ---- echo = TRUE----------------------------------------------------------
 
 print(datosAj[43:44,c(4,6:8)])
 
@@ -506,7 +506,7 @@ print(datosAj[43:44,c(4,6:8)])
 #' 
 #' ## Ajuste de una recta más una periodicidad anual (por meses)
 #' 
-## ---- echo = TRUE, eval = FALSE------------------------------------------
+## ---- echo = TRUE, eval = FALSE--------------------------------------------
 ## datosAj <- datos[1:42,]
 ## datosAj$i <- 1:42
 ## datosAj <- rbind(datosAj,
@@ -525,7 +525,7 @@ print(datosAj[43:44,c(4,6:8)])
 #' 
 #' ----
 #' 
-## ---- echo = TRUE, eval = FALSE------------------------------------------
+## ---- echo = TRUE, eval = FALSE--------------------------------------------
 ## ggplot(datosAj,aes(x=fecha,y=ventas,group=1)) + geom_line() +
 ##   geom_line(aes(y=fit), col="green")+
 ##   geom_ribbon(aes(ymin=lwr, ymax=upr), fill="green", alpha=0.05)+
@@ -536,7 +536,7 @@ print(datosAj[43:44,c(4,6:8)])
 #' 
 #' ----
 #' 
-## ---- echo = FALSE, warning = FALSE--------------------------------------
+## ---- echo = FALSE, warning = FALSE----------------------------------------
 datosAj <- datos[1:42,]
 datosAj$i <- 1:42
 datosAj <- rbind(datosAj,
@@ -562,7 +562,7 @@ ggplot(datosAj,aes(x=fecha,y=ventas,group=1)) + geom_line() +
 #' 
 #' ----
 #' 
-## ---- echo = TRUE--------------------------------------------------------
+## ---- echo = TRUE----------------------------------------------------------
 
 print(datosAj[43:44,c(4,6:8)])
 
@@ -572,33 +572,33 @@ print(datosAj[43:44,c(4,6:8)])
 #' 
 #' ### Comprobación del ajuste
 #' 
-## ---- echo = TRUE--------------------------------------------------------
+## ---- echo = TRUE----------------------------------------------------------
 summary(ajuste)
 
 #' 
 #' ----
 #' 
-## ---- echo = TRUE, eval = FALSE------------------------------------------
+## ---- echo = TRUE, eval = FALSE--------------------------------------------
 ## plot(ajuste, which = 1:2)
 
 #' 
 #' 
 #' ----
 #' 
-## ---- echo = FALSE-------------------------------------------------------
+## ---- echo = FALSE---------------------------------------------------------
 plot(ajuste, which = 1)
 
 #' 
 #' 
 #' ----
 #' 
-## ---- echo = FALSE-------------------------------------------------------
+## ---- echo = FALSE---------------------------------------------------------
 plot(ajuste, which = 2)
 
 #' 
 #' ----
 #' 
-## ---- echo = TRUE--------------------------------------------------------
+## ---- echo = TRUE----------------------------------------------------------
 shapiro.test(ajuste$residuals)
 
 #' 
@@ -633,7 +633,7 @@ shapiro.test(ajuste$residuals)
 #' Consiste en pronosticar el siguiente valor de la serie temporal como igual al último valor disponible en la misma más un término dependiente de la variación entre los dos valores anteriores.
 #' 
 #' $$
-#' \\ \hat y_{n+1} = y_n + k (y_n - y_{n+1})
+#' \\ \hat y_{n+1} = y_n + k (y_n - y_{n-1})
 #' $$
 #' 
 #' Si *k* vale 1, consiste en el ajuste de una recta a los dos datos anteriores.

@@ -27,7 +27,7 @@ if(!require("tidyverse")) {
 if(!require("nortest")) {
   install.packages("nortest", repos="https://cloud.r-project.org/",
          quiet=TRUE, type="binary")
-  library("normtest")
+  library("nortest")
 }
 if(!require("kableExtra")) {
   install.packages("kableExtra", repos="https://cloud.r-project.org/",
@@ -175,7 +175,7 @@ shapiro.test(datos)
 if(!require("nortest")) {
   install.packages("nortest", repos="https://cloud.r-project.org/",
          quiet=TRUE, type="binary")
-  library("normtest")
+  library("nortest")
 }
 
 ``` {r, echo = TRUE}

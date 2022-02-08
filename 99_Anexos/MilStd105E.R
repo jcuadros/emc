@@ -16,11 +16,11 @@
 #'   chunk_output_type: console
 #' ---
 #' 
-## ----setup, include=FALSE------------------------------------------------
+## ----setup, include=FALSE--------------------------------------------------
 knitr::opts_chunk$set(echo = FALSE, dev="svg")
 
 #' 
-## ---- include=FALSE------------------------------------------------------
+## ---- include=FALSE--------------------------------------------------------
 if(!require("tidyverse")) {
   install.packages("tidyverse")
   library("tidyverse")
@@ -46,19 +46,19 @@ if(!require("kableExtra")) {
 #' 
 #' ## Tabla 1. Código del tamaño de muestra {.smaller}
 #' 
-## ---- echo = FALSE, results = 'asis'-------------------------------------
+## ---- echo = FALSE, results = 'asis'---------------------------------------
 df105t1 <- read.table(file="105E_tab1.txt", sep=";", header=TRUE, quote="")
 knitr::kable(df105t1)
 
 #' 
 #' ## Tabla 2. M. simple >> ins. normal {.smaller}
 #' 
-## ---- include = FALSE----------------------------------------------------
+## ---- include = FALSE------------------------------------------------------
 df105t2 <- read.table(file="105E_tab2a.txt", sep=";", header=TRUE, quote="")
 df105t2ls <- read.table(file="105E_tab2a_ls.txt", sep=";", header=TRUE, quote="")
 
 #' 
-## ---- echo = FALSE, results = 'asis'-------------------------------------
+## ---- echo = FALSE, results = 'asis'---------------------------------------
 df105t2r <- inner_join(df105t2, df105t2ls, by = "Letter")
 df105t2r <- df105t2r %>% mutate(AcRe=ifelse(LetterSize < Size, "\U21D3",
                          ifelse(LetterSize > Size, "\U21D1",
@@ -73,7 +73,7 @@ kable_styling(kable(df105t2p), font_size=16)
 #' 
 #' ## Tabla 2. M. simple >> ins. normal {.smaller}
 #' 
-## ---- echo = FALSE, results = 'asis'-------------------------------------
+## ---- echo = FALSE, results = 'asis'---------------------------------------
 df105t2p <- df105t2r %>%  filter(AQL > 0.65 & AQL <= 25) %>%
   dplyr::select(-Size,-Ac,-Re) %>%  
   rename(Size=LetterSize) %>%
@@ -83,7 +83,7 @@ kable_styling(kable(df105t2p), font_size=16)
 #' 
 #' ## Tabla 2. M. simple >> ins. normal {.smaller}
 #' 
-## ---- echo = FALSE, results = 'asis'-------------------------------------
+## ---- echo = FALSE, results = 'asis'---------------------------------------
 df105t2p <- df105t2r %>%  filter(AQL > 25) %>%
   dplyr::select(-Size,-Ac,-Re) %>%  
   rename(Size=LetterSize) %>%
@@ -94,12 +94,12 @@ kable_styling(kable(df105t2p), font_size=16)
 #' 
 #' ## Tabla 2. M. simple >> ins. estricta {.smaller}
 #' 
-## ---- include = FALSE----------------------------------------------------
+## ---- include = FALSE------------------------------------------------------
 df105t2 <- read.table(file="105E_tab2b.txt", sep=";", header=TRUE, quote="")
 df105t2ls <- read.table(file="105E_tab2b_ls.txt", sep=";", header=TRUE, quote="")
 
 #' 
-## ---- echo = FALSE, results = 'asis'-------------------------------------
+## ---- echo = FALSE, results = 'asis'---------------------------------------
 df105t2r <- inner_join(df105t2, df105t2ls, by = "Letter")
 df105t2r <- df105t2r %>% mutate(AcRe=ifelse(LetterSize < Size, "\U21D3",
                          ifelse(LetterSize > Size, "\U21D1",
@@ -114,7 +114,7 @@ kable_styling(kable(df105t2p), font_size=16)
 #' 
 #' ## Tabla 2. M. simple >> ins. esctricta {.smaller}
 #' 
-## ---- echo = FALSE, results = 'asis'-------------------------------------
+## ---- echo = FALSE, results = 'asis'---------------------------------------
 df105t2p <- df105t2r %>%  filter(AQL > 0.65 & AQL <= 25) %>%
   dplyr::select(-Size,-Ac,-Re) %>%  
   rename(Size=LetterSize) %>%
@@ -124,7 +124,7 @@ kable_styling(kable(df105t2p), font_size=16)
 #' 
 #' ## Tabla 2. M. simple >> ins. estricta {.smaller}
 #' 
-## ---- echo = FALSE, results = 'asis'-------------------------------------
+## ---- echo = FALSE, results = 'asis'---------------------------------------
 df105t2p <- df105t2r %>%  filter(AQL > 25) %>%
   dplyr::select(-Size,-Ac,-Re) %>%  
   rename(Size=LetterSize) %>%

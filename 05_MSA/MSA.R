@@ -14,11 +14,11 @@
 #'       background_transition: 0
 #' ---
 #' 
-## ----setup, include=FALSE------------------------------------------------
+## ----setup, include=FALSE--------------------------------------------------
 knitr::opts_chunk$set(echo = FALSE, dev="svg")
 
 #' 
-## ----include=FALSE-------------------------------------------------------
+## ----include=FALSE---------------------------------------------------------
 if(!require("tidyverse")) {
   install.packages("tidyverse", repos="https://cloud.r-project.org/",
          quiet=TRUE, type="binary")
@@ -180,7 +180,7 @@ if(!require("kableExtra")) {
 #' 
 #' Los valores obtenidos se muestran en tabla adjunta, de arriba a abajo y de izquierda a derecha ,y en el fichero <a href="constante.txt">constante.txt</a>.
 #' 
-## ---- echo = FALSE, results = 'asis'-------------------------------------
+## ---- echo = FALSE, results = 'asis'---------------------------------------
 datos <- read.table("constante.txt", header=FALSE, dec=",")
 kable_styling(kable(matrix(datos[,1],ncol=5)), font_size=24)
 

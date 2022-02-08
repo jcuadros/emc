@@ -14,11 +14,11 @@
 #'       background_transition: 0
 #' ---
 #' 
-## ----setup, include=FALSE------------------------------------------------
+## ----setup, include=FALSE--------------------------------------------------
 knitr::opts_chunk$set(echo = FALSE, dev="svg")
 
 #' 
-## ----include=FALSE-------------------------------------------------------
+## ----include=FALSE---------------------------------------------------------
 if(!require("tidyverse")) {
   install.packages("tidyverse", repos="https://cloud.r-project.org/",
          quiet=TRUE, type="binary")
@@ -252,7 +252,7 @@ if(!require("kableExtra")) {
 #' 
 #' ----
 #' 
-## ---- echo = TRUE, eval = FALSE------------------------------------------
+## ---- echo = TRUE, eval = FALSE--------------------------------------------
 ## datos <- data.frame(shift=1:20,
 ##       s1=c(2.7,2.6,2.3,2.8,2.6,
 ##            2.2,2.2,2.8,2.4,2.6,
@@ -278,7 +278,7 @@ if(!require("kableExtra")) {
 #' 
 #' ----
 #' 
-## ---- echo = FALSE, results = 'asis'-------------------------------------
+## ---- echo = FALSE, results = 'asis'---------------------------------------
 datos <- data.frame(shift=1:20,
       s1=c(2.7,2.6,2.3,2.8,2.6,
            2.2,2.2,2.8,2.4,2.6,
@@ -305,7 +305,7 @@ kable_styling(kable(datos), font_size=18)
 #' 
 #' ----
 #' 
-## ---- echo = TRUE--------------------------------------------------------
+## ---- echo = TRUE----------------------------------------------------------
 promedio <- apply(datos[,2:6],1,mean)
 rango <- apply(datos[,2:6],1,function (x) diff(range(x)))
 promedio
@@ -317,7 +317,7 @@ str(resumen)
 #' 
 #' ----
 #' 
-## ---- echo = TRUE, eval = FALSE------------------------------------------
+## ---- echo = TRUE, eval = FALSE--------------------------------------------
 ## if(!require("tidyverse")) {
 ##   install.packages("tidyverse", repos="https://cloud.r-project.org/",
 ##                    quiet=TRUE, type="binary")
@@ -327,7 +327,7 @@ str(resumen)
 #' 
 #' ----
 #' 
-## ---- echo = TRUE, eval = FALSE------------------------------------------
+## ---- echo = TRUE, eval = FALSE--------------------------------------------
 ## ggplot(resumen,aes(x=shift,y=rango))+
 ##   geom_point(size=3,shape=21)+geom_line()+
 ##   geom_hline(yintercept = 1.63,color="red")+
@@ -337,7 +337,7 @@ str(resumen)
 
 #' ----
 #' 
-## ---- echo = FALSE-------------------------------------------------------
+## ---- echo = FALSE---------------------------------------------------------
 ggplot(resumen,aes(x=shift,y=rango))+
   geom_point(size=3,shape=21)+geom_line()+
   geom_hline(yintercept = 1.63,color="red")+
@@ -348,7 +348,7 @@ ggplot(resumen,aes(x=shift,y=rango))+
 #' 
 #' ----
 #' 
-## ---- echo = TRUE, eval = FALSE------------------------------------------
+## ---- echo = TRUE, eval = FALSE--------------------------------------------
 ## ggplot(resumen,aes(x=shift,y=promedio))+
 ##   geom_point(size=3,shape=21)+geom_line()+
 ##   geom_hline(yintercept = 2.96,color="red")+
@@ -363,7 +363,7 @@ ggplot(resumen,aes(x=shift,y=rango))+
 #' 
 #' ----
 #' 
-## ---- echo = FALSE-------------------------------------------------------
+## ---- echo = FALSE---------------------------------------------------------
 ggplot(resumen,aes(x=shift,y=promedio))+
   geom_point(size=3,shape=21)+geom_line()+
   geom_hline(yintercept = 2.96,color="red")+
@@ -430,7 +430,7 @@ ggplot(resumen,aes(x=shift,y=promedio))+
 #' 
 #' ----
 #' 
-## ---- echo = TRUE--------------------------------------------------------
+## ---- echo = TRUE----------------------------------------------------------
 datos <- read.table("humedad.txt",header=TRUE,sep="\t",
                     dec=",",quote="")
 
@@ -451,7 +451,7 @@ X_LCI <- X_LC - .577 * R_LC
 #' 
 #' ----
 #' 
-## ---- echo = FALSE-------------------------------------------------------
+## ---- echo = FALSE---------------------------------------------------------
 ggplot(resumen,aes(x=Muestra,y=rango))+
   geom_point(size=3,shape=21)+geom_line()+
   geom_hline(yintercept = R_LCS,color="red")+
@@ -466,7 +466,7 @@ ggplot(resumen,aes(x=Muestra,y=rango))+
 #' 
 #' Se excluye para el cálculo de los límites de control. Recalculando sin este punto...
 #' 
-## ---- echo = TRUE--------------------------------------------------------
+## ---- echo = TRUE----------------------------------------------------------
 R_LC <- mean(resumen$rango[-6])
 R_LCS <- 2.114 * R_LC
 R_LCI <- 0
@@ -478,7 +478,7 @@ X_LCI <- X_LC - .577 * R_LC
 #' 
 #' ----
 #' 
-## ---- echo = FALSE-------------------------------------------------------
+## ---- echo = FALSE---------------------------------------------------------
 ggplot(resumen,aes(x=Muestra,y=rango))+
   geom_point(size=3,shape=21)+geom_line()+
   geom_hline(yintercept = R_LCS,color="red")+
@@ -489,7 +489,7 @@ ggplot(resumen,aes(x=Muestra,y=rango))+
 #' 
 #' ----
 #' 
-## ---- echo = FALSE-------------------------------------------------------
+## ---- echo = FALSE---------------------------------------------------------
 ggplot(resumen,aes(x=Muestra,y=promedio))+
   geom_point(size=3,shape=21)+geom_line()+
   geom_hline(yintercept = X_LCS,color="red")+
@@ -506,7 +506,7 @@ ggplot(resumen,aes(x=Muestra,y=promedio))+
 #' 
 #' Iterando se logra una secuencia de datos en los que no se muestran indicios de estar fuera de control excluyendo los datos 6 y los que estan entre 10 y 20 (extremos incluidos)
 #' 
-## ---- echo = FALSE-------------------------------------------------------
+## ---- echo = FALSE---------------------------------------------------------
 exc <- c(6,10:20)
 
 R_LC <- mean(resumen$rango[-exc])
@@ -520,19 +520,19 @@ X_LCI <- X_LC - .577 * R_LC
 #' 
 #' Líneas de control para el gráfico R
 #' 
-## ---- echo = FALSE-------------------------------------------------------
+## ---- echo = FALSE---------------------------------------------------------
 c(LC = R_LC, LCI = R_LCI, LCS = R_LCS)
 
 #' 
 #' Líneas de control para el gráfico Xbarra
 #' 
-## ---- echo = FALSE-------------------------------------------------------
+## ---- echo = FALSE---------------------------------------------------------
 c(LC = X_LC, LCI = X_LCI, LCS = X_LCS)
 
 #' 
 #' ----
 #' 
-## ---- echo = FALSE-------------------------------------------------------
+## ---- echo = FALSE---------------------------------------------------------
 ggplot(resumen[-exc,],aes(x=Muestra,y=rango))+
   geom_point(size=3,shape=21)+geom_line()+
   geom_hline(yintercept = R_LCS,color="red")+
@@ -543,7 +543,7 @@ ggplot(resumen[-exc,],aes(x=Muestra,y=rango))+
 #' 
 #' ----
 #' 
-## ---- echo = FALSE-------------------------------------------------------
+## ---- echo = FALSE---------------------------------------------------------
 ggplot(resumen[-exc,],aes(x=Muestra,y=promedio))+
   geom_point(size=3,shape=21)+geom_line()+
   geom_hline(yintercept = X_LCS,color="red")+
@@ -562,7 +562,7 @@ ggplot(resumen[-exc,],aes(x=Muestra,y=promedio))+
 #' 
 #' ----
 #' 
-## ---- echo = FALSE-------------------------------------------------------
+## ---- echo = FALSE---------------------------------------------------------
 ggplot(resumen,aes(x=Muestra,y=rango))+
   geom_point(size=3,shape=21)+geom_line()+
   geom_hline(yintercept = R_LCS,color="red")+
@@ -573,7 +573,7 @@ ggplot(resumen,aes(x=Muestra,y=rango))+
 #' 
 #' ----
 #' 
-## ---- echo = FALSE-------------------------------------------------------
+## ---- echo = FALSE---------------------------------------------------------
 ggplot(resumen,aes(x=Muestra,y=promedio))+
   geom_point(size=3,shape=21)+geom_line()+
   geom_hline(yintercept = X_LCS,color="red")+
@@ -603,7 +603,7 @@ ggplot(resumen,aes(x=Muestra,y=promedio))+
 #' 
 #' Los datos adjuntos corresponden a medidas de la resistividad de 25 placas de silicona fabricadas de forma consecutivas (<a href="resistividad.txt">resistividad.txt</a>).
 #' 
-## ---- echo = FALSE, results = 'asis'-------------------------------------
+## ---- echo = FALSE, results = 'asis'---------------------------------------
 datos <- read.table("resistividad.txt")
 colnames(datos) <- c("x")
 
@@ -614,7 +614,7 @@ kable_styling(kable(matrix(datos[,1],ncol=5)), font_size=18)
 #' 
 #' ----
 #' 
-## ---- echo = FALSE-------------------------------------------------------
+## ---- echo = FALSE---------------------------------------------------------
 datos$i <- 1:25
 datos <- datos[,c(2,1)]
 mr <- data.frame(i=2:25,R=abs(diff(datos$x)))
@@ -645,7 +645,7 @@ ggplot(mr,aes(x=i,y=R))+
 #' 
 #' Líneas de control para el gráfico mR
 #' 
-## ---- echo = FALSE-------------------------------------------------------
+## ---- echo = FALSE---------------------------------------------------------
 mr <- data.frame(i=2:23,R=abs(diff(datos$x[-c(12,19)])))
 
 R_LC <- mean(mr$R)
@@ -657,7 +657,7 @@ c(LC = R_LC, LCI = R_LCI, LCS = R_LCS)
 #' 
 #' Líneas de control para el gráfico I
 #' 
-## ---- echo = FALSE-------------------------------------------------------
+## ---- echo = FALSE---------------------------------------------------------
 X_LC <- mean(datos$x[-c(12,19)])
 X_LCS <- X_LC + 2.660 * R_LC
 X_LCI <- X_LC - 2.660 * R_LC
@@ -667,7 +667,7 @@ c(LC = X_LC, LCI = X_LCI, LCS = X_LCS)
 #' 
 #' ----
 #' 
-## ---- echo = FALSE-------------------------------------------------------
+## ---- echo = FALSE---------------------------------------------------------
 mr <- data.frame(i=2:25,R=abs(diff(datos$x)))
 
 ggplot(mr,aes(x=i,y=R))+
@@ -680,7 +680,7 @@ ggplot(mr,aes(x=i,y=R))+
 #' 
 #' ----
 #' 
-## ---- echo = FALSE-------------------------------------------------------
+## ---- echo = FALSE---------------------------------------------------------
 ggplot(datos,aes(x=i,y=x))+
   geom_point(size=3,shape=21)+geom_line()+
   geom_hline(yintercept = X_LCS,color="red")+
@@ -736,7 +736,7 @@ ggplot(datos,aes(x=i,y=x))+
 #' 
 #' ----
 #' 
-## ---- echo = FALSE-------------------------------------------------------
+## ---- echo = FALSE---------------------------------------------------------
 load("grageas.rda")
 
 P_LC <- mean(datos$p)
@@ -746,7 +746,7 @@ datos$lci <- P_LC - 3 * sqrt(P_LC * (1-P_LC)) / sqrt(datos$n)
 datos$i <- 1:50
 
 #' 
-## ---- echo = TRUE, eval=FALSE--------------------------------------------
+## ---- echo = TRUE, eval=FALSE----------------------------------------------
 ## ggplot(datos,aes(x=i,y=p))+
 ##   geom_point(size=3,shape=21)+geom_line()+
 ##   geom_hline(yintercept = P_LC)+
@@ -761,7 +761,7 @@ datos$i <- 1:50
 #' 
 #' ----
 #' 
-## ---- echo = FALSE-------------------------------------------------------
+## ---- echo = FALSE---------------------------------------------------------
 ggplot(datos,aes(x=i,y=p))+
   geom_point(size=3,shape=21)+geom_line()+
   geom_hline(yintercept = P_LC)+
@@ -787,7 +787,7 @@ ggplot(datos,aes(x=i,y=p))+
 #' 
 #' ----
 #' 
-## ---- echo = TRUE, eval=FALSE--------------------------------------------
+## ---- echo = TRUE, eval=FALSE----------------------------------------------
 ## limites <- data.frame(i=c((1:50)-0.4999,(1:50)+0.4999),
 ##                       lcs=c(datos$lcs,datos$lcs),
 ##                       lci=c(datos$lci,datos$lci))
@@ -807,7 +807,7 @@ ggplot(datos,aes(x=i,y=p))+
 #' 
 #' ----
 #' 
-## ---- echo = FALSE-------------------------------------------------------
+## ---- echo = FALSE---------------------------------------------------------
 limites <- data.frame(i=c((1:50)-0.4999,(1:50)+0.4999),
                       lcs=c(datos$lcs,datos$lcs),
                       lci=c(datos$lci,datos$lci))

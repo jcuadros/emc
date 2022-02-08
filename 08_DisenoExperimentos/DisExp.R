@@ -16,11 +16,11 @@
 #'   chunk_output_type: console
 #' ---
 #' 
-## ----setup, include=FALSE------------------------------------------------
+## ----setup, include=FALSE--------------------------------------------------
 knitr::opts_chunk$set(echo = FALSE, dev="svg")
 
 #' 
-## ----include=FALSE-------------------------------------------------------
+## ----include=FALSE---------------------------------------------------------
 if(!require("tidyverse")) {
   install.packages("tidyverse", repos="https://cloud.r-project.org/",
          quiet=TRUE, type="binary")
@@ -308,39 +308,39 @@ if(!require("kableExtra")) {
 #' 
 #' ----
 #' 
-## ---- echo = FALSE, results = 'asis'-------------------------------------
+## ---- echo = FALSE, results = 'asis'---------------------------------------
 datos <- read.table("vigas.txt", header=TRUE, dec=".", sep=";")
 kable_styling(kable(datos), font_size=28)
 
 #' 
 #' ----
 #' 
-## ---- echo = TRUE--------------------------------------------------------
+## ---- echo = TRUE----------------------------------------------------------
 datos$Dif <- datos$Metodo1 - datos$Metodo2
 shapiro.test(datos$Dif)
 
 #' 
-## ---- eval=FALSE, echo = TRUE--------------------------------------------
+## ---- eval=FALSE, echo = TRUE----------------------------------------------
 ## ggplot(datos, aes(sample=Dif)) +
 ##   geom_qq() + geom_qq_line() + theme_classic()
 
 #' 
 #' ----
 #' 
-## ---- echo = FALSE-------------------------------------------------------
+## ---- echo = FALSE---------------------------------------------------------
 ggplot(datos, aes(sample=Dif)) +
   geom_qq() + geom_qq_line() + theme_classic()
 
 #' 
 #' ----
 #' 
-## ---- echo = TRUE--------------------------------------------------------
+## ---- echo = TRUE----------------------------------------------------------
 t.test(datos$Dif)
 
 #' 
 #' ----
 #' 
-## ---- echo = TRUE--------------------------------------------------------
+## ---- echo = TRUE----------------------------------------------------------
 wilcox.test(datos$Dif)
 
 #' 
@@ -397,7 +397,7 @@ wilcox.test(datos$Dif)
 #' 
 #' <div class="col">
 #' 
-## ---- echo = FALSE, results = 'asis'-------------------------------------
+## ---- echo = FALSE, results = 'asis'---------------------------------------
 datos <- read.table("papel.txt", sep="\t", header=TRUE)
 datos$Prop <- factor(datos$Prop)
 kable_styling(kable(datos[1:11,],row.names=FALSE), font_size=28)
@@ -406,7 +406,7 @@ kable_styling(kable(datos[1:11,],row.names=FALSE), font_size=28)
 #' </div>
 #' <div class="col">
 #' 
-## ---- echo = FALSE, results = 'asis'-------------------------------------
+## ---- echo = FALSE, results = 'asis'---------------------------------------
 kable_styling(kable(datos[12:22,],row.names=FALSE), font_size=28)
 
 #' 
@@ -415,7 +415,7 @@ kable_styling(kable(datos[12:22,],row.names=FALSE), font_size=28)
 #' 
 #' ----
 #' 
-## ---- eval = FALSE, echo = TRUE------------------------------------------
+## ---- eval = FALSE, echo = TRUE--------------------------------------------
 ## datos <- read.table("papel.txt", sep="\t", header=TRUE)
 ## datos$Prop <- factor(datos$Prop)
 ## ggplot(datos, aes(x=Prop,y=Resist)) +
@@ -425,7 +425,7 @@ kable_styling(kable(datos[12:22,],row.names=FALSE), font_size=28)
 #' 
 #' ----
 #' 
-## ---- echo = FALSE-------------------------------------------------------
+## ---- echo = FALSE---------------------------------------------------------
 ggplot(datos, aes(x=Prop,y=Resist)) +
   geom_boxplot() +
   theme_classic()
@@ -433,20 +433,20 @@ ggplot(datos, aes(x=Prop,y=Resist)) +
 #' 
 #' ----
 #' 
-## ---- echo = TRUE--------------------------------------------------------
+## ---- echo = TRUE----------------------------------------------------------
 by(datos$Resist,datos$Prop,shapiro.test)
 
 #' 
 #' ----
 #' 
-## ---- echo = TRUE--------------------------------------------------------
+## ---- echo = TRUE----------------------------------------------------------
 t.test(datos$Resist ~ datos$Prop,
        alternative = "less")
 
 #' 
 #' ----
 #' 
-## ---- echo = TRUE--------------------------------------------------------
+## ---- echo = TRUE----------------------------------------------------------
 var.test(datos$Resist ~ datos$Prop,
        alternative = "greater")
 
@@ -643,7 +643,7 @@ var.test(datos$Resist ~ datos$Prop,
 #' 
 #' ----
 #' 
-## ---- echo = FALSE, results = 'asis'-------------------------------------
+## ---- echo = FALSE, results = 'asis'---------------------------------------
 datos <- read.table("bean.csv", sep=";", header=TRUE)
 colnames(datos)[1] <- "A"
 kable_styling(kable(datos,row.names=FALSE), font_size=28)
@@ -653,7 +653,7 @@ kable_styling(kable(datos,row.names=FALSE), font_size=28)
 #' 
 #' ### Matriz de diseño con interacciones y respuestas
 #' 
-## ---- echo = TRUE, eval = FALSE------------------------------------------
+## ---- echo = TRUE, eval = FALSE--------------------------------------------
 ## datos <- gather(datos,"rep","yield",Rep1:Rep3)
 ## 
 ## datos$AB <- datos$A * datos$B
@@ -667,7 +667,7 @@ kable_styling(kable(datos,row.names=FALSE), font_size=28)
 #' 
 #' ----
 #' 
-## ---- echo = FALSE-------------------------------------------------------
+## ---- echo = FALSE---------------------------------------------------------
 datos <- gather(datos,"rep","yield",Rep1:Rep3)
 
 datos$AB <- datos$A * datos$B
@@ -685,7 +685,7 @@ kable_styling(kable(head(datos,12),row.names=FALSE), font_size=28)
 #' 
 #' ### Cálculo de los efectos
 #' 
-## ---- echo = TRUE--------------------------------------------------------
+## ---- echo = TRUE----------------------------------------------------------
 efectos <- datos[,1:7] * datos[,8]
 efectos <- colSums(efectos) / 12
 efectos
@@ -693,7 +693,7 @@ efectos
 #' 
 #' ----
 #' 
-## ---- echo = TRUE--------------------------------------------------------
+## ---- echo = TRUE----------------------------------------------------------
 mediasA <- datos %>% group_by(A) %>% summarise(media=mean(yield))
 colnames(mediasA)[1] <- "nivel"
 mediasA$factor <- "A"
@@ -711,7 +711,7 @@ medias <- rbind(mediasA,mediasB,mediasC)
 #' 
 #' ----
 #' 
-## ---- eval = FALSE, echo = TRUE------------------------------------------
+## ---- eval = FALSE, echo = TRUE--------------------------------------------
 ## ggplot(medias,aes(x=factor(nivel),y=media,group=1))+
 ##   geom_point() +
 ##   geom_line() +
@@ -721,7 +721,7 @@ medias <- rbind(mediasA,mediasB,mediasC)
 #' 
 #' ----
 #' 
-## ---- echo = FALSE-------------------------------------------------------
+## ---- echo = FALSE---------------------------------------------------------
 ggplot(medias,aes(x=factor(nivel),y=media,group=1))+
   geom_point() +
   geom_line() +
@@ -731,7 +731,7 @@ ggplot(medias,aes(x=factor(nivel),y=media,group=1))+
 #' 
 #' ----
 #' 
-## ---- echo = TRUE, eval = FALSE------------------------------------------
+## ---- echo = TRUE, eval = FALSE--------------------------------------------
 ## interacciones <- datos %>% group_by(A,B) %>%
 ##   summarise(media=mean(yield))
 ## 
@@ -744,7 +744,7 @@ ggplot(medias,aes(x=factor(nivel),y=media,group=1))+
 #' 
 #' ----
 #' 
-## ---- echo = FALSE-------------------------------------------------------
+## ---- echo = FALSE---------------------------------------------------------
 interacciones <- datos %>% group_by(A,B) %>% 
   summarise(media=mean(yield))
 
@@ -757,7 +757,7 @@ ggplot(interacciones,
 #' 
 #' ----
 #' 
-## ---- echo = TRUE, eval = FALSE------------------------------------------
+## ---- echo = TRUE, eval = FALSE--------------------------------------------
 ## efectosO <- efectos[order(abs(efectos))]
 ## efectosO <- data.frame(variable=factor(names(efectosO),
 ##                                        levels=names(efectosO)),
@@ -772,7 +772,7 @@ ggplot(interacciones,
 #' 
 #' ----
 #' 
-## ---- echo = FALSE-------------------------------------------------------
+## ---- echo = FALSE---------------------------------------------------------
 efectosO <- efectos[order(abs(efectos))]
 efectosO <- data.frame(variable=factor(names(efectosO),
                                        levels=names(efectosO)),
@@ -809,7 +809,7 @@ ggplot(efectosO,aes(x=variable,y=abs(efecto),fill=efecto>0)) +
 #' 
 #' ----
 #' 
-## ---- echo = TRUE--------------------------------------------------------
+## ---- echo = TRUE----------------------------------------------------------
 (sef <- 1.5 * median(abs(efectos[abs(efectos) < 
           3.75 * median(abs(efectos))])))
 (efc <- sef * qt(0.975, 24 - 8))
@@ -817,7 +817,7 @@ ggplot(efectosO,aes(x=variable,y=abs(efecto),fill=efecto>0)) +
 #' 
 #' ----
 #'   
-## ---- echo = TRUE, eval = FALSE------------------------------------------
+## ---- echo = TRUE, eval = FALSE--------------------------------------------
 ## ggplot(efectosO,aes(x=variable,y=abs(efecto),fill=efecto>0)) +
 ##   geom_bar(stat="identity",color="black")+
 ##   geom_hline(yintercept=efc)+
@@ -828,7 +828,7 @@ ggplot(efectosO,aes(x=variable,y=abs(efecto),fill=efecto>0)) +
 #' 
 #' ----
 #' 
-## ---- echo = FALSE-------------------------------------------------------
+## ---- echo = FALSE---------------------------------------------------------
 ggplot(efectosO,aes(x=variable,y=abs(efecto),fill=efecto>0)) +
   geom_bar(stat="identity",color="black")+
   geom_hline(yintercept=efc)+
@@ -858,14 +858,14 @@ ggplot(efectosO,aes(x=variable,y=abs(efecto),fill=efecto>0)) +
 #' 
 #' ----
 #' 
-## ---- echo = TRUE--------------------------------------------------------
+## ---- echo = TRUE----------------------------------------------------------
 ajuste <- lm(yield~(A+B+C)^3,datos)
 summary(ajuste)
 
 #' 
 #' ----
 #' 
-## ---- echo = TRUE--------------------------------------------------------
+## ---- echo = TRUE----------------------------------------------------------
 ajuste <- lm(yield~A+B+C,datos)
 summary(ajuste)
 
@@ -1268,10 +1268,96 @@ summary(ajuste)
 #' <p class="bibref">https://www.itl.nist.gov/div898/handbook/pri/section3/pri338.htm</p>
 #' 
 #' 
-#' <!-- ## Diseños para superfícies de respuesta -->
+#' ## Diseños para superfícies de respuesta
+#' 
+#' - Adición de puntos centrales
+#' - Diseños para modelos cuadráticos
+#'     - Diseños centrales compuestos de Box-Wilson, https://www.itl.nist.gov/div898/handbook/pri/section3/pri3361.htm
+#'     - Diseños de Box-Behnken, https://www.itl.nist.gov/div898/handbook/pri/section3/pri3362.htm
+#'     
+#'     
+#' ## Adición de puntos centrales
+#' 
+#' Una recomendación habitual en los diseños factoriales (especialmente en los saturados) consiste en la adición de puntos centrales
+#' 
+#' - Entre 3 y 7 puntos
+#' - Equiespaciados en la secuencia experimental. Si son 3, al principio, en el medio y al final.
+#' 
+#' ----
+#' 
+#' Permiten
+#' 
+#' - **Comprobar la estabilidad del proceso**. El resultado debe ser estable
+#' - **Comprobar la existencia de curvatura**. La media de los valores centrales debe coincidir con la media de los demás puntos
+#' - **Estimar el error de los efectos (en diseños saturados)**
 #' 
 #' 
-#' <!-- # Investigación *ex-post-facto* -->
+#' ## Diseños centrales compuestos de Box-Wilson
+#' 
+#' Permiten reutilizar los experimentos del diseño factorial completo.
+#' 
+#' ![](im009.png){style=width:80%;margin-left:-40%;}
+#' 
+#' <span class="bibref">https://www.itl.nist.gov/div898/handbook/pri/section3/pri3361.htm</span>
+#' 
+#' ## Diseños de Box-Behnken
+#' 
+#' Tienen un diseño independiente de los diseños factoriales completos.
+#' 
+#' ![](im010.png){style=width:50%;margin-left:-25%;}
+#' 
+#' <span class="bibref">https://www.itl.nist.gov/div898/handbook/pri/section3/pri3362.htm</span>
+#' 
+#' 
+#' # Investigación *ex-post-facto*
+#' 
+#' ## Situación
+#' 
+#' Corresponde a aquellas investigaciones en las que no es posible modificar las variables influyentes. Parte de valores recogidos de distintas variables sin que se haya podido establecer un control experimental a través de un diseño concreto.
+#' 
+#' Los estudios se hacen entonces a partir de los datos ya disponibles.
+#' 
+#' 
+#' ## Consideraciones 
+#' 
+#' Estos análisis no permiten inferir causalidad ya que no hay una intervención experimental controlada.
+#' 
+#' Los análisis correlacionales se basan en observar las relaciones existentes entre variables a partir de
+#' 
+#' - Diagramas de dispersión (*small multiples*)
+#' - Coeficientes de correlación
+#' - Modelos de regresión
+#' - Técnicas de aprendizaje automático (*machine learning*)
+#' 
+#' ## Diagramas de dispersión (small multiples)
+#' 
+#' ![](im011.png){style=width:90%;margin-left:-45%;}
+#' 
+#' <span class="bibref">http://dataremixed.com/2012/10/interactive-visualizations-or-small-multiples/</span>
+#' 
+#' 
+#' ## Coeficientes de correlación
+#' 
+#' ![](im012.png){style=width:50%;margin-left:-25%;}
+#' 
+#' <span class="bibref">http://www.sthda.com/english/wiki/visualize-correlation-matrix-using-correlogram</span>
+#' 
+#' 
+#' 
+#' ## Modelos de regresión
+#' 
+#' Ya hemos visto durante el curso algunos usos de modelos de regresión (especialmente lineal). Las mismas ideas se aplican en este caso.
+#' 
+#' 
+#' ## Técnicas de aprendizaje automático
+#' 
+#' El objetivo general de las técnicas de *machine learning* es poder predecir. 
+#' 
+#' Las técnicas básicas suelen agruparse en
+#' 
+#' - **Clasificación**. Establecer la pertenencia de un individuo a un grupo
+#' - **Regresión**. Determinar el valor de una propiedad cuantitativa
+#' - **Clustering**. Agrupar en grupos significativos
 #' 
 #' 
 #' # Referencias
