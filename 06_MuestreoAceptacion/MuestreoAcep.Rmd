@@ -356,7 +356,7 @@ Habiéndose fijado *a priori*
 
 4. Se seleccionan de acuerdo con un muestreo adecuado las unidades que deben ser inspeccionadas. Se determina la propiedad de interés para cada una de estas unidades.
 5. Se determina el promedio ($\bar X$) y la desviación estándar ($s$) de las medidas.
-6. Se rechaza el lote si el promedio se encuentra fuera de los límites de especificación ($\  \bar X > U \  $  o $\  \bar X < L \  $).
+6. Se rechaza el lote si el promedio se encuentra fuera de los límites de especificación $\:(\bar X > U\:  \vee  \:\bar X < L\:)$.
 
 ----
 
